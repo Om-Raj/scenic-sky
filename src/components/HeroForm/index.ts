@@ -1,0 +1,1 @@
+export { HeroForm } from './HeroForm';
