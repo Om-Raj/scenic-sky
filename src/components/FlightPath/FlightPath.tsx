@@ -15,6 +15,9 @@ interface FlightPathProps {
   onPause: () => void;
   onReset: () => void;
   onProgressChange: (progress: number) => void;
+  currentTime: string;
+  timeLeft: string;
+  progressPercent: number;
   onResetView?: () => void;
 }
 
@@ -30,6 +33,9 @@ export function FlightPath({
   onPause, 
   onReset, 
   onProgressChange, 
+  currentTime,
+  timeLeft,
+  progressPercent,
   onResetView 
 }: FlightPathProps) {
   const airplaneMarker = useRef<maplibregl.Marker | null>(null);
@@ -98,10 +104,17 @@ export function FlightPath({
 
     // Cleanup function
     return () => {
-      if (map && map.getSource('flight-path')) {
-        map.removeLayer('flight-path-line');
-        map.removeSource('flight-path');
+      try {
+        if (map && map.isStyleLoaded && map.isStyleLoaded() && map.getSource('flight-path')) {
+          if (map.getLayer('flight-path-line')) {
+            map.removeLayer('flight-path-line');
+          }
+          map.removeSource('flight-path');
+        }
+      } catch (error) {
+        console.warn('Error cleaning up flight path:', error);
       }
+      
       if (airplaneMarker.current) {
         airplaneMarker.current.remove();
         airplaneMarker.current = null;
@@ -174,12 +187,11 @@ export function FlightPath({
   if (!flightState) return null;
 
   const remainingKm = Math.round(flightState.totalDistance * (1 - progress));
-  const progressPercent = Math.round(progress * 100);
 
   return (
-    <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-sm rounded-lg p-4 shadow-lg">
-      <div className="flex flex-col space-y-4">
-        {/* Flight Info */}
+    <div className="absolute bottom-2 left-2 right-2 md:bottom-4 md:left-4 md:right-4 max-w-md mx-auto bg-white/95 backdrop-blur-sm rounded-lg p-4 shadow-lg border">
+      <div className="flex flex-col space-y-3">
+        {/* Flight Route Info */}
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center space-x-2">
             <Plane className="w-4 h-4 text-blue-600" />
@@ -188,12 +200,24 @@ export function FlightPath({
             </span>
           </div>
           <div className="text-gray-600">
-            {progressPercent}% • {remainingKm} km remaining
+            {progressPercent}%
+          </div>
+        </div>
+
+        {/* Time Information - Side by Side */}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="bg-gray-50 rounded-lg p-2 text-center">
+            <div className="text-xs text-gray-500 mb-1">Current Time</div>
+            <div className="font-medium text-sm">{currentTime}</div>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-2 text-center">
+            <div className="text-xs text-gray-500 mb-1">Time Left</div>
+            <div className="font-medium text-sm">{timeLeft}</div>
           </div>
         </div>
 
         {/* Progress Slider */}
-        <div className="space-y-2">
+        <div className="space-y-1">
           <Slider
             value={[progress * 100]}
             onValueChange={handleSliderChange}
@@ -208,18 +232,19 @@ export function FlightPath({
         <div className="flex items-center justify-between">
           <div className="flex space-x-2">
             <Button
-              variant="outline"
+              variant={isPlaying ? "default" : "outline"}
               size="sm"
               onClick={isPlaying ? onPause : onPlay}
+              className="px-3 py-1"
             >
               {isPlaying ? (
                 <>
-                  <Pause className="w-4 h-4 mr-1" />
+                  <Pause className="w-3 h-3 mr-1" />
                   Pause
                 </>
               ) : (
                 <>
-                  <Play className="w-4 h-4 mr-1" />
+                  <Play className="w-3 h-3 mr-1" />
                   Play
                 </>
               )}
@@ -232,14 +257,20 @@ export function FlightPath({
                 onReset();
                 if (onResetView) onResetView();
               }}
+              className="px-3 py-1"
             >
-              <RotateCcw className="w-4 h-4 mr-1" />
+              <RotateCcw className="w-3 h-3 mr-1" />
               Reset
             </Button>
           </div>
 
-          <Button variant="ghost" size="sm" onClick={handleResetView}>
-            Center View
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={handleResetView}
+            className="px-3 py-1"
+          >
+            Center
           </Button>
         </div>
       </div>

@@ -172,3 +172,10 @@ Keep the hero form compact on mobile (collapsible map controls) — comment resp
 ### Prompt 2
 
 Restructure the project such that on submitting the form the data is sent to /flight-map route and the map along with the controls is displayed there. make the inputs as url params.
+
+
+
+### Prompt 3
+
+Remove flight details section. flight controls should be on the bottom center of the screen in a floating compact deck form. Max width should not exceed 400px. it should contain current time calculated from start time and arrival time and % distance.
+

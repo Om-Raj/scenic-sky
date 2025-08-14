@@ -6,7 +6,7 @@ import { Map } from '@/components/Map';
 import { FlightPath } from '@/components/FlightPath';
 import { useFlightPath } from '@/hooks/useFlightPath';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Plane, Clock, MapPin } from 'lucide-react';
+import { ArrowLeft, Plane } from 'lucide-react';
 import maplibregl from 'maplibre-gl';
 
 export default function FlightMapPage() {
@@ -68,11 +68,22 @@ export default function FlightMapPage() {
     setMap(mapInstance);
   }, []);
 
-  // Format time for display
-  const formatDateTime = (date: string, time: string) => {
-    if (!date || !time) return 'N/A';
-    const dateObj = new Date(`${date}T${time}`);
-    return dateObj.toLocaleString('en-US', {
+  // Calculate current flight time based on progress
+  const calculateCurrentTime = () => {
+    if (!flightData.departureDate || !flightData.departureTime || !flightData.arrivalDate || !flightData.arrivalTime) {
+      return 'N/A';
+    }
+    
+    const departureDateTime = new Date(`${flightData.departureDate}T${flightData.departureTime}`);
+    const arrivalDateTime = new Date(`${flightData.arrivalDate}T${flightData.arrivalTime}`);
+    
+    // Calculate total flight duration in milliseconds
+    const totalDuration = arrivalDateTime.getTime() - departureDateTime.getTime();
+    
+    // Calculate current time based on progress
+    const currentTime = new Date(departureDateTime.getTime() + (totalDuration * progress));
+    
+    return currentTime.toLocaleString('en-US', {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
@@ -80,64 +91,59 @@ export default function FlightMapPage() {
     });
   };
 
+  // Calculate remaining flight time
+  const calculateTimeLeft = () => {
+    if (!flightData.departureDate || !flightData.departureTime || !flightData.arrivalDate || !flightData.arrivalTime) {
+      return 'N/A';
+    }
+    
+    const departureDateTime = new Date(`${flightData.departureDate}T${flightData.departureTime}`);
+    const arrivalDateTime = new Date(`${flightData.arrivalDate}T${flightData.arrivalTime}`);
+    
+    // Calculate total flight duration in milliseconds
+    const totalDuration = arrivalDateTime.getTime() - departureDateTime.getTime();
+    
+    // Calculate remaining time
+    const remainingDuration = totalDuration * (1 - progress);
+    
+    // Convert to hours and minutes
+    const hours = Math.floor(remainingDuration / (1000 * 60 * 60));
+    const minutes = Math.floor((remainingDuration % (1000 * 60 * 60)) / (1000 * 60));
+    
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    } else {
+      return `${minutes}m`;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Header with flight info and back button */}
-      <div className="relative z-10 p-4 bg-white/95 backdrop-blur-sm shadow-sm border-b">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-between mb-4">
-            <Button 
-              variant="outline" 
-              onClick={() => router.push('/')}
-              className="flex items-center space-x-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span>Back to Planner</span>
-            </Button>
+      {/* Simple Header with Back Button */}
+      <div className="relative z-50 p-4 bg-white/95 backdrop-blur-sm shadow-sm border-b">
+        <div className="flex items-center justify-between">
+          <Button 
+            variant="outline" 
+            onClick={() => router.push('/')}
+            className="flex items-center space-x-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Planner</span>
+          </Button>
 
-            {flightData.departure && flightData.arrival && (
-              <div className="flex items-center space-x-2">
-                <Plane className="w-5 h-5 text-blue-600" />
-                <span className="text-lg font-semibold">
-                  {flightData.departure} → {flightData.arrival}
-                </span>
-              </div>
-            )}
-          </div>
-
-          {/* Flight Details Grid - Responsive */}
           {flightData.departure && flightData.arrival && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-              <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg">
-                <Plane className="w-4 h-4 text-gray-600" />
-                <div>
-                  <span className="font-medium text-gray-900">Aircraft:</span>
-                  <div className="text-gray-600">{flightData.airplaneModel}</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-2 p-3 bg-green-50 rounded-lg">
-                <MapPin className="w-4 h-4 text-green-600" />
-                <div>
-                  <span className="font-medium text-gray-900">Departure:</span>
-                  <div className="text-gray-600">{formatDateTime(flightData.departureDate, flightData.departureTime)}</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-2 p-3 bg-blue-50 rounded-lg">
-                <Clock className="w-4 h-4 text-blue-600" />
-                <div>
-                  <span className="font-medium text-gray-900">Arrival:</span>
-                  <div className="text-gray-600">{formatDateTime(flightData.arrivalDate, flightData.arrivalTime)}</div>
-                </div>
-              </div>
+            <div className="flex items-center space-x-2">
+              <Plane className="w-5 h-5 text-blue-600" />
+              <span className="text-lg font-semibold">
+                {flightData.departure} → {flightData.arrival}
+              </span>
             </div>
           )}
         </div>
       </div>
 
-      {/* Map Section */}
-      <div className="relative h-[calc(100vh-140px)]">
+      {/* Full Screen Map */}
+      <div className="h-[calc(100vh-73px)]">
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
@@ -158,6 +164,9 @@ export default function FlightMapPage() {
                 onPause={pauseAnimation}
                 onReset={resetAnimation}
                 onProgressChange={setPosition}
+                currentTime={calculateCurrentTime()}
+                timeLeft={calculateTimeLeft()}
+                progressPercent={Math.round(progress * 100)}
                 onResetView={() => {
                   // Reset view to show full flight path
                   if (map && flightState) {
