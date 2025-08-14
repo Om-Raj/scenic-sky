@@ -10,6 +10,14 @@ export function useFlightPath() {
   const [animationState, setAnimationState] = useState<AnimationState | null>(null);
   const animationRef = useRef<number | undefined>(undefined);
 
+  // Helper function to stop any running animation
+  const stopAnimation = useCallback(() => {
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+      animationRef.current = undefined;
+    }
+  }, []);
+
   // Calculate and set up flight path between two airports
   const generateFlightPath = useCallback((departureCode: string, arrivalCode: string) => {
     const departure = DEMO_AIRPORTS.find((airport) => airport.code === departureCode);
@@ -44,10 +52,16 @@ export function useFlightPath() {
       if (!flightState) return;
 
       setFlightState((prev) => (prev ? { ...prev, isPlaying: true } : null));
+      
+      // Store the current position as the starting point for this animation
+      const currentProgress = flightState.currentPosition;
+      const remainingDuration = durationMs * (1 - currentProgress);
+      
       setAnimationState({
         startTime: Date.now(),
-        duration: durationMs,
+        duration: remainingDuration,
         currentTime: 0,
+        startPosition: currentProgress, // Remember where we started this animation
       });
     },
     [flightState]
@@ -55,17 +69,13 @@ export function useFlightPath() {
 
   // Pause flight animation
   const pauseAnimation = useCallback(() => {
-    if (animationRef.current) {
-      cancelAnimationFrame(animationRef.current);
-    }
+    stopAnimation();
     setFlightState((prev) => (prev ? { ...prev, isPlaying: false } : null));
-  }, []);
+  }, [stopAnimation]);
 
   // Reset flight to beginning
   const resetAnimation = useCallback(() => {
-    if (animationRef.current) {
-      cancelAnimationFrame(animationRef.current);
-    }
+    stopAnimation();
     setFlightState((prev) =>
       prev
         ? {
@@ -76,36 +86,49 @@ export function useFlightPath() {
         : null
     );
     setAnimationState(null);
-  }, []);
+  }, [stopAnimation]);
 
   // Manually set position (for slider control)
   const setPosition = useCallback((position: number) => {
+    // Clear any running animation when manually setting position
+    stopAnimation();
+    
     setFlightState((prev) =>
       prev
         ? {
             ...prev,
             currentPosition: Math.max(0, Math.min(1, position)),
+            isPlaying: false, // Stop animation when manually setting position
           }
         : null
     );
-  }, []);
+    
+    // Clear animation state so next play starts from this new position
+    setAnimationState(null);
+  }, [stopAnimation]);
 
   // Animation loop using requestAnimationFrame for smooth performance
+  // Resumes from current position when play is pressed after pause
   useEffect(() => {
     if (!flightState?.isPlaying || !animationState) return;
 
     const animate = () => {
       const now = Date.now();
       const elapsed = now - animationState.startTime;
-      const progress = Math.min(elapsed / animationState.duration, 1);
+      const animationProgress = Math.min(elapsed / animationState.duration, 1);
+      
+      // Calculate new position: start position + progress from that point
+      // This ensures animation resumes from where it was paused
+      const progressFromStart = animationProgress * (1 - animationState.startPosition);
+      const newPosition = animationState.startPosition + progressFromStart;
 
-      setFlightState((prev) => (prev ? { ...prev, currentPosition: progress } : null));
+      setFlightState((prev) => (prev ? { ...prev, currentPosition: newPosition } : null));
 
-      if (progress < 1) {
+      if (animationProgress < 1) {
         animationRef.current = requestAnimationFrame(animate);
       } else {
-        // Animation complete
-        setFlightState((prev) => (prev ? { ...prev, isPlaying: false } : null));
+        // Animation complete - airplane should be at destination
+        setFlightState((prev) => (prev ? { ...prev, currentPosition: 1, isPlaying: false } : null));
         setAnimationState(null);
       }
     };
@@ -113,9 +136,7 @@ export function useFlightPath() {
     animationRef.current = requestAnimationFrame(animate);
 
     return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
+      stopAnimation();
     };
   }, [flightState?.isPlaying, animationState]);
 

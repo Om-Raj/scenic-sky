@@ -166,3 +166,9 @@ Small stylistic & UX suggestions (optional)
 Show a small info chip with distance and progress % (computed client-side using the path length) — keep as optional UI element. Add one-line comments where that calculation happens.
 
 Keep the hero form compact on mobile (collapsible map controls) — comment responsive choices inline.
+
+
+
+### Prompt 2
+
+Restructure the project such that on submitting the form the data is sent to /flight-map route and the map along with the controls is displayed there. make the inputs as url params.

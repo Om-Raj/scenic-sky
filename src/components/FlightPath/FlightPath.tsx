@@ -98,7 +98,7 @@ export function FlightPath({
 
     // Cleanup function
     return () => {
-      if (map.getSource('flight-path')) {
+      if (map && map.getSource('flight-path')) {
         map.removeLayer('flight-path-line');
         map.removeSource('flight-path');
       }

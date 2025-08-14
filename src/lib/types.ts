@@ -37,4 +37,5 @@ export interface AnimationState {
   startTime: number;
   duration: number; // milliseconds for full flight
   currentTime: number;
+  startPosition: number; // Position where animation started (0-1)
 }

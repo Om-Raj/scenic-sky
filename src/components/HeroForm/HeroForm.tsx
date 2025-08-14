@@ -52,13 +52,6 @@ export function HeroForm({ onSubmit, isLoading = false }: HeroFormProps) {
 
   return (
     <div className="w-full max-w-4xl mx-auto p-6 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg">
-      <div className="text-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Scenic Sky Flight Planner</h1>
-        <p className="text-gray-600">
-          Plan and visualize great-circle flight paths between major airports
-        </p>
-      </div>
-
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Airplane Model */}
@@ -117,7 +110,7 @@ export function HeroForm({ onSubmit, isLoading = false }: HeroFormProps) {
           {/* Action Button - spans remaining space on large screens */}
           <div className="space-y-2 lg:flex lg:items-end">
             <Button type="submit" disabled={isLoading} className="w-full lg:h-10">
-              {isLoading ? 'Calculating...' : 'Visualize Flight'}
+              {isLoading ? 'Processing...' : 'Plan Flight Route'}
             </Button>
           </div>
         </div>
