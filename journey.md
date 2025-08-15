@@ -54,9 +54,6 @@ A modern Next.js application that visualizes Great-Circle flight paths between a
 
 **Implementation**:
 - Floating button in top-left corner of flight map
-- Dedicated `/seatmap` route with URL parameter preservation
-- Responsive layout: desktop (60/40 split), mobile (stacked)
-- Interactive aircraft seatmap via iframe integration
 - Seat recommendation logic based on flight type (long-haul vs short-haul)
 - Real-time seat selection with postMessage API communication
 
@@ -84,22 +81,10 @@ const adjustedAz = (az - mapBearing + 360) % 360; // Counter-rotate compass
 
 **Solution**:
 ```typescript
-// Fixed rotation direction
-const adjustedAz = (az - mapBearing + 360) % 360; // Subtract for counter-rotation
-```
-
-### Bug 3: Sun Position on Wrong Side
 **Problem**: Sun appeared on incorrect side of aircraft.
 
 **Root Cause**: Sun position rotation was in same direction as map bearing instead of opposite.
 
-**Solution**:
-```typescript
-// Fixed sun position rotation
-const bearingRad = -mapBearing * DEG2RAD; // Negative to rotate opposite to map
-const adjustedX = rawSun.x * cosB - rawSun.z * sinB;
-const adjustedZ = rawSun.x * sinB + rawSun.z * cosB;
-```
 
 ### Bug 4: Incorrect Timezone Handling
 **Problem**: Times interpreted as browser's local timezone instead of airport timezones.
@@ -120,40 +105,13 @@ export interface Airport {
   lat: number;
   lon: number;
   timezone: string; // IANA timezone identifier
-}
-
-// Airport data with timezones
-const DEMO_AIRPORTS: Airport[] = [
-  { code: 'JFK', name: 'New York John F. Kennedy', lat: 40.6413, lon: -73.7781, timezone: 'America/New_York' },
-  { code: 'DEL', name: 'Indira Gandhi Intl, Delhi', lat: 28.5562, lon: 77.1, timezone: 'Asia/Kolkata' },
   // ... other airports
 ];
-
-// Proper timezone handling
-export function createDateTimeInTimezone(date: string, time: string, timezone: string): Date {
-  const timezoneOffsets: { [key: string]: string } = {
-    'America/New_York': '-04:00', // EDT in summer
     'Asia/Kolkata': '+05:30', // IST
     // ... other timezones
   };
-  
-  const offset = timezoneOffsets[timezone] || '+00:00';
-  const isoString = `${date}T${time}:00${offset}`;
-  return new Date(isoString);
 }
 ```
-
-**Before Fix**:
-- DEL 12:00 → treated as IST → wrong solar calculation
-- JFK 23:00 → treated as IST → completely incorrect
-
-**After Fix**:
-- DEL 12:00 IST → 2025-08-15T06:30:00.000Z → Sun at 74.3° elevation, 155.6° azimuth (correct)
-- JFK 23:00 EDT → 2025-08-16T03:00:00.000Z → Sun at -28.9° elevation (nighttime, correct)
-
-### Bug 5: Aircraft HTML File Path Resolution
-**Problem**: 404 errors when loading aircraft seatmap HTML files in iframe.
-
 **Root Cause**: Case-sensitive file paths and incorrect directory references.
 
 **Initial Issue**:
@@ -555,3 +513,15 @@ export function findSolarEventsAlongPath(
 - Verified correct local time formatting for CPT→EZE in both test scripts (`test-timezone-fix.js`) and browser UI (navbar now matches expected output: 6:30 PM GMT+2, 11:00 PM GMT-3).
 - Updated 3D sun visualization and solar calculations to match real-world sun position.
 - All changes logged and verified; code is modular, robust, and ready for further features.
+
+# 2025-08-16 — Seatmap UI: Left/Right Scenery Comparison & Recommendation
+
+- Created `CompactSeatRecommendationDisplay` component for clean sidebar integration in seatmap page.
+- Modified `src/app/seatmap/page.tsx` to auto-generate recommendations from URL params using `useAutoSeatRecommendation` hook.
+- Updated layout: iframe max width 300px (left), right sidebar hosts side-by-side scenery comparison and seat recommendation.
+- Implemented quality-based sorting for scenic views and solar events (excellent > good > fair > poor) in `SeatComparisonDisplay`.
+- Fixed TypeScript indexing errors by typing quality map as `Record<string, number>`.
+- Deduplicated `SCENIC_LOCATIONS` dataset using runtime dedupe function to remove duplicates (e.g., "Lake Pukaki" appeared multiple times).
+- All UI components integrated and sorted lists display properly with quality-based ordering.
+
+````

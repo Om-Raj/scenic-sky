@@ -69,10 +69,19 @@ export function SeatComparisonDisplay({
   }
 
   const summary = generateRecommendationSummary(result);
-  const leftViews = getPrioritizedScenicViews(result, 'left');
-  const rightViews = getPrioritizedScenicViews(result, 'right');
-  const leftSolarEvents = getFormattedSolarEvents(result, 'left');
-  const rightSolarEvents = getFormattedSolarEvents(result, 'right');
+  
+  // Sort scenic views by quality (excellent > good > fair > poor)
+  const qualityOrder: Record<string, number> = { excellent: 4, good: 3, fair: 2, poor: 1 };
+  const leftViews = getPrioritizedScenicViews(result, 'left')
+    .sort((a, b) => (qualityOrder[b.visibility] || 0) - (qualityOrder[a.visibility] || 0));
+  const rightViews = getPrioritizedScenicViews(result, 'right')
+    .sort((a, b) => (qualityOrder[b.visibility] || 0) - (qualityOrder[a.visibility] || 0));
+  
+  // Sort solar events by quality (excellent > good > fair > poor)
+  const leftSolarEvents = getFormattedSolarEvents(result, 'left')
+    .sort((a, b) => (qualityOrder[b.visibility] || 0) - (qualityOrder[a.visibility] || 0));
+  const rightSolarEvents = getFormattedSolarEvents(result, 'right')
+    .sort((a, b) => (qualityOrder[b.visibility] || 0) - (qualityOrder[a.visibility] || 0));
 
   const formatDuration = (hours: number): string => {
     const h = Math.floor(hours);
@@ -204,7 +213,7 @@ export function SeatComparisonDisplay({
                         <div className="flex-1">
                           <div className="font-medium text-gray-900">{event.type}</div>
                           <div className="text-gray-600 text-xs">
-                            {event.time} • {event.progress}%
+                            {event.time} • Journey Completed: {event.progress}%
                           </div>
                         </div>
                         <span className={`px-1.5 py-0.5 text-xs rounded border ${getVisibilityBadge(event.visibility)} ml-2`}>
@@ -292,7 +301,7 @@ export function SeatComparisonDisplay({
                         <div className="flex-1">
                           <div className="font-medium text-gray-900">{event.type}</div>
                           <div className="text-gray-600 text-xs">
-                            {event.time} • {event.progress}%
+                            {event.time} • Journey Completed: {event.progress}%
                           </div>
                         </div>
                         <span className={`px-1.5 py-0.5 text-xs rounded border ${getVisibilityBadge(event.visibility)} ml-2`}>
