@@ -3,7 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, MapPin, Plane, Users } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { ArrowLeft, MapPin, Plane, Users, Sparkles } from 'lucide-react';
+import { CompactSeatRecommendationDisplay, SeatComparisonDisplay } from '@/components/SeatRecommendation';
+import { useAutoSeatRecommendation } from '@/hooks/useSeatRecommendation';
 
 interface SeatData {
   seat: string;
@@ -16,6 +19,9 @@ export default function SeatmapPage() {
   const searchParams = useSearchParams();
   const [selectedSeat, setSelectedSeat] = useState<SeatData | null>(null);
   const [iframeLoaded, setIframeLoaded] = useState(false);
+
+  // Use the seat recommendation hook with URL parameters
+  const seatRecommendation = useAutoSeatRecommendation(searchParams);
 
   // Extract flight data from URL parameters
   const flightData = {
@@ -173,15 +179,15 @@ export default function SeatmapPage() {
           </div>
         </div>
 
-        {/* Seatmap Iframe */}
-        <div className="flex-1 lg:w-[40%] relative">
+        {/* Seatmap Iframe - Compact */}
+        <div className="flex-shrink-0 lg:w-[400px] relative">
           <div className="h-full p-4">
-            <div className="h-full bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className="h-full max-w-[400px] bg-white rounded-lg shadow-lg overflow-hidden">
               {!iframeLoaded && (
                 <div className="h-full flex items-center justify-center">
                   <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                    <p className="text-gray-600">Loading seatmap...</p>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                    <p className="text-gray-600 text-sm">Loading seatmap...</p>
                   </div>
                 </div>
               )}
@@ -196,88 +202,70 @@ export default function SeatmapPage() {
           </div>
         </div>
 
-        {/* Desktop: Seat Details (Right Side) */}
-        <div className="hidden lg:block lg:w-[60%] p-4">
-          <div className="h-full bg-white rounded-lg shadow-lg p-6">
-            <div className="flex items-center space-x-2 mb-6">
-              <MapPin className="w-6 h-6 text-blue-600" />
-              <h2 className="text-xl font-semibold">
-                {selectedSeat ? 'Selected Seat' : 'Recommended Seat'}
-              </h2>
-            </div>
-            
-            <div className="space-y-6">
-              {/* Main Seat Info */}
-              <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
-                <div className="text-center mb-4">
-                  <div className="text-4xl font-bold text-blue-900 mb-1">{currentSeat.seat}</div>
-                  <div className="text-lg text-blue-700">{currentSeat.position} Seat</div>
-                </div>
-                
-                <div className="space-y-3">
-                  <div>
-                    <div className="text-sm font-medium text-gray-700 mb-2">Features</div>
-                    <div className="flex flex-wrap gap-2">
-                      {currentSeat.features.map((feature, index) => (
-                        <span 
-                          key={index}
-                          className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full"
-                        >
-                          {feature}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {!selectedSeat && 'reason' in recommendedSeat && (
+        {/* Desktop: Expanded Right Sidebar with Seat Comparison */}
+        <div className="hidden lg:block flex-1 p-4">
+          <div className="h-full space-y-4">
+            {/* Basic Seat Info Bar */}
+            <Card className="bg-white">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <MapPin className="w-5 h-5 text-blue-600" />
                     <div>
-                      <div className="text-sm font-medium text-gray-700 mb-2">Why this seat?</div>
-                      <div className="text-sm text-gray-600 italic">
-                        {recommendedSeat.reason}
+                      <div className="font-semibold text-lg">
+                        {selectedSeat ? 'Selected' : 'Recommended'}: {currentSeat.seat}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        {currentSeat.position} Seat • {flightData.departure} → {flightData.arrival}
                       </div>
                     </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Flight Details */}
-              <div className="p-4 bg-gray-50 rounded-lg border">
-                <h3 className="text-sm font-medium text-gray-700 mb-3">Flight Details</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Aircraft:</span>
-                    <span className="font-medium">{flightData.airplaneModel}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Route:</span>
-                    <span className="font-medium">{flightData.departure} → {flightData.arrival}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Departure:</span>
-                    <span className="font-medium">
-                      {flightData.departureDate} at {flightData.departureTime}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Arrival:</span>
-                    <span className="font-medium">
-                      {flightData.arrivalDate} at {flightData.arrivalTime}
-                    </span>
+                  <div className="flex flex-wrap gap-1">
+                    {currentSeat.features.slice(0, 3).map((feature, index) => (
+                      <span 
+                        key={index}
+                        className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded"
+                      >
+                        {feature}
+                      </span>
+                    ))}
                   </div>
                 </div>
-              </div>
+              </CardContent>
+            </Card>
 
-              {/* Seat Selection Tips */}
-              <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                <h3 className="text-sm font-medium text-yellow-800 mb-2">💡 Seat Selection Tips</h3>
-                <ul className="text-xs text-yellow-700 space-y-1">
-                  <li>• Window seats offer views but less mobility</li>
-                  <li>• Aisle seats provide easy access to overhead bins</li>
-                  <li>• Avoid seats near lavatories for quieter flight</li>
-                  <li>• Exit row seats usually have extra legroom</li>
-                </ul>
-              </div>
-            </div>
+            {/* Seat Recommendation Comparison */}
+            {seatRecommendation.result ? (
+              <SeatComparisonDisplay 
+                result={seatRecommendation.result}
+                loading={seatRecommendation.loading}
+                error={seatRecommendation.error}
+                className="flex-1"
+              />
+            ) : seatRecommendation.loading ? (
+              <SeatComparisonDisplay 
+                result={null as any}
+                loading={true}
+                error={null}
+                className="flex-1"
+              />
+            ) : seatRecommendation.error ? (
+              <SeatComparisonDisplay 
+                result={null as any}
+                loading={false}
+                error={seatRecommendation.error}
+                className="flex-1"
+              />
+            ) : (
+              <Card className="flex-1">
+                <CardContent className="p-6 flex items-center justify-center h-full">
+                  <div className="text-center">
+                    <Sparkles className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-gray-500">Loading seat recommendations...</p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>

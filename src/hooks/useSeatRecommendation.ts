@@ -131,7 +131,7 @@ export function useSeatRecommendationFromParams(
   const [input, setInput] = useState<SeatRecommendationInput | null>(null);
 
   useEffect(() => {
-    const airplaneModel = searchParams.get('airplane');
+    const airplaneModel = searchParams.get('airplaneModel');
     const departureDate = searchParams.get('departureDate');
     const departureTime = searchParams.get('departureTime');
     const arrivalDate = searchParams.get('arrivalDate');
