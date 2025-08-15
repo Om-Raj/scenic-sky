@@ -131,7 +131,7 @@ export function SeatRecommendationDisplay({
                           <div className="font-medium">{view.name}</div>
                           <div className="text-gray-600 text-xs">{view.description}</div>
                           <div className="text-gray-500 text-xs mt-1">
-                            {view.distanceFromRoute}km • {view.type}
+                            {Math.round(view.distanceFromRoute)}km • {view.type} • Journey Completed: {Math.round(view.routeProgress * 100)}%
                           </div>
                         </div>
                         <span className={`px-2 py-1 text-xs rounded-full ${getVisibilityBadge(view.visibility)}`}>
@@ -204,7 +204,7 @@ export function SeatRecommendationDisplay({
                           <div className="font-medium">{view.name}</div>
                           <div className="text-gray-600 text-xs">{view.description}</div>
                           <div className="text-gray-500 text-xs mt-1">
-                            {view.distanceFromRoute}km • {view.type}
+                            {Math.round(view.distanceFromRoute)}km • {view.type} • Journey Completed: {Math.round(view.routeProgress * 100)}%
                           </div>
                         </div>
                         <span className={`px-2 py-1 text-xs rounded-full ${getVisibilityBadge(view.visibility)}`}>

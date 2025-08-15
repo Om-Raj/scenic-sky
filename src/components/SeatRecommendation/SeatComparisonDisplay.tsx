@@ -177,7 +177,7 @@ export function SeatComparisonDisplay({
                         <div className="flex-1 min-w-0">
                           <div className="font-medium text-gray-900 truncate">{view.name}</div>
                           <div className="text-gray-600 text-xs">
-                            {view.distanceFromRoute}km • {view.type}
+                            {Math.round(view.distanceFromRoute)}km • {view.type} • Journey Completed: {Math.round(view.routeProgress * 100)}%
                           </div>
                         </div>
                         <span className={`px-1.5 py-0.5 text-xs rounded border ${getVisibilityBadge(view.visibility)} ml-2 shrink-0`}>
@@ -265,7 +265,7 @@ export function SeatComparisonDisplay({
                         <div className="flex-1 min-w-0">
                           <div className="font-medium text-gray-900 truncate">{view.name}</div>
                           <div className="text-gray-600 text-xs">
-                            {view.distanceFromRoute}km • {view.type}
+                            {Math.round(view.distanceFromRoute)}km • {view.type} • Journey Completed: {Math.round(view.routeProgress * 100)}%
                           </div>
                         </div>
                         <span className={`px-1.5 py-0.5 text-xs rounded border ${getVisibilityBadge(view.visibility)} ml-2 shrink-0`}>

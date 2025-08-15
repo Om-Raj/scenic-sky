@@ -147,6 +147,7 @@ export function getPrioritizedScenicViews(
   likes: number;
   visibility: string;
   distanceFromRoute: number;
+  routeProgress: number;
   description?: string;
 }> {
   return result.detailedScenicLocations
@@ -157,6 +158,7 @@ export function getPrioritizedScenicViews(
       likes: location.likes,
       visibility: location.visibility || 'fair',
       distanceFromRoute: Math.round(location.distanceFromRoute),
+      routeProgress: location.routeProgress,
       description: location.description,
     }))
     .sort((a, b) => {

@@ -522,6 +522,16 @@ export function findSolarEventsAlongPath(
 - Implemented quality-based sorting for scenic views and solar events (excellent > good > fair > poor) in `SeatComparisonDisplay`.
 - Fixed TypeScript indexing errors by typing quality map as `Record<string, number>`.
 - Deduplicated `SCENIC_LOCATIONS` dataset using runtime dedupe function to remove duplicates (e.g., "Lake Pukaki" appeared multiple times).
-- All UI components integrated and sorted lists display properly with quality-based ordering.
+- **Added journey completion percentage to scenic locations**: Now shows "Journey Completed: X%" for scenic views, matching solar events format.
+- Updated `getPrioritizedScenicViews` function to include `routeProgress` property in return type.
+- Modified all seat recommendation UI components to display scenic location progress alongside distance and type.
+- All UI components integrated and sorted lists display properly with quality-based ordering and progress percentages.
+
+## 2025-08-16 — Scenic Location Progress Percentages Added
+
+- Added "Journey Completed: X%" display for scenic locations across all seat recommendation UIs so scenic views match solar events' progress formatting.
+- Files changed: `src/lib/seat-recommendation-engine.ts`, `src/components/SeatRecommendation/SeatComparisonDisplay.tsx`, `src/components/SeatRecommendation/CompactSeatRecommendationDisplay.tsx`, `src/components/SeatRecommendation/SeatRecommendationDisplay.tsx`.
+- Also updated `journey.md` to document the change and verified TypeScript checks for modified files (no errors).
+
 
 ````
