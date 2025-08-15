@@ -21,22 +21,22 @@ const DEG2RAD = Math.PI / 180;
 /**
  * Convert SunCalc output to scene XYZ coordinates.
  * Returns x (east), y (up), z (north), plus azimuthDeg and elevationDeg.
+ * Using coordinate system that matches compass: North = negative Z, East = positive X
  */
 function getSunPosition(date: Date, latitude: number, longitude: number, radius = 1.5) {
   const pos = SunCalc.getPosition(date, latitude, longitude);
   const elevationRad = pos.altitude; // radians, -π/2..+π/2
-  const rawAzRad = pos.azimuth; // SunCalc azimuth in radians (from -π..π, measured from south?)
+  const rawAzRad = pos.azimuth; // SunCalc azimuth in radians
 
   // Convert SunCalc azimuth to degrees clockwise from North (0..360)
-  // Common conversion: azDeg = (rawAzRad * RAD2DEG + 180) % 360
   const azDeg = (rawAzRad * RAD2DEG + 180) % 360;
   const azRadFromNorthClockwise = azDeg * DEG2RAD;
 
-  // Map to Cartesian coords: x => East, y => Up, z => North
-  // Fix coordinate system so North is at negative Z (top of screen)
-  const x = radius * Math.cos(elevationRad) * Math.sin(azRadFromNorthClockwise); // East-West
-  const z = -radius * Math.cos(elevationRad) * Math.cos(azRadFromNorthClockwise); // North-South (negative Z = North)
-  const y = radius * Math.sin(elevationRad); // Up-Down
+  // Use same coordinate system as compass:
+  // North (0°) at negative Z, East (90°) at positive X
+  const x = radius * Math.cos(elevationRad) * Math.sin(azRadFromNorthClockwise);
+  const z = -radius * Math.cos(elevationRad) * Math.cos(azRadFromNorthClockwise);
+  const y = radius * Math.sin(elevationRad);
 
   return {
     x,
@@ -61,8 +61,8 @@ function makeLatitudeRingGeometry(elevationDeg: number, radius = 1.5, segments =
 
   for (let i = 0; i <= segments; i++) {
     const az = (i / segments) * Math.PI * 2;
-    const x = r * Math.cos(az);
-    const z = -r * Math.sin(az); // Fix coordinate system: adjust Z for proper orientation
+    const x = r * Math.sin(az); // Match compass coordinate system
+    const z = -r * Math.cos(az); // Match compass coordinate system
     points.push(x, y, z);
   }
 
@@ -84,8 +84,8 @@ function makeMeridianGeometry(azimuthDeg: number, radius = 1.5, segments = 36) {
     const elevRad = elev * DEG2RAD;
     const r = Math.cos(elevRad) * radius;
     const y = Math.sin(elevRad) * radius;
-    const x = r * Math.sin(azRad);
-    const z = -r * Math.cos(azRad); // Fix coordinate system: negative Z = North
+    const x = r * Math.sin(azRad); // Match compass coordinate system
+    const z = -r * Math.cos(azRad); // Match compass coordinate system
     points.push(x, y, z);
   }
 
@@ -169,7 +169,7 @@ function SkySphereScene({
 }) {
   // Sun position memoized and adjusted for map bearing
   const sun = useMemo(() => {
-    const rawSun = getSunPosition(date, latitude, longitude, radius);
+    const rawSun = getSunPosition(date, latitude, longitude, radius); // Back to original radius
     
     // Adjust sun position for map bearing (rotate opposite to map)
     // When map rotates clockwise, sun should appear to rotate counter-clockwise
@@ -221,12 +221,14 @@ function SkySphereScene({
     }
   }, [date, latitude, longitude, radius, mapBearing]);
 
-  // Sun ray geometry
+  // Sun ray geometry - connect from scaled sun position to center
   const sunRay = useMemo(() => {
-    if (sun.elevationDeg > 0) {
-      return makeSunRayGeometry(sun);
-    }
-    return null;
+    const scaledSun = {
+      x: sun.x * 1.15,
+      y: sun.y * 1.15,
+      z: sun.z * 1.15
+    };
+    return makeSunRayGeometry(scaledSun);
   }, [sun]);
 
   // Precompute latitude rings (elevations) and meridians (azimuths)
@@ -294,15 +296,15 @@ function SkySphereScene({
         </primitive>
       )}
 
-      {/* Sun ray from sun to center (airplane) */}
-      {sunRay && sun.elevationDeg > 0 && (
+      {/* Sun ray from sun to center (airplane) - always visible */}
+      {sunRay && (
         <primitive object={new THREE.Line(sunRay)}>
           <lineBasicMaterial
             attach="material"
-            color="#ffd700"
+            color="#ffff00"
             transparent
-            opacity={0.6}
-            linewidth={3}
+            opacity={0.4}
+            linewidth={2}
           />
         </primitive>
       )}
@@ -319,9 +321,9 @@ function SkySphereScene({
         const adjustedAz = (az - mapBearing + 360) % 360;
         const azRad = adjustedAz * DEG2RAD;
         
-        // Position with corrected coordinate system:
-        // North (0°) at negative Z (top of screen)
-        // East (90°) at positive X (right of screen)  
+        // Position with correct coordinate system:
+        // North (0°) should be at negative Z (towards top of map)
+        // East (90°) should be at positive X (towards right of map)
         const x = Math.sin(azRad) * radius;
         const z = -Math.cos(azRad) * radius;
         
@@ -334,27 +336,29 @@ function SkySphereScene({
         );
       })}
 
-      {/* Sun: small bright sphere + sprite halo - only show if above horizon */}
-      {sun.elevationDeg > 0 && (
-        <group position={[sun.x, sun.y, sun.z]}>
-          <mesh ref={sunRef}>
-            <sphereGeometry args={[0.06, 16, 16]} />
-            <meshBasicMaterial color="#ffd76b" toneMapped={false} />
-          </mesh>
+      {/* Sun: bright sphere positioned slightly outside hemisphere to avoid clipping */}
+      <group position={[sun.x * 1.15, sun.y * 1.15, sun.z * 1.15]}>
+        <mesh ref={sunRef}>
+          <sphereGeometry args={[0.08, 16, 16]} />
+          <meshBasicMaterial 
+            color="#ffff00" 
+            toneMapped={false}
+          />
+        </mesh>
 
-          {/* simple sprite halo */}
-          <sprite scale={[0.6, 0.6, 1]}>
-            <spriteMaterial
-              attach="material"
-              color="#ffd76b"
-              transparent
-              opacity={0.25}
-              depthWrite={false}
-            />
-          </sprite>
+        {/* Glow effect */}
+        <sprite scale={[0.3, 0.3, 1]}>
+          <spriteMaterial
+            attach="material"
+            color="#ffff00"
+            transparent
+            opacity={0.6}
+          />
+        </sprite>
 
-          {/* small elevation/azimuth readout as 3D text near the sun */}
-          <Html center position={[0.12, 0.06, 0]}>
+        {/* Show elevation/azimuth readout only when above horizon */}
+        {sun.elevationDeg > 0 && (
+          <Html center position={[0.15, 0.08, 0]}>
             <div style={{
               color: 'white',
               fontSize: 10,
@@ -367,8 +371,8 @@ function SkySphereScene({
               {`Az ${sun.azimuthDeg.toFixed(0)}° • El ${sun.elevationDeg.toFixed(0)}°`}
             </div>
           </Html>
-        </group>
-      )}
+        )}
+      </group>
     </group>
   );
 }
