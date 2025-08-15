@@ -21,7 +21,6 @@ export function MapWithCenteredAircraft({
 }: MapWithCenteredAircraftProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
-  const aircraftMarker = useRef<maplibregl.Marker | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Initialize map
@@ -62,30 +61,8 @@ export function MapWithCenteredAircraft({
     map.current.addControl(new maplibregl.NavigationControl(), 'top-right');
     map.current.addControl(new maplibregl.FullscreenControl(), 'top-right');
 
-    // Create aircraft marker element
-    const aircraftElement = document.createElement('div');
-    aircraftElement.className = 'aircraft-marker';
-    aircraftElement.innerHTML = `
-      <div style="
-        width: 32px;
-        height: 32px;
-        background: url('/airplane-black-shape.svg') center/contain no-repeat;
-        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)) brightness(1.2);
-        transform: rotate(0deg);
-        transition: none;
-        position: relative;
-        z-index: 1000;
-      "></div>
-    `;
-
-    // Create and position aircraft marker at map center - use offset to ensure true centering
-    aircraftMarker.current = new maplibregl.Marker({
-      element: aircraftElement,
-      anchor: 'center',
-      offset: [0, 0], // No offset needed for center anchor
-    })
-      .setLngLat([aircraftPosition.lng, aircraftPosition.lat])
-      .addTo(map.current);
+    // Don't create a map marker - we'll use a fixed HTML element instead
+    // This ensures the aircraft always stays at screen center
 
     map.current.on('load', () => {
       setIsLoaded(true);
@@ -95,9 +72,6 @@ export function MapWithCenteredAircraft({
     });
 
     return () => {
-      if (aircraftMarker.current) {
-        aircraftMarker.current.remove();
-      }
       if (map.current) {
         map.current.remove();
         map.current = null;
@@ -107,7 +81,7 @@ export function MapWithCenteredAircraft({
 
   // Update aircraft position and keep it centered
   useEffect(() => {
-    if (!map.current || !aircraftMarker.current || !isLoaded) return;
+    if (!map.current || !isLoaded) return;
 
     // Calculate the bearing for map rotation to keep aircraft direction pointing up
     // Aircraft bearing tells us which direction the aircraft is moving
@@ -115,26 +89,13 @@ export function MapWithCenteredAircraft({
     // Map bearing formula: aircraftBearing - 180 (to align movement direction with screen top)
     const mapBearing = aircraftPosition.bearing ? aircraftPosition.bearing - 180 : 0;
 
-    // Update aircraft marker position FIRST to keep it truly centered
-    aircraftMarker.current.setLngLat([aircraftPosition.lng, aircraftPosition.lat]);
-    
-    // Then smoothly move and rotate map to align aircraft movement direction with screen top
+    // Update map center and bearing to keep aircraft centered
     map.current.easeTo({
       center: [aircraftPosition.lng, aircraftPosition.lat],
       bearing: mapBearing, // Rotate map so aircraft movement direction points up
       duration: 300, // Shorter duration for smoother updates
       essential: true,
     });
-    
-    // Keep aircraft icon pointing up (since map rotates to align direction)
-    const aircraftElement = aircraftMarker.current.getElement();
-    if (aircraftElement) {
-      const iconDiv = aircraftElement.querySelector('div') as HTMLDivElement;
-      if (iconDiv) {
-        // Aircraft should point up since map rotation aligns movement direction with top
-        iconDiv.style.transform = `rotate(0deg)`;
-      }
-    }
   }, [aircraftPosition, isLoaded]);
 
   return (
@@ -145,6 +106,21 @@ export function MapWithCenteredAircraft({
         style={{ minHeight: '400px' }}
       />
       
+      {/* Fixed aircraft icon at screen center */}
+      <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-10">
+        <div 
+          className="aircraft-center-icon"
+          style={{
+            width: '32px',
+            height: '32px',
+            background: 'url("/airplane-black-shape.svg") center/contain no-repeat',
+            filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.4)) brightness(1.2)',
+            transform: 'rotate(0deg)',
+            zIndex: 1000,
+          }}
+        />
+      </div>
+
       {/* Minimal center indicator */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
         <div className="w-1 h-1 bg-blue-500/40 rounded-full"></div>

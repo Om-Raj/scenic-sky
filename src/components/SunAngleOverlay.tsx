@@ -79,6 +79,7 @@ export function SunAngleOverlay({
             filter: `brightness(${0.8 + solarData.intensity * 0.4}) saturate(${0.9 + solarData.intensity * 0.3})`,
           }}
         >
+          {/* Main sun flare image */}
           <img
             src="/sun-flare.png"
             alt="Sun"
@@ -89,18 +90,40 @@ export function SunAngleOverlay({
             }}
           />
           
-          {/* Light ray to aircraft position (if provided) */}
+          {/* Studio shape point in center of sun */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <img
+              src="/studio_shape_point.png"
+              alt="Sun Center"
+              className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6"
+              style={{
+                filter: 'brightness(1.2) contrast(1.1)',
+                opacity: solarData.intensity * 0.9,
+              }}
+            />
+          </div>
+          
+          {/* Light ray from sun center to screen center (aircraft position) */}
           {aircraftPosition && solarData.intensity > 0.4 && (
             <div
-              className="absolute top-1/2 left-1/2 origin-left bg-gradient-to-r from-yellow-300/30 to-transparent"
+              className="absolute"
               style={{
-                width: '200px',
-                height: '2px',
-                transform: `translate(-50%, -50%) rotate(${Math.atan2(
-                  50 - solarData.y, // Point toward center where aircraft is
+                left: '50%',
+                top: '50%',
+                width: '2px',
+                transformOrigin: 'top center',
+                transform: `translate(-50%, 0) rotate(${Math.atan2(
+                  50 - solarData.y, // Calculate angle to screen center (50%, 50%)
                   50 - solarData.x
-                ) * (180 / Math.PI) + 90}deg)`,
-                transformOrigin: 'left center',
+                ) * (180 / Math.PI)}deg)`,
+                height: `${Math.sqrt(
+                  Math.pow(50 - solarData.x, 2) + Math.pow(50 - solarData.y, 2)
+                )}vh`, // Length from sun to center
+                background: `linear-gradient(to bottom, 
+                  rgba(255, 220, 100, ${solarData.intensity * 0.8}) 0%, 
+                  rgba(255, 220, 100, ${solarData.intensity * 0.4}) 50%, 
+                  transparent 100%)`,
+                pointerEvents: 'none',
               }}
             />
           )}
