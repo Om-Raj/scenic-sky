@@ -115,12 +115,20 @@ function makeSunDayPathGeometry(date: Date, latitude: number, longitude: number,
 }
 
 /**
- * Generate sun ray geometry from sun position to center (airplane)
+ * Generate sun ray geometry from sun position to aircraft (accounting for scene tilt)
  */
 function makeSunRayGeometry(sunPosition: { x: number; y: number; z: number }) {
+  // Account for the 0.2 radian forward tilt applied to the scene
+  // The visual center where aircraft appears is slightly forward due to tilt
+  const aircraftVisualPosition = {
+    x: 0,
+    y: -0.4, // Slightly lower due to forward tilt
+    z: 0.2   // Slightly forward due to forward tilt
+  };
+  
   const points = [
     sunPosition.x, sunPosition.y, sunPosition.z, // Sun position
-    0, 0, 0 // Center (airplane position)
+    aircraftVisualPosition.x, aircraftVisualPosition.y, aircraftVisualPosition.z // Aircraft visual position
   ];
   
   const geometry = new THREE.BufferGeometry();
@@ -222,9 +230,9 @@ function SkySphereScene({
     return makeSunRayGeometry(sun);
   }, [sun]);
 
-  // Precompute latitude rings (elevations) and meridians (azimuths)
-  const latRings = useMemo(() => [0, 15, 30, 45, 60, 75], []);
-  const meridians = useMemo(() => [0, 45, 90, 135, 180, 225, 270, 315], []);
+  // Precompute latitude rings (elevations) and meridians (azimuths) - reduced for cleaner look
+  const latRings = useMemo(() => [0], []); // Keep only equator, 30°, and 60°
+  const meridians = useMemo(() => [], []); // Keep only cardinal directions
 
   // subtle bobbing animation for sun using frame clock
   const sunRef = React.useRef<THREE.Mesh | null>(null);
@@ -253,6 +261,7 @@ function SkySphereScene({
               color={isEquator ? '#ffffff' : '#9fc9ff'}
               transparent
               opacity={isEquator ? 0.9 : 0.35}
+              linewidth={isEquator ? 3 : 1}
             />
           </primitive>
         );
@@ -320,7 +329,7 @@ function SkySphereScene({
         
         return (
           <group key={`label-${label}`} position={[x, 0.02, z]}>
-            <Text fontSize={0.14} color="#fff" anchorX="center" anchorY="middle" maxWidth={1}>
+            <Text fontSize={0.22} color="#fff" anchorX="center" anchorY="middle" maxWidth={1}>
               {label}
             </Text>
           </group>
@@ -331,12 +340,14 @@ function SkySphereScene({
       <group position={[sun.x, sun.y, sun.z]}>
         <mesh ref={sunRef}>
           <sphereGeometry args={[(() => {
-            // Scale sun size based on elevation angle, not distance from center
+            // Scale sun size based on elevation angle
             // Higher elevation = larger sun (appears closer/more prominent)
-            const elevationFactor = Math.max(0.1, (sun.elevationDeg + 90) / 180); // 0.1 to 1.0
-            const baseSize = 0.06;
-            const scaledSize = baseSize + (elevationFactor * 0.04); // 0.06 to 0.10
-            return scaledSize;
+            // Lower elevation = smaller sun (appears farther/less prominent)
+            const elevationFactor = Math.max(0.2, (sun.elevationDeg + 90) / 180); // 0.2 to 1.0
+            const baseSize = 0.15; // Increased base size
+            const variationRange = 0.08; // Size can vary by ±0.08
+            const scaledSize = baseSize + (elevationFactor - 0.6) * variationRange; // 0.08 to 0.16
+            return Math.max(0.08, Math.min(0.18, scaledSize)); // Clamp between 0.08 and 0.18
           })(), 16, 16]} />
           <meshBasicMaterial 
             color="#ffff00" 
@@ -348,21 +359,27 @@ function SkySphereScene({
 
         {/* Glow effect that scales with sun size */}
         <sprite scale={[(() => {
-          const elevationFactor = Math.max(0.1, (sun.elevationDeg + 90) / 180);
-          const baseScale = 0.25;
-          const scaledGlow = baseScale + (elevationFactor * 0.15); // 0.25 to 0.40
-          return scaledGlow;
+          const elevationFactor = Math.max(0.2, (sun.elevationDeg + 90) / 180);
+          const baseScale = 0.35; // Increased base glow size
+          const variationRange = 0.25; // Glow can vary by ±0.25
+          const scaledGlow = baseScale + (elevationFactor - 0.6) * variationRange; // 0.20 to 0.50
+          return Math.max(0.25, Math.min(0.55, scaledGlow));
         })(), (() => {
-          const elevationFactor = Math.max(0.1, (sun.elevationDeg + 90) / 180);
-          const baseScale = 0.25;
-          const scaledGlow = baseScale + (elevationFactor * 0.15);
-          return scaledGlow;
+          const elevationFactor = Math.max(0.2, (sun.elevationDeg + 90) / 180);
+          const baseScale = 0.35;
+          const variationRange = 0.25;
+          const scaledGlow = baseScale + (elevationFactor - 0.6) * variationRange;
+          return Math.max(0.25, Math.min(0.55, scaledGlow));
         })(), 1]}>
           <spriteMaterial
             attach="material"
             color="#ffff00"
             transparent
-            opacity={0.8}
+            opacity={(() => {
+              // Opacity also varies with elevation - higher sun is brighter
+              const elevationFactor = Math.max(0.2, (sun.elevationDeg + 90) / 180);
+              return 0.6 + (elevationFactor * 0.3); // 0.6 to 0.9 opacity
+            })()}
             depthTest={false}
             depthWrite={false}
           />

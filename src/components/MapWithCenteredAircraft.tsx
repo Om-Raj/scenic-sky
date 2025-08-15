@@ -54,7 +54,7 @@ export function MapWithCenteredAircraft({
         ],
       },
       center: [aircraftPosition.lng, aircraftPosition.lat],
-      zoom: 8, // Close zoom to show aircraft perspective
+      zoom: 3, // Close zoom to show aircraft perspective
       pitch: 45, // Tilted view for 3D effect
       bearing: aircraftPosition.bearing || 0, // Initialize with correct bearing for forward movement
     });
