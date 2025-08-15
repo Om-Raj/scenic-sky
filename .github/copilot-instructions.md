@@ -179,3 +179,38 @@ Restructure the project such that on submitting the form the data is sent to /fl
 
 Remove flight details section. flight controls should be on the bottom center of the screen in a floating compact deck form. Max width should not exceed 400px. it should contain current time calculated from start time and arrival time and % distance.
 
+
+### Prompt 4 
+<!-- 
+When crossing the international date line the flight path abruptly stops and goes around the globe to cross it. it may be due to the shift from 180 to -180. fix it by maybe omitting drawing the path between the two points crossing the line.
+
+**Agent:** You're absolutely right! The issue is that when crossing the international date line, the longitude jumps from ~180° to ~-180° (or vice versa), causing the flight path to wrap around the globe in the wrong direction. I need to detect these longitude jumps and either break the path or use a different approach for trans-Pacific flights. -->
+
+
+### Prompt 5
+
+Create a component that renders a realistic 3D sun in the center of the screen using Three.js.
+
+The sun should have a subtle floating/bobbing animation for depth.
+
+Based on the given latitude, longitude, date, and time, calculate the solar elevation and azimuth (using a precise astronomical formula or library).
+
+The calculated angles should control the sun’s 3D tilt and position within its floating container to match the real-world position relative to the given coordinates.
+
+Render a thick 3D ray of light from the center of the sun toward the given position coordinates (representing an aircraft) to visually show the sun’s relative angle.
+
+The ray should be dynamic, adjusting its direction and length according to the computed elevation and azimuth.
+
+Use smooth transitions or easing when the sun’s position or rotation changes.
+
+Also:
+
+Modify the map so the aircraft position is always fixed at the center of the screen. The map should move beneath the aircraft as its coordinates update, keeping the plane centered.
+
+The sun component must remain visually fixed in the center of the screen, but the sun’s actual position inside the component should shift subtly to reflect the real-world angles for a 3D effect.
+
+Optimize for performance with GPU-accelerated transforms and minimal re-renders.
+
+Ensure calculations work for any location, date, and time, including different hemispheres.
+
+Keep the design framework-agnostic except for using Three.js for rendering.
