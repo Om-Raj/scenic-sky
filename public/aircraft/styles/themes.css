@@ -1,0 +1,1213 @@
+/* All themes */
+.floor {
+  fill: none;
+}
+
+.copyright {
+  color: rgb(220, 220, 220);
+  font-size: 12px;
+  padding: 0;
+  margin: 10px 0 0 0;
+}
+
+/* Theme Default */
+
+.default .comp-plane {
+  background-color: #39c0ec;
+}
+
+/* Bulk */
+.default .bulk-cut {
+  fill: rgb(148, 168, 190);
+}
+
+.default .bulk-base {
+  fill: rgb(186, 199, 213);
+}
+.default .bulk.icon {
+  fill: rgb(70, 81, 94);
+}
+.default .bulk.icon.floor-icon {
+  fill: rgb(206, 216, 237);
+}
+
+/* Cockpit */
+.default .cockpit-door {
+  fill: none;
+  stroke: rgb(82, 82, 86);
+}
+.default .cockpit-windows {
+  fill: rgb(255, 255, 255);
+}
+
+/* Fuselage */
+.default .fuselage {
+  fill: rgb(232, 237, 241);
+}
+.default .fuselage-cut {
+  fill: rgb(202, 213, 223);
+}
+.default .fuselage-separator {
+  fill: none;
+  stroke: rgb(185, 186, 186);
+}
+
+/* Seat */
+
+.default .seat-armrest {
+  fill: rgb(202, 213, 223);
+}
+.default .seat-base {
+  fill: rgb(229, 234, 239);
+}
+.default .seat-headrest-cover {
+  fill: rgb(186, 199, 213);
+}
+
+.default .seatmap .seat-number {
+  fill: rgb(70, 81, 94);
+}
+
+.default .seatmap .default-color {
+  color: rgb(186, 199, 213);
+  fill: rgb(54, 54, 54);
+}
+
+.default .turbine,
+.default .tail-stabilizer,
+.default .wing {
+  fill: rgb(232, 237, 241);
+  stroke: rgb(217, 225, 232);
+  stroke-width: 7px;
+}
+
+/* -moz -safari part*/
+
+.default #cockpit-door {
+  fill: none;
+  stroke: rgb(82, 82, 86);
+}
+
+.default #cockpit-bulk-left .bulk-base,
+.default #cockpit-bulk-right .bulk-base,
+.default #cockpit-door .bulk-base {
+  fill: rgb(186, 199, 213);
+}
+
+.default #cockpit-bulk-left .bulk-cut,
+.default #cockpit-bulk-right .bulk-cut,
+.default #tail-bulk .bulk-cut {
+  fill: rgb(148, 168, 190);
+}
+
+.default #tail-horizontal-stabilizer,
+.default #wing,
+.default #turbine {
+  fill: rgb(232, 237, 241);
+  stroke: rgb(217, 225, 232);
+}
+
+/* Tooltip */
+.default .tooltip-arrow {
+  border-color: rgba(255, 255, 255, 0.98) transparent transparent transparent !important;
+}
+
+.default .tooltip-button {
+  background-color: rgb(18, 166, 139);
+  border-color: none !important;
+  color: #fff !important;
+}
+
+.default .tooltip-button-icon {
+  color: #fff !important;
+  fill: currentColor !important;
+}
+
+.default .tooltip-feature svg {
+  fill: rgb(70, 81, 94);
+  stroke: rgb(70, 81, 94);
+}
+
+.default .tooltip-feature-label {
+  color: rgb(70, 81, 94) !important;
+}
+
+.default .tooltip-feature-plus svg {
+  fill: rgb(17, 217, 0);
+  stroke: none;
+}
+
+.default .tooltip-feature-minus svg {
+  fill: rgb(225, 0, 0);
+  stroke: none;
+}
+
+.default .tooltip-header {
+  color: rgb(70, 81, 94) !important;
+}
+
+.default .tooltip-hint {
+  color: rgb(70, 81, 94);
+}
+
+.default .tooltip-unit {
+  background-color: rgb(234, 235, 237);
+  border-color: rgb(234, 235, 237);
+  color: rgb(91, 93, 107) !important;
+}
+
+.default .tooltip-unit svg {
+  fill: rgb(64, 66, 82);
+}
+
+.default .tooltip-vr {
+  color: rgb(112, 217, 252);
+}
+.default .tooltip-vr-icon {
+  fill: #fff !important;
+}
+
+.default .tooltip-wrapper {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+}
+
+/* Seatbar */
+.default .seatbar {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.default .seatbar-guests {
+  color: rgb(255, 255, 255);
+}
+
+.default .seatbar-seats {
+  color: rgb(255, 255, 255);
+}
+.default .seatbar-separator {
+  color: rgb(255, 255, 255);
+}
+.default .seatbar-arrow > .seatbar-icon {
+  background-color: rgb(255, 255, 255);
+}
+.default .seatbar-armchair > .seatbar-icon {
+  background-color: rgb(255, 255, 255);
+}
+/* Deck switch */
+.default .deck-switch-button {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Carpet comp-plane_carpet */
+.default .plane-vector_carpet {
+  fill: rgb(70, 81, 94);
+}
+/*** Theme Kiwi ***/
+
+.kiwi .comp-plane {
+  background-color: rgb(176, 232, 254);
+}
+
+/* Bulk */
+.kiwi .bulk-cut {
+  fill: rgb(148, 168, 190);
+}
+
+.kiwi .bulk-base {
+  fill: rgb(186, 199, 213);
+}
+.kiwi .bulk.icon {
+  fill: rgb(70, 81, 94);
+}
+.kiwi .bulk.icon.floor-icon {
+  fill: rgb(206, 216, 237);
+}
+
+/* Cockpit */
+.kiwi .cockpit-door {
+  fill: none;
+  stroke: rgb(82, 82, 86);
+}
+.kiwi .cockpit-windows {
+  fill: rgb(255, 255, 255);
+}
+
+/* Fuselage */
+.kiwi .fuselage {
+  fill: rgb(232, 237, 241);
+}
+.kiwi .fuselage-cut {
+  fill: rgb(202, 213, 223);
+}
+.kiwi .fuselage-separator {
+  fill: none;
+  stroke: rgb(185, 186, 186);
+}
+
+/* Seat */
+
+.kiwi .seat-armrest {
+  fill: rgb(202, 213, 223);
+}
+.kiwi .seat-base {
+  fill: rgb(229, 234, 239);
+}
+.kiwi .seat-headrest-cover {
+  fill: rgb(186, 199, 213);
+}
+
+.kiwi .seatmap .seat-number {
+  fill: rgb(70, 81, 94);
+}
+
+.kiwi .seatmap .default-color {
+  color: rgb(186, 199, 213);
+  fill: rgb(54, 54, 54);
+}
+
+.kiwi .turbine,
+.kiwi .tail-stabilizer,
+.kiwi .wing {
+  fill: rgb(232, 237, 241);
+  stroke: rgb(217, 225, 232);
+  stroke-width: 7px;
+}
+
+/* -moz -safari part*/
+
+.kiwi #cockpit-door {
+  fill: none;
+  stroke: rgb(82, 82, 86);
+}
+
+.kiwi #cockpit-bulk-left .bulk-base,
+.kiwi #cockpit-bulk-right .bulk-base,
+.kiwi #cockpit-door .bulk-base {
+  fill: rgb(186, 199, 213);
+}
+
+.kiwi #cockpit-bulk-left .bulk-cut,
+.kiwi #cockpit-bulk-right .bulk-cut,
+.kiwi #tail-bulk .bulk-cut {
+  fill: rgb(148, 168, 190);
+}
+
+.kiwi #tail-horizontal-stabilizer,
+.kiwi #wing,
+.kiwi #turbine {
+  fill: rgb(232, 237, 241);
+  stroke: rgb(217, 225, 232);
+}
+
+/* Tooltip */
+.kiwi .tooltip-arrow {
+  border-color: rgba(255, 255, 255, 0.95) transparent transparent transparent !important;
+}
+
+.kiwi .tooltip-button {
+  background-color: none;
+  border-color: rgb(0, 169, 145) !important;
+  color: rgb(0, 169, 145) !important;
+}
+
+.kiwi .tooltip-button-icon {
+  color: rgb(0, 169, 145) !important;
+  fill: currentColor !important;
+}
+
+.kiwi .tooltip-feature svg {
+  fill: rgb(70, 81, 94);
+  stroke: rgb(70, 81, 94);
+}
+
+.kiwi .tooltip-feature-label {
+  color: rgb(70, 81, 94) !important;
+}
+
+.kiwi .tooltip-feature-plus svg {
+  fill: rgb(17, 217, 0);
+  stroke: none;
+}
+
+.kiwi .tooltip-feature-minus svg {
+  fill: rgb(225, 0, 0);
+  stroke: none;
+}
+
+.kiwi .tooltip-header {
+  color: rgb(70, 81, 94) !important;
+}
+
+.kiwi .tooltip-hint {
+  color: rgb(70, 81, 94);
+}
+
+.kiwi .tooltip-unit {
+  background-color: none;
+  border-color: rgb(232, 237, 241) !important;
+  color: rgb(70, 81, 94) !important;
+}
+
+.kiwi .tooltip-unit svg {
+  fill: rgb(186, 199, 213);
+}
+
+.kiwi .tooltip-vr {
+  color: rgb(0, 169, 145);
+}
+.kiwi .tooltip-vr-icon {
+  fill: rgb(0, 169, 145);
+}
+
+.kiwi .tooltip-wrapper {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Seatbar */
+.kiwi .seatbar {
+  background-color: rgba(0, 169, 145, 0.9);
+}
+.kiwi .seatbar-guests {
+  color: rgb(255, 255, 255);
+}
+.kiwi .seatbar-seats {
+  color: rgb(255, 255, 255);
+}
+.kiwi .seatbar-separator {
+  color: rgb(255, 255, 255);
+}
+.kiwi .seatbar-arrow > .seatbar-icon {
+  background-color: rgb(255, 255, 255);
+}
+.kiwi .seatbar-armchair > .seatbar-icon {
+  background-color: rgb(255, 255, 255);
+}
+
+/* Deck switch */
+.kiwi .deck-switch-button {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Carpet */
+.kiwi .plane-vector_carpet {
+  fill: rgb(70, 81, 94);
+}
+/*** Theme Skyscanner ***/
+
+.skyscanner .comp-plane {
+  background-color: rgb(25, 196, 217);
+}
+
+/* Bulk */
+.skyscanner .bulk-cut {
+  fill: rgb(237, 237, 237);
+}
+
+.skyscanner .bulk-base {
+  fill: rgb(185, 186, 186);
+}
+.skyscanner .bulk.icon {
+  fill: rgba(0, 0, 0, 0.4);
+}
+.skyscanner .bulk.icon.floor-icon {
+  fill: rgba(0, 0, 0, 0.4);
+}
+
+/* Cockpit */
+.skyscanner .cockpit-door {
+  fill: none;
+  stroke: rgb(82, 82, 86);
+}
+.skyscanner .cockpit-windows {
+  fill: rgb(255, 255, 255);
+}
+
+/* Fuselage */
+.skyscanner .fuselage {
+  fill: rgb(219, 219, 219);
+}
+.skyscanner .fuselage-cut {
+  fill: rgb(185, 186, 186);
+}
+.skyscanner .fuselage-separator {
+  fill: none;
+  stroke: rgb(185, 186, 186);
+}
+
+/* Seat */
+
+.skyscanner .seat-armrest {
+  fill: rgb(185, 186, 186);
+}
+.skyscanner .seat-base {
+  fill: rgb(237, 237, 237);
+}
+.skyscanner .seat-headrest-cover {
+  fill: rgb(253, 255, 255);
+}
+
+.skyscanner .seatmap .seat-number {
+  fill: rgb(82, 82, 86);
+}
+
+.skyscanner .seatmap .default-color {
+  color: rgb(185, 186, 186);
+  fill: rgb(237, 237, 237);
+}
+
+.skyscanner .turbine,
+.skyscanner .tail-stabilizer,
+.skyscanner .wing {
+  fill: rgb(219, 219, 219);
+  stroke: rgb(185, 186, 186);
+  stroke-width: 7px;
+}
+
+/* Tooltip */
+.skyscanner .tooltip-arrow {
+  border-color: rgba(56, 46, 77, 0.95) transparent transparent transparent !important;
+}
+
+.skyscanner .tooltip-button {
+  background-color: none;
+  border-color: rgb(20, 183, 237) !important;
+  color: rgb(20, 183, 237) !important;
+}
+
+.skyscanner .tooltip-button-icon {
+  color: rgb(20, 183, 237) !important;
+  fill: currentColor !important;
+}
+
+.skyscanner .tooltip-feature svg {
+  fill: rgb(255, 255, 255) !important;
+  stroke: rgb(255, 255, 255) !important;
+}
+
+.skyscanner .tooltip-feature-label {
+  color: rgb(255, 255, 255) !important;
+}
+
+.skyscanner .tooltip-feature-plus svg {
+  fill: rgb(17, 217, 0);
+  stroke: none;
+}
+
+.skyscanner .tooltip-feature-minus svg {
+  fill: rgb(225, 0, 0);
+  stroke: none;
+}
+
+.skyscanner .tooltip-header {
+  color: rgb(255, 255, 255) !important;
+}
+
+.skyscanner .tooltip-hint {
+  color: rgb(255, 255, 255) !important;
+}
+
+.skyscanner .tooltip-unit {
+  background-color: none;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: rgb(255, 255, 255) !important;
+}
+
+.skyscanner .tooltip-unit svg {
+  fill: rgb(189, 191, 190) !important;
+}
+
+.skyscanner .tooltip-vr {
+  color: rgb(20, 183, 237) !important;
+}
+.skyscanner .tooltip-vr-icon {
+  fill: rgb(20, 183, 237) !important;
+}
+
+.skyscanner .tooltip-wrapper {
+  background-color: rgba(56, 46, 77, 0.95);
+}
+
+/* Seatbar */
+.skyscanner .seatbar {
+  background-color: rgba(219, 219, 219, 0.95);
+}
+.skyscanner .seatbar-guests {
+  color: rgb(255, 255, 255);
+}
+.skyscanner .seatbar-seats {
+  color: rgb(255, 255, 255);
+}
+.skyscanner .seatbar-separator {
+  color: rgb(255, 255, 255);
+}
+.skyscanner .seatbar-arrow > .seatbar-icon {
+  background-color: rgb(255, 255, 255);
+}
+.skyscanner .seatbar-armchair > .seatbar-icon {
+  background-color: rgb(255, 255, 255);
+}
+
+/* Deck switch */
+.skyscanner .deck-switch-button {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Carpet */
+.skyscanner .plane-vector_carpet {
+  fill: rgb(255, 255, 255);
+}
+/*** Theme Businessclass ***/
+
+.businessclass .comp-plane {
+  background-color: rgb(255, 255, 255);
+}
+
+/* Bulk */
+.businessclass .bulk-cut {
+  fill: rgb(237, 237, 237);
+}
+
+.businessclass .bulk-base {
+  fill: rgb(185, 186, 186);
+}
+.businessclass .bulk.icon {
+  fill: rgba(0, 0, 0, 0.4);
+}
+.businessclass .bulk.icon.floor-icon {
+  fill: rgba(0, 0, 0, 0.4);
+}
+
+/* Cockpit */
+.businessclass .cockpit-door {
+  fill: none;
+  stroke: rgb(82, 82, 86);
+}
+.businessclass .cockpit-windows {
+  fill: rgb(255, 255, 255);
+}
+
+/* Fuselage */
+.businessclass .fuselage {
+  fill: rgb(237, 237, 237);
+}
+.businessclass .fuselage-cut {
+  fill: rgb(255, 255, 255);
+}
+.businessclass .fuselage-separator {
+  fill: none;
+  stroke: rgb(255, 255, 255);
+}
+
+/* Seat */
+
+.businessclass .seat-armrest {
+  fill: rgb(185, 186, 186);
+}
+.businessclass .seat-base {
+  fill: rgb(237, 237, 237);
+}
+.businessclass .seat-headrest-cover {
+  fill: rgb(253, 255, 255);
+}
+
+.businessclass .seatmap .seat-number {
+  fill: rgb(82, 82, 86);
+}
+
+.businessclass .seatmap .default-color {
+  color: rgb(185, 186, 186);
+  fill: rgb(237, 237, 237);
+}
+
+.businessclass .turbine,
+.businessclass .tail-stabilizer,
+.businessclass .wing {
+  fill: rgb(237, 237, 237);
+  stroke: rgb(255, 255, 255);
+  stroke-width: 7px;
+}
+
+/* Tooltip */
+.businessclass .tooltip-arrow {
+  border-color: rgba(255, 255, 255, 0.95) transparent transparent transparent !important;
+}
+
+.businessclass .tooltip-button {
+  background-color: none;
+  border-color: rgb(63, 121, 112) !important;
+  color: rgb(63, 121, 112) !important;
+}
+
+.businessclass .tooltip-button-icon {
+  color: rgb(63, 121, 112) !important;
+  fill: currentColor !important;
+}
+
+.businessclass .tooltip-feature svg {
+  fill: rgb(82, 82, 86) !important;
+  stroke: rgb(82, 82, 86) !important;
+}
+
+.businessclass .tooltip-feature-label {
+  color: rgb(82, 82, 86) !important;
+}
+
+.businessclass .tooltip-feature-plus svg {
+  fill: rgb(17, 217, 0);
+  stroke: none;
+}
+
+.businessclass .tooltip-feature-minus svg {
+  fill: rgb(225, 0, 0);
+  stroke: none;
+}
+
+.businessclass .tooltip-header {
+  color: rgb(82, 82, 86) !important;
+}
+
+.businessclass .tooltip-hint {
+  color: rgb(82, 82, 86) !important;
+}
+
+.businessclass .tooltip-unit {
+  background-color: none;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: rgb(82, 82, 86) !important;
+}
+
+.businessclass .tooltip-unit svg {
+  fill: rgb(189, 191, 190) !important;
+}
+
+.businessclass .tooltip-vr {
+  color: rgb(63, 121, 112) !important;
+}
+.businessclass .tooltip-vr-icon {
+  fill: rgb(63, 121, 112) !important;
+}
+
+.businessclass .tooltip-wrapper {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Seatbar */
+.businessclass .seatbar {
+  background-color: transparent;
+}
+.businessclass .seatbar-guests {
+  color: transparent;
+}
+.businessclass .seatbar-seats {
+  color: transparent;
+}
+.businessclass .seatbar-separator {
+  color: transparent;
+}
+.businessclass .seatbar-arrow > .seatbar-icon {
+  background-color: transparent;
+}
+.businessclass .seatbar-armchair > .seatbar-icon {
+  background-color: transparent;
+}
+
+/* Deck switch */
+.businessclass .floor-switcher {
+  background-color: rgba(20, 20, 20, 0.3) !important;
+}
+
+/* Carpet */
+.businessclass .plane-vector_carpet {
+  fill: rgb(180, 143, 86);
+}
+/*** Theme Kayak ***/
+
+.kayak .comp-plane {
+  background-color: rgb(185, 186, 186);
+}
+
+/* Bulk */
+.kayak .bulk-cut {
+  fill: rgb(237, 237, 237);
+}
+
+.kayak .bulk-base {
+  fill: rgb(185, 186, 186);
+}
+.kayak .bulk.icon {
+  fill: rgba(0, 0, 0, 0.4);
+}
+.kayak .bulk.icon.floor-icon {
+  fill: rgba(0, 0, 0, 0.4);
+}
+
+/* Cockpit */
+.kayak .cockpit-door {
+  fill: none;
+  stroke: rgb(82, 82, 86);
+}
+.kayak .cockpit-windows {
+  fill: rgb(255, 255, 255);
+}
+
+/* Fuselage */
+.kayak .fuselage {
+  fill: rgb(252, 108, 43);
+}
+.kayak .fuselage-cut {
+  fill: rgb(185, 186, 186);
+}
+.kayak .fuselage-separator {
+  fill: none;
+  stroke: rgb(185, 186, 186);
+}
+
+/* Seat */
+
+.kayak .seat-armrest {
+  fill: rgb(185, 186, 186);
+}
+.kayak .seat-base {
+  fill: rgb(237, 237, 237);
+}
+.kayak .seat-headrest-cover {
+  fill: rgb(253, 255, 255);
+}
+
+.kayak .seatmap .seat-number {
+  fill: rgb(82, 82, 86);
+}
+
+.kayak .seatmap .default-color {
+  color: rgb(185, 186, 186);
+  fill: rgb(237, 237, 237);
+}
+
+.kayak .turbine,
+.kayak .tail-stabilizer,
+.kayak .wing {
+  fill: rgb(252, 108, 43);
+  stroke: rgb(185, 186, 186);
+  stroke-width: 7px;
+}
+
+/* Tooltip */
+.kayak .tooltip-arrow {
+  border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent !important;
+}
+
+.kayak .tooltip-button {
+  background-color: none;
+  border-color: rgb(189, 191, 190) !important;
+  color: rgb(189, 191, 190) !important;
+}
+
+.kayak .tooltip-button-icon {
+  color: rgb(189, 191, 190) !important;
+  fill: currentColor;
+}
+
+.kayak .tooltip-feature svg {
+  fill: rgb(255, 255, 255) !important;
+  stroke: rgb(255, 255, 255) !important;
+}
+
+.kayak .tooltip-feature-label {
+  color: rgb(255, 255, 255) !important;
+}
+
+.kayak .tooltip-feature-plus svg {
+  fill: rgb(17, 217, 0);
+  stroke: none;
+}
+
+.kayak .tooltip-feature-minus svg {
+  fill: rgb(225, 0, 0);
+  stroke: none;
+}
+
+.kayak .tooltip-header {
+  color: rgb(255, 255, 255) !important;
+}
+
+.kayak .tooltip-hint {
+  color: rgb(255, 255, 255) !important;
+}
+
+.kayak .tooltip-unit {
+  background-color: none;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: rgb(255, 255, 255) !important;
+}
+
+.kayak .tooltip-unit svg {
+  fill: rgb(189, 191, 190) !important;
+}
+
+.kayak .tooltip-vr {
+  color: rgb(189, 191, 190) !important;
+}
+.kayak .tooltip-vr-icon {
+  fill: rgb(189, 191, 190) !important;
+}
+
+.kayak .tooltip-wrapper {
+  background-color: rgba(0, 0, 0, 0.95) !important;
+}
+
+/* Seatbar */
+.kayak .seatbar {
+  background-color: rgba(252, 108, 43, 0.8);
+}
+.kayak .seatbar-guests {
+  color: rgb(255, 255, 255);
+}
+.kayak .seatbar-seats {
+  color: rgb(255, 255, 255);
+}
+.kayak .seatbar-separator {
+  color: rgb(255, 255, 255);
+}
+.kayak .seatbar-arrow > .seatbar-icon {
+  background-color: rgb(255, 255, 255);
+}
+.kayak .seatbar-armchair > .seatbar-icon {
+  background-color: rgb(255, 255, 255);
+}
+
+/* Deck switch */
+.kayak .deck-switch-button {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Carpet */
+.kayak .plane-vector_carpet {
+  fill: rgb(255, 255, 255);
+}
+/*** Theme Momondo ***/
+
+.momondo .comp-plane {
+  background-color: rgb(32, 158, 185);
+}
+
+/* Bulk */
+.momondo .bulk-cut {
+  fill: rgb(237, 237, 237);
+}
+
+.momondo .bulk-base {
+  fill: rgb(185, 186, 186);
+}
+.momondo .bulk.icon {
+  fill: rgba(0, 0, 0, 0.4);
+}
+.momondo .bulk.icon.floor-icon {
+  fill: rgba(0, 0, 0, 0.4);
+}
+
+/* Cockpit */
+.momondo .cockpit-door {
+  fill: none;
+  stroke: rgb(82, 82, 86);
+}
+.momondo .cockpit-windows {
+  fill: rgb(255, 255, 255);
+}
+
+/* Fuselage */
+.momondo .fuselage {
+  fill: rgb(230, 56, 137);
+}
+.momondo .fuselage-cut {
+  fill: rgb(185, 186, 186);
+}
+.momondo .fuselage-separator {
+  fill: none;
+  stroke: rgb(185, 186, 186);
+}
+
+/* Seat */
+
+.momondo .seat-armrest {
+  fill: rgb(185, 186, 186);
+}
+.momondo .seat-base {
+  fill: rgb(237, 237, 237);
+}
+.momondo .seat-headrest-cover {
+  fill: rgb(253, 255, 255);
+}
+
+.momondo .seatmap .seat-number {
+  fill: rgb(82, 82, 86);
+}
+
+.momondo .seatmap .default-color {
+  color: rgb(185, 186, 186);
+  fill: rgb(237, 237, 237);
+}
+
+.momondo .turbine,
+.momondo .tail-stabilizer,
+.momondo .wing {
+  fill: rgb(230, 56, 137);
+  stroke: rgb(185, 186, 186);
+  stroke-width: 7px;
+}
+
+/* Tooltip */
+.momondo .tooltip-arrow {
+  border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent !important;
+}
+
+.momondo .tooltip-button {
+  background-color: none;
+  border-color: rgb(32, 158, 185) !important;
+  color: rgb(32, 158, 185) !important;
+}
+
+.momondo .tooltip-button-icon {
+  color: rgb(32, 158, 185) !important;
+  fill: currentColor !important;
+}
+
+.momondo .tooltip-feature svg {
+  fill: rgb(255, 255, 255) !important;
+  stroke: rgb(255, 255, 255) !important;
+}
+
+.momondo .tooltip-feature-label {
+  color: rgb(255, 255, 255) !important;
+}
+
+.momondo .tooltip-feature-plus svg {
+  fill: rgb(17, 217, 0);
+  stroke: none;
+}
+
+.momondo .tooltip-feature-minus svg {
+  fill: rgb(225, 0, 0);
+  stroke: none;
+}
+
+.momondo .tooltip-header {
+  color: rgb(255, 255, 255) !important;
+}
+
+.momondo .tooltip-hint {
+  color: rgb(255, 255, 255) !important;
+}
+
+.momondo .tooltip-unit {
+  background-color: none;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: rgb(255, 255, 255) !important;
+}
+
+.momondo .tooltip-unit svg {
+  fill: rgb(189, 191, 190) !important;
+}
+
+.momondo .tooltip-vr {
+  color: rgb(32, 158, 185) !important;
+}
+.momondo .tooltip-vr-icon {
+  fill: rgb(32, 158, 185) !important;
+}
+
+.momondo .tooltip-wrapper {
+  background-color: rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Seatbar */
+.momondo .seatbar {
+  background-color: rgba(230, 56, 137, 0.95);
+}
+.momondo .seatbar-guests {
+  color: rgb(255, 255, 255);
+}
+.momondo .seatbar-seats {
+  color: rgb(255, 255, 255);
+}
+.momondo .seatbar-separator {
+  color: rgb(255, 255, 255);
+}
+.momondo .seatbar-arrow > .seatbar-icon {
+  background-color: rgb(255, 255, 255);
+}
+.momondo .seatbar-armchair > .seatbar-icon {
+  background-color: rgb(255, 255, 255);
+}
+
+/* Deck switch */
+.momondo .deck-switch-button {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Carpet */
+.momondo .plane-vector_carpet {
+  fill: rgb(255, 255, 255);
+}
+/*** Theme Travolic ***/
+
+.travolic .comp-plane {
+  background-color: rgba(111, 146, 162, 1);
+}
+
+/* Bulk */
+.travolic .bulk-cut {
+  fill: rgb(111, 146, 162);
+}
+
+.travolic .bulk-base {
+  fill: rgb(185, 186, 186);
+}
+.travolic .bulk.icon {
+  fill: rgb(214, 222, 41);
+}
+.travolic .bulk.icon.floor-icon {
+  fill: rgb(214, 222, 41);
+}
+
+/* Cockpit */
+.travolic .cockpit-door {
+  fill: rgb(0, 0, 0);
+  stroke: rgb(82, 82, 86);
+}
+.travolic .cockpit-windows {
+  fill: rgb(255, 255, 255);
+}
+
+/* Fuselage */
+.travolic .fuselage {
+  fill: rgb(237, 237, 237);
+}
+.travolic .fuselage-cut {
+  fill: rgb(255, 255, 255);
+}
+.travolic .fuselage-separator {
+  fill: rgb(0, 0, 0);
+  stroke: rgb(255, 255, 255);
+}
+
+/* Seat */
+
+.travolic .seat-armrest {
+  fill: rgb(185, 186, 186);
+}
+.travolic .seat-base {
+  fill: rgb(237, 237, 237);
+}
+.travolic .seat-headrest-cover {
+  fill: rgb(253, 255, 255);
+}
+
+.travolic .seatmap .seat-number {
+  fill: rgb(82, 82, 86);
+}
+
+.travolic .seatmap .default-color {
+  color: rgb(185, 186, 186);
+  fill: rgb(237, 237, 237);
+}
+
+.travolic .turbine,
+.travolic .tail-stabilizer,
+.travolic .wing {
+  fill: rgb(237, 237, 237);
+  stroke: rgb(255, 255, 255);
+  stroke-width: 7px;
+}
+
+/* Tooltip */
+.travolic .tooltip-arrow {
+  border-color: rgba(255, 255, 255, 0.95) transparent transparent transparent !important;
+}
+
+.travolic .tooltip-button {
+  background-color: rgb(255, 255, 255);
+  border-color: rgb(43, 166, 222) !important;
+  color: rgb(43, 166, 222) !important;
+}
+
+.travolic .tooltip-button-icon {
+  color: rgb(189, 191, 190) !important;
+  fill: currentColor;
+}
+
+.travolic .tooltip-feature svg {
+  fill: rgb(82, 82, 86) !important;
+  stroke: rgb(82, 82, 86) !important;
+}
+
+.travolic .tooltip-feature-label {
+  color: rgb(82, 82, 86) !important;
+}
+
+.travolic .tooltip-feature-plus svg {
+  fill: rgb(17, 217, 0);
+  stroke: none;
+}
+
+.travolic .tooltip-feature-minus svg {
+  fill: rgb(225, 0, 0);
+  stroke: none;
+}
+
+.travolic .tooltip-header {
+  color: rgb(82, 82, 86) !important;
+}
+
+.travolic .tooltip-hint {
+  color: rgb(255, 255, 255) !important;
+}
+
+.travolic .tooltip-unit {
+  background-color: none;
+  border-color: rgba(0, 0, 0, 0.3) !important;
+  color: rgb(82, 82, 86) !important;
+}
+
+.travolic .tooltip-unit svg {
+  fill: rgb(189, 191, 190) !important;
+}
+
+.travolic .tooltip-vr {
+  color: rgb(189, 191, 190) !important;
+}
+.travolic .tooltip-vr-icon {
+  fill: rgb(43, 166, 222) !important;
+}
+
+.travolic .tooltip-wrapper {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Seatbar */
+.travolic .seatbar {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+.travolic .seatbar-guests {
+  color: rgb(255, 255, 255);
+}
+.travolic .seatbar-seats {
+  color: rgb(255, 255, 255);
+}
+.travolic .seatbar-separator {
+  color: rgb(255, 255, 255);
+}
+.travolic .seatbar-arrow > .seatbar-icon {
+  background-color: rgb(255, 255, 255);
+}
+.travolic .seatbar-armchair > .seatbar-icon {
+  background-color: rgb(255, 255, 255);
+}
+
+/* Deck switch */
+.travolic .deck-switch-button {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Carpet */
+.travolic .plane-vector_carpet {
+  fill: rgb(10, 66, 92);
+}

@@ -1,0 +1,2632 @@
+/* normalize.css v2.1.0 | MIT License | git.io/normalize */
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary {
+    display: block
+}
+
+audio,canvas,video {
+    display: inline-block
+}
+
+audio:not([controls]) {
+    display: none;
+    height: 0
+}
+
+[hidden] {
+    display: none
+}
+
+html {
+    font-family: sans-serif;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%
+}
+
+body {
+    margin: 0
+}
+
+a:focus {
+    outline: thin dotted
+}
+
+a:active,a:hover {
+    outline: 0
+}
+
+h1 {
+    font-size: 2em
+}
+
+abbr[title] {
+    border-bottom: 1px dotted
+}
+
+b,strong {
+    font-weight: bold
+}
+
+dfn {
+    font-style: italic
+}
+
+hr {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 0
+}
+
+mark {
+    background: #ff0;
+    color: #000
+}
+
+code,kbd,pre,samp {
+    font-family: monospace,serif;
+    font-size: 1em
+}
+
+pre {
+    white-space: pre-wrap
+}
+
+q {
+    quotes: '\201C''\201D''\2018''\2019'
+}
+
+small {
+    font-size: 80%
+}
+
+sub,sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline
+}
+
+sup {
+    top: -0.5em
+}
+
+sub {
+    bottom: -0.25em
+}
+
+img {
+    border: 0
+}
+
+svg:not(:root) {
+    overflow: hidden
+}
+
+figure {
+    margin: 0
+}
+
+fieldset {
+    border: 1px solid silver;
+    margin: 0 2px;
+    padding: .35em .625em .75em
+}
+
+legend {
+    border: 0;
+    padding: 0
+}
+
+button,input,select,textarea {
+    font-family: inherit;
+    font-size: 100%;
+    margin: 0
+}
+
+button,input {
+    line-height: normal
+}
+
+button,select {
+    text-transform: none
+}
+
+button,html input[type='button'],input[type='reset'],input[type='submit'] {
+    -webkit-appearance: button;
+    cursor: pointer
+}
+
+button[disabled],html input[disabled] {
+    cursor: default
+}
+
+input[type='checkbox'],input[type='radio'] {
+    box-sizing: border-box;
+    padding: 0
+}
+
+input[type='search'] {
+    -webkit-appearance: textfield;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box
+}
+
+input[type='search']::-webkit-search-cancel-button,input[type='search']::-webkit-search-decoration {
+    -webkit-appearance: none
+}
+
+button::-moz-focus-inner,input::-moz-focus-inner {
+    border: 0;
+    padding: 0
+}
+
+textarea {
+    overflow: auto;
+    vertical-align: top
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+html,button,input,select,textarea {
+    color: #222
+}
+
+img {
+    vertical-align: middle
+}
+
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0
+}
+
+textarea {
+    resize: vertical
+}
+
+* {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-text-size-adjust: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none
+}
+
+body {
+    margin: 0
+}
+
+.identity {
+    top: 5px;
+    left: 5px;
+    color: rgba(255,255,255,0.1)
+}
+
+.comp-tooltip {
+    z-index: 11;
+    -webkit-transform-origin: left top;
+    -moz-transform-origin: left top;
+    -ms-transform-origin: left top;
+    -o-transform-origin: left top;
+    transform-origin: left top
+}
+
+.comp-tooltip .comp-tooltip_flip {
+    bottom: 10px;
+    right: 0;
+    padding: 20px
+}
+
+.comp-tooltip .comp-tooltip_flip .comp-tooltip_flip-button {
+    width: 40px;
+    height: 40px;
+    background: #14b7ed;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px
+}
+
+.comp-tooltip .comp-tooltip_arrow {
+    top: 100%;
+    margin: 0 0 0 -16px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 14px 16px 0 16px;
+    border-color: rgba(0,0,0,0.8) transparent transparent transparent
+}
+
+.comp-tooltip.arrow-top .comp-tooltip_arrow {
+    top: auto;
+    bottom: 100%;
+    transform: rotate(180deg)
+}
+
+.comp-tooltip .comp-tooltip_wrapper {
+    background: rgba(0,0,0,0.8);
+    border-radius: 10px
+}
+
+.comp-tooltip .comp-tooltip_container {
+    padding: 20px
+}
+
+.comp-tooltip .comp-tooltip_header {
+    color: #fff;
+    font-size: 26px;
+    font-weight: normal;
+    margin: 0 0 10px;
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis
+}
+
+.comp-tooltip.rtl .comp-tooltip_header {
+    text-align: right
+}
+
+.comp-tooltip.rtl .comp-tooltip_features .comp-tooltip_features-item {
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 0 6px 0 0
+}
+
+.comp-tooltip.rtl .comp-tooltip_features .comp-tooltip_features-item .comp-tooltip_features-item-icon {
+    position: sticky !important;
+    margin-left: 10px
+}
+
+.comp-tooltip.rtl .comp-tooltip_features .comp-tooltip_features-item .comp-tooltip_features-item-icon.plus,.comp-tooltip.rtl .comp-tooltip_features .comp-tooltip_features-item .comp-tooltip_features-item-icon.minus {
+    margin-left: 10px
+}
+
+.comp-tooltip.rtl .comp-tooltip_features .comp-tooltip_features-item .comp-tooltip_features-item-icon.bluetooth {
+    margin-top: 3px
+}
+
+.comp-tooltip.rtl .comp-tooltip_button {
+    flex-direction: row-reverse
+}
+
+.comp-tooltip.rtl .comp-tooltip_button .comp-tooltip_button-title {
+    margin-right: 8px
+}
+
+.comp-tooltip.rtl .comp-tooltip_order-button__content {
+    width: 100%;
+    flex-direction: row-reverse
+}
+
+.comp-tooltip.rtl .comp-tooltip_order-button__content :first-child {
+    margin-left: 10px;
+    margin-right: 0;
+    direction: rtl
+}
+
+.comp-tooltip.rtl .comp-tooltip_order-button-description {
+    display: flex;
+    width: 100%;
+    flex-direction: row-reverse
+}
+
+.seatbar.rtl .seatbar-seats {
+    direction: rtl
+}
+
+.seatbar.rtl .seatbar-guests {
+    direction: rtl
+}
+
+.comp-tooltip .comp-tooltip_circles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    line-height: normal
+}
+
+@media(max-width: 320px) {
+    .comp-tooltip .comp-tooltip_circles {
+        flex-wrap:wrap
+    }
+}
+
+.comp-tooltip.exception .comp-tooltip_circles .circle:before {
+    top: -30px;
+    line-height: 13px
+}
+
+.comp-tooltip .comp-tooltip_header .comp-tooltip_header-title {
+    padding: 0 15px 0 0
+}
+
+.comp-tooltip .comp-tooltip_circles .circle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 60px;
+    width: 80px;
+    height: 85px;
+    margin: 0 6px 0;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 8px
+}
+
+@media(max-width: 360px) {
+    .comp-tooltip .comp-tooltip_circles .circle:first-child {
+        margin:0 6px 0 0
+    }
+
+    .comp-tooltip .comp-tooltip_circles .circle:last-child {
+        margin: 0 0 0 6px
+    }
+}
+
+@media(max-width: 320px) {
+    .comp-tooltip .comp-tooltip_circles .circle {
+        margin:0 6px 6px 0 !important
+    }
+
+    .comp-tooltip .comp-tooltip_circles .circle:last-child {
+        margin: 0 !important
+    }
+}
+
+.comp-tooltip .comp-tooltip_circles .circle .tooltip-circle-title {
+    margin-top: 5px;
+    font-weight: bold
+}
+
+.comp-tooltip .comp-tooltip_circles .circle.pitch>svg {
+    transform: scale(1.5)
+}
+
+.comp-tooltip .comp-tooltip_circles .circle.recline>svg {
+    transform: scale(-1,1)
+}
+
+.comp-tooltip .comp-tooltip_features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 18px
+}
+
+.comp-tooltip .comp-tooltip_features .comp-tooltip_features-item {
+    margin: 0 0 5px;
+    padding: 0 0 0 24px
+}
+
+.comp-tooltip .comp-tooltip_features .comp-tooltip_features-item .comp-tooltip_features-item-icon {
+    left: 0;
+    top: 1px;
+    width: 14px
+}
+
+.comp-tooltip .comp-tooltip_features .comp-tooltip_features-item .comp-tooltip_features-item-icon.plus,.comp-tooltip .comp-tooltip_features .comp-tooltip_features-item .comp-tooltip_features-item-icon.minus {
+    margin-left: -3px
+}
+
+.comp-tooltip .comp-tooltip_features .comp-tooltip_features-item .comp-tooltip_features-item-icon.bluetooth {
+    margin-top: 3px
+}
+
+.comp-tooltip .comp-tooltip_features .comp-tooltip_features-item .comp-tooltip_features-item-icon.comp-tooltip_features-item-icon__additional {
+    width: 12px
+}
+
+.comp-tooltip .comp-tooltip_features .comp-tooltip_features-item .comp-tooltip_features-item-label {
+    font-size: 14px;
+    line-height: 16px;
+    color: #fff;
+    padding-top: 3px
+}
+
+.comp-tooltip .comp-tooltip_button {
+    padding: 8px;
+    border: solid 1px #fff;
+    display: flex;
+    align-items: center;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+    min-height: 35px
+}
+
+.comp-tooltip .comp-tooltip_button ~ .comp-tooltip_button {
+    margin: 10px 0 0 0
+}
+
+.comp-tooltip .comp-tooltip_button.inverse {
+    color: #fff;
+    background: #14b7ed
+}
+
+.comp-tooltip .comp-tooltip_button-img {
+    width: 50px;
+    height: 40px
+}
+
+.comp-tooltip .comp-tooltip_button-img svg {
+    width: 100%;
+    height: 100%
+}
+
+.comp-tooltip .comp-tooltip_button .comp-tooltip_button-title {
+    font-size: 20px;
+    line-height: 20px;
+    margin-left: 15px
+}
+
+@media(max-width: 410px) {
+    .comp-tooltip .comp-tooltip_button .comp-tooltip_button-title {
+        font-size:14px;
+        margin-left: 8px
+    }
+}
+
+.comp-tooltip .comp-tooltip_button .comp-tooltip_button-description {
+    font-style: normal;
+    font-size: 13px;
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 16px
+}
+
+.comp-tooltip .comp-tooltip_button .comp-tooltip_button-icon {
+    right: 24px;
+    top: 50%;
+    margin: -16px 0 0;
+    height: 32px
+}
+
+.comp-tooltip .comp-tooltip_footer.filled {
+    padding: 20px 0 0
+}
+
+.comp-tooltip .comp-tooltip_footer .comp-tooltip_footer-separator {
+    margin: 0;
+    border: 0;
+    border-top: solid 1px rgba(255,255,255,0.3)
+}
+
+.comp-tooltip .comp-tooltip_footer .comp-tooltip_footer-occupied {
+    color: #fff;
+    margin: 0 0 10px
+}
+
+.comp-tooltip .comp-tooltip_footer .comp-tooltip_footer-title {
+    margin-left: 70px;
+    margin-right: 22px
+}
+
+.comp-tooltip .comp-tooltip_broadcasting-selection .comp-tooltip_broadcasting-selection-column:first-child {
+    left: 0
+}
+
+.comp-tooltip .comp-tooltip_broadcasting-selection .comp-tooltip_broadcasting-selection-column:last-child {
+    right: 0
+}
+
+.comp-tooltip .comp-tooltip_broadcasting-selection .comp-tooltip_broadcasting-selection-column:first-child,.comp-tooltip .comp-tooltip_broadcasting-selection .comp-tooltip_broadcasting-selection-column:last-child {
+    top: 0
+}
+
+.comp-plane {
+    padding: 64px 0 0;
+    overflow: hidden;
+    background-color: #14baf1;
+    background-repeat: repeat-y;
+    background-position: 50% 50%;
+    background-size: 6000px 100%
+}
+
+.comp-plane[data-floor='2']+.floor-switcher img.up {
+    display: none
+}
+
+.comp-plane[data-floor='2']+.floor-switcher img.down {
+    display: block
+}
+
+.comp-plane .comp-plane_floor {
+    width: 768px;
+    left: 50%;
+    margin: 0 0 0 -384px;
+    -webkit-transform-origin: 50% 0;
+    -moz-transform-origin: 50% 0;
+    -ms-transform-origin: 50% 0;
+    -o-transform-origin: 50% 0;
+    transform-origin: 50% 0
+}
+
+.comp-plane_sticker-bulk-floor {
+    left: 50%;
+    -webkit-transform-origin: 50% 0;
+    -moz-transform-origin: 50% 0;
+    -ms-transform-origin: 50% 0;
+    -o-transform-origin: 50% 0;
+    transform-origin: 50% 0;
+    z-index: 10 !important
+}
+
+.comp-plane_sticker-bulks {
+    left: 50%;
+    width: 2px;
+    top: 0;
+    z-index: 10
+}
+
+.comp-plane .comp-plane_plane {
+    left: 50%;
+    -webkit-transform-origin: 50% 0;
+    -moz-transform-origin: 50% 0;
+    -ms-transform-origin: 50% 0;
+    -o-transform-origin: 50% 0;
+    transform-origin: 50% 0
+}
+
+.comp-plane_carpet {
+    overflow: hidden;
+    position: absolute;
+    transform: scale(0.75);
+    left: 50%;
+    -webkit-transform-origin: 50% 0;
+    -moz-transform-origin: 50% 0;
+    -ms-transform-origin: 50% 0;
+    -o-transform-origin: 50% 0;
+    transform-origin: 50% 0
+}
+
+.comp-plane .comp-plane_fuselage {
+    z-index: 8
+}
+
+.comp-plane .comp-plane_bulks {
+    width: 2px;
+    top: 0;
+    left: 50%;
+    z-index: 10
+}
+
+.comp-plane .comp-plane_bulks .comp-plane_bulk {
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: 100% 100%
+}
+
+.comp-plane .comp-plane_bulks .comp-plane_bulk.nose-bulk svg {
+    pointer-events: none
+}
+
+.comp-plane .comp-plane_bulks .comp-plane_bulk .comp-plane_bulk-stickers-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    pointer-events: none
+}
+
+.comp-plane .comp-plane_seats.absolute {
+    width: 100%;
+    height: 100%;
+    z-index: 9
+}
+
+.comp-plane .comp-plane_seat {
+    top: 0;
+    left: 50%;
+    padding: 10px;
+    height: 120px
+}
+
+.comp-plane .comp-plane_seat.ST-1 .comp-plane_seat-avatar {
+    top: 14px;
+    left: 0;
+    width: 121px;
+    height: 121px
+}
+
+.comp-plane .comp-plane_seat.ST-1 .comp-plane_seat-number {
+    padding: 75px 10px 0 0
+}
+
+.comp-plane .comp-plane_seat.ST-2 .comp-plane_seat-avatar {
+    top: 38px;
+    left: 40px;
+    width: 75px;
+    height: 75px
+}
+
+.comp-plane .comp-plane_seat.ST-2 .comp-plane_seat-number {
+    padding-top: 55px
+}
+
+.comp-plane .comp-plane_seat.ST-3 .comp-plane_seat-avatar {
+    top: 30px;
+    left: 17px;
+    width: 70px;
+    height: 70px
+}
+
+.comp-plane .comp-plane_seat.ST-3 .comp-plane_seat-number {
+    padding-top: 45px
+}
+
+.comp-plane .comp-plane_seat .comp-plane_seat-number {
+    font-size: 30px;
+    color: #fff;
+    text-align: center
+}
+
+.comp-plane .comp-plane_seat.ST-1 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-2 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-3 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-4 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-5 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-6 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-7 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-8 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-9 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-10 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-11 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-12 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-13 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-14 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-15 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-16 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-17 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-18 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-19 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-20 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-21 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-22 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-23 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-24 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-25 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-26 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-27 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-28 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-29 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-30 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-31 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-32 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-33 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-34 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-35 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-36 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-37 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-38 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-39 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-40 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-41 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-42 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-43 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-44 .comp-plane_seat-sprite,.comp-plane .comp-plane_seat.ST-45 .comp-plane_seat-sprite {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-width: 0 !important;
+    background-position: center center;
+    background-repeat: no-repeat
+}
+
+.comp-plane .comp-plane_seat.ST-1 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-2 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-3 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-4 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-5 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-6 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-7 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-8 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-9 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-10 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-11 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-12 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-13 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-14 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-15 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-16 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-17 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-18 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-19 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-20 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-21 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-22 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-23 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-24 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-25 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-26 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-27 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-28 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-29 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-30 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-31 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-32 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-33 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-34 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-35 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-36 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-37 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-38 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-39 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-40 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-41 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-42 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-43 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-44 .comp-plane_seat-sprite .color,.comp-plane .comp-plane_seat.ST-45 .comp-plane_seat-sprite .color {
+    position: absolute
+}
+
+.comp-plane .comp-plane_seat.decolor .comp-plane_seat-sprite .color {
+    display: none
+}
+
+.comp-plane .comp-plane_seat.ST-3 .comp-plane_seat-sprite {
+    margin-left: -85px;
+    width: 174px;
+    height: 160px
+}
+
+.comp-plane .comp-plane_seat.ST-3 .comp-plane_seat-sprite .color {
+    top: 6px;
+    left: 24px;
+    width: 126px;
+    height: 112px
+}
+
+.comp-plane .comp-plane_seat.ST-3.R-s .comp-plane_seat-sprite .color {
+    height: 126px
+}
+
+.comp-plane .comp-plane_seat.ST-3[class*='R-s'] .comp-plane_seat-avatar {
+    top: 16px
+}
+
+.comp-plane .comp-plane_seat.ST-3[class*='R-s'] .comp-plane_seat-number {
+    padding-top: 52px
+}
+
+.comp-plane .comp-plane_seat.ST-2 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 180px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-2 .comp-plane_seat-sprite .color {
+    top: 24px;
+    left: 18px;
+    width: 164px;
+    height: 128px
+}
+
+.comp-plane .comp-plane_seat.ST-1 .comp-plane_seat-sprite {
+    margin-left: -105px;
+    width: 220px;
+    height: 218px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-1 .comp-plane_seat-sprite .color {
+    top: 16px;
+    left: 38px;
+    width: 144px;
+    height: 126px
+}
+
+.comp-plane .comp-plane_seat.ST-4 .comp-plane_seat-sprite {
+    margin-left: -90px;
+    width: 210px;
+    height: 220px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-4 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 230px;
+    height: 300px
+}
+
+.comp-plane .comp-plane_seat.ST-4 .comp-plane_seat-avatar {
+    top: 24px;
+    left: 19px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.ST-4 .comp-plane_seat-number {
+    padding: 42px 30px 0 0
+}
+
+.comp-plane .comp-plane_seat.ST-5 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 200px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-5 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 200px;
+    height: 280px
+}
+
+.comp-plane .comp-plane_seat.ST-5 .comp-plane_seat-avatar {
+    top: 35px;
+    left: 30px;
+    width: 120px;
+    height: 120px
+}
+
+.comp-plane .comp-plane_seat.ST-5 .comp-plane_seat-number {
+    padding: 60px 0 0 0
+}
+
+.comp-plane .comp-plane_seat.ST-6 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 200px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-6 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 200px;
+    height: 280px
+}
+
+.comp-plane .comp-plane_seat.ST-6 .comp-plane_seat-avatar {
+    top: 35px;
+    left: 46px;
+    width: 120px;
+    height: 120px
+}
+
+.comp-plane .comp-plane_seat.ST-6 .comp-plane_seat-number {
+    padding: 60px 0 0 0
+}
+
+.comp-plane .comp-plane_seat.ST-7 .comp-plane_seat-sprite {
+    margin-left: -69px;
+    width: 140px;
+    height: 200px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-7 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 150px;
+    height: 220px
+}
+
+.comp-plane .comp-plane_seat.ST-7 .comp-plane_seat-avatar {
+    top: 20px;
+    left: 14px;
+    width: 110px;
+    height: 110px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-7 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-7 .comp-plane_seat-number {
+    padding: 40px 0 0 0
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-7 .comp-plane_seat-number {
+    padding: 0 0 36px 0;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-8 .comp-plane_seat-sprite {
+    margin-left: -75px;
+    width: 150px;
+    height: 200px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-8 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 160px;
+    height: 220px
+}
+
+.comp-plane .comp-plane_seat.ST-8 .comp-plane_seat-avatar {
+    top: 30px;
+    left: 26px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.ST-8 .comp-plane_seat-number {
+    padding: 40px 0 0 10px
+}
+
+.comp-plane .comp-plane_seat.ST-9 .comp-plane_seat-sprite {
+    margin-left: -75px;
+    width: 150px;
+    height: 200px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-9.comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 160px;
+    height: 220px
+}
+
+.comp-plane .comp-plane_seat.ST-9 .comp-plane_seat-avatar {
+    top: 30px;
+    left: 20px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.ST-9 .comp-plane_seat-number {
+    padding: 40px 10px 0 0
+}
+
+.comp-plane .comp-plane_seat.ST-10 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 150px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-10.comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 210px;
+    height: 160px
+}
+
+.comp-plane .comp-plane_seat.ST-10 .comp-plane_seat-avatar {
+    top: 22px;
+    left: 70px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.ST-10 .comp-plane_seat-number {
+    padding: 36px 0 0 60px
+}
+
+.comp-plane .comp-plane_seat.ST-11 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 150px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-11.comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 210px;
+    height: 160px
+}
+
+.comp-plane .comp-plane_seat.ST-11 .comp-plane_seat-avatar {
+    top: 22px;
+    left: 20px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.ST-11 .comp-plane_seat-number {
+    padding: 36px 60px 0 0
+}
+
+.comp-plane .comp-plane_seat.ST-12 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 185px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-12.comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 210px;
+    height: 195px
+}
+
+.comp-plane .comp-plane_seat.ST-12 .comp-plane_seat-avatar {
+    top: 40px;
+    left: -6px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.ST-12 .comp-plane_seat-number {
+    padding: 46px 110px 0 0
+}
+
+.comp-plane .comp-plane_seat.ST-13 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 185px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-13.comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 210px;
+    height: 195px
+}
+
+.comp-plane .comp-plane_seat.ST-13 .comp-plane_seat-avatar {
+    top: 40px;
+    left: 102px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.ST-13 .comp-plane_seat-number {
+    padding: 46px 0 0 110px
+}
+
+.comp-plane .comp-plane_seat.ST-14 .comp-plane_seat-sprite {
+    margin-left: -60px;
+    width: 120px;
+    height: 150px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-14.comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 130px;
+    height: 160px
+}
+
+.comp-plane .comp-plane_seat.ST-14 .comp-plane_seat-avatar {
+    top: 30px;
+    left: 6px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.ST-14 .comp-plane_seat-number {
+    padding: 36px 0 0 0
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-14 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-14 .comp-plane_seat-number {
+    padding: 0 0 36px 0;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-15 .comp-plane_seat-sprite {
+    margin-left: -75px;
+    width: 150px;
+    height: 175px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-15.comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 160px;
+    height: 185px
+}
+
+.comp-plane .comp-plane_seat.ST-15 .comp-plane_seat-avatar {
+    top: 18px;
+    left: 40px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.ST-15 .comp-plane_seat-number {
+    padding: 25px 0 0 35px
+}
+
+.comp-plane .comp-plane_seat.ST-16 .comp-plane_seat-sprite {
+    margin-left: -75px;
+    width: 150px;
+    height: 175px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-16.comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 160px;
+    height: 185px
+}
+
+.comp-plane .comp-plane_seat.ST-16 .comp-plane_seat-avatar {
+    top: 18px;
+    left: 6px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.ST-16 .comp-plane_seat-number {
+    padding: 25px 35px 0 0
+}
+
+.comp-plane .comp-plane_seat.ST-17 .comp-plane_seat-sprite {
+    margin-left: -92px;
+    width: 185px;
+    height: 175px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-17.comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 160px;
+    height: 185px
+}
+
+.comp-plane .comp-plane_seat.ST-17 .comp-plane_seat-avatar {
+    top: 18px;
+    left: 58px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.ST-17 .comp-plane_seat-number {
+    padding: 25px 0 0 66px
+}
+
+.comp-plane .comp-plane_seat.ST-18 .comp-plane_seat-sprite {
+    margin-left: -92px;
+    width: 185px;
+    height: 175px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-18.comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 160px;
+    height: 185px
+}
+
+.comp-plane .comp-plane_seat.ST-18 .comp-plane_seat-avatar {
+    top: 18px;
+    left: -12px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.ST-18 .comp-plane_seat-number {
+    padding: 25px 66px 0 0
+}
+
+.comp-plane .comp-plane_seat.ST-19 .comp-plane_seat-sprite {
+    margin-left: -127px;
+    width: 255px;
+    height: 175px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-19.comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 260px;
+    height: 185px
+}
+
+.comp-plane .comp-plane_seat.ST-19 .comp-plane_seat-avatar {
+    top: 18px;
+    left: 24px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.ST-19 .comp-plane_seat-number {
+    padding: 25px 0 0 8px
+}
+
+.comp-plane .comp-plane_seat.ST-20 .comp-plane_seat-sprite {
+    margin-left: -65px;
+    width: 130px;
+    height: 330px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-20.comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 140px;
+    height: 340px
+}
+
+.comp-plane .comp-plane_seat.ST-20 .comp-plane_seat-avatar {
+    top: 200px;
+    left: 13px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.ST-20 .comp-plane_seat-number {
+    padding: 215px 0 0 8px
+}
+
+.comp-plane .comp-plane_seat.ST-21 .comp-plane_seat-sprite {
+    margin-left: -65px;
+    width: 130px;
+    height: 330px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-21.comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 140px;
+    height: 340px
+}
+
+.comp-plane .comp-plane_seat.ST-21 .comp-plane_seat-avatar {
+    top: 200px;
+    left: 13px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.ST-21 .comp-plane_seat-number {
+    padding: 215px 0 0 8px
+}
+
+.comp-plane .comp-plane_seat.ST-22 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 400px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-22.comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 210px;
+    height: 420px
+}
+
+.comp-plane .comp-plane_seat.ST-22 .comp-plane_seat-avatar {
+    top: 212px;
+    left: 37px;
+    width: 120px;
+    height: 120px
+}
+
+.comp-plane .comp-plane_seat.ST-22 .comp-plane_seat-number {
+    padding: 240px 0 0 8px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-22 .comp-plane_seat-number {
+    padding: 0 0 240px 0;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-23 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 400px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-23.comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 210px;
+    height: 420px
+}
+
+.comp-plane .comp-plane_seat.ST-23 .comp-plane_seat-avatar {
+    top: 212px;
+    left: 39px;
+    width: 120px;
+    height: 120px
+}
+
+.comp-plane .comp-plane_seat.ST-23 .comp-plane_seat-number {
+    padding: 240px 0 0 8px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-23 .comp-plane_seat-number {
+    padding: 0 0 240px 0;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-24 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 365px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-24.comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 210px;
+    height: 375px
+}
+
+.comp-plane .comp-plane_seat.ST-24 .comp-plane_seat-avatar {
+    top: 198px;
+    left: 27px;
+    width: 120px;
+    height: 120px
+}
+
+.comp-plane .comp-plane_seat.ST-24 .comp-plane_seat-number {
+    padding: 200px 0 0 0
+}
+
+.comp-plane .comp-plane_seat.ST-25 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 365px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-25.comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 210px;
+    height: 375px
+}
+
+.comp-plane .comp-plane_seat.ST-25 .comp-plane_seat-avatar {
+    top: 198px;
+    left: 48px;
+    width: 120px;
+    height: 120px
+}
+
+.comp-plane .comp-plane_seat.ST-25 .comp-plane_seat-number {
+    padding: 200px 0 0 8px
+}
+
+.comp-plane .comp-plane_seat.ST-26 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 200px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-26 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 200px;
+    height: 280px
+}
+
+.comp-plane .comp-plane_seat.ST-26 .comp-plane_seat-avatar {
+    top: 44px;
+    left: 15px;
+    width: 110px;
+    height: 110px
+}
+
+.comp-plane .comp-plane_seat.ST-26 .comp-plane_seat-number {
+    padding: 65px 56px 0 0
+}
+
+.comp-plane .comp-plane_seat.ST-27 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 200px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-27 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 200px;
+    height: 280px
+}
+
+.comp-plane .comp-plane_seat.ST-27 .comp-plane_seat-avatar {
+    top: 44px;
+    left: 72px;
+    width: 110px;
+    height: 110px
+}
+
+.comp-plane .comp-plane_seat.ST-27 .comp-plane_seat-number {
+    padding: 65px 0 0 56px
+}
+
+.comp-plane .comp-plane_seat.ST-28 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 200px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-28 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 200px;
+    height: 280px
+}
+
+.comp-plane .comp-plane_seat.ST-28 .comp-plane_seat-avatar {
+    top: 78px;
+    left: 15px;
+    width: 110px;
+    height: 110px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-28 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-28 .comp-plane_seat-number {
+    padding: 90px 56px 0 0
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-28 .comp-plane_seat-number {
+    padding: 0 0 90px 56px;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-29 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 200px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-29 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 200px;
+    height: 280px
+}
+
+.comp-plane .comp-plane_seat.ST-29 .comp-plane_seat-avatar {
+    top: 78px;
+    left: 72px;
+    width: 110px;
+    height: 110px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-29 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-29 .comp-plane_seat-number {
+    padding: 90px 0 0 56px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-29 .comp-plane_seat-number {
+    padding: 0 56px 90px 0;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-30 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 265px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-30 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 200px;
+    height: 280px
+}
+
+.comp-plane .comp-plane_seat.ST-30 .comp-plane_seat-avatar {
+    top: 140px;
+    left: 15px;
+    width: 110px;
+    height: 110px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-30 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-30 .comp-plane_seat-number {
+    padding: 155px 56px 0 0
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-30 .comp-plane_seat-number {
+    padding: 0 0 155px 56px;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-31 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 265px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-31 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 200px;
+    height: 280px
+}
+
+.comp-plane .comp-plane_seat.ST-31 .comp-plane_seat-avatar {
+    top: 140px;
+    left: 72px;
+    width: 110px;
+    height: 110px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-31 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-31 .comp-plane_seat-number {
+    padding: 155px 0 0 56px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-31 .comp-plane_seat-number {
+    padding: 0 56px 155px 0;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-32 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 330px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-32 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 200px;
+    height: 340px
+}
+
+.comp-plane .comp-plane_seat.ST-32 .comp-plane_seat-avatar {
+    top: 170px;
+    left: 15px;
+    width: 110px;
+    height: 110px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-32 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-32 .comp-plane_seat-number {
+    padding: 192px 56px 0 0
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-32 .comp-plane_seat-number {
+    padding: 0 0 192px 56px;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-33 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 330px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-33 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 200px;
+    height: 340px
+}
+
+.comp-plane .comp-plane_seat.ST-33 .comp-plane_seat-avatar {
+    top: 170px;
+    left: 72px;
+    width: 110px;
+    height: 110px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-33 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-33 .comp-plane_seat-number {
+    padding: 192px 0 0 56px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-33 .comp-plane_seat-number {
+    padding: 0 56px 192px 0;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-34 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 200px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-34 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 200px;
+    height: 280px
+}
+
+.comp-plane .comp-plane_seat.ST-34 .comp-plane_seat-avatar {
+    top: 62px;
+    left: 56px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-34 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-34 .comp-plane_seat-number {
+    padding: 72px 0 0 25px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-34 .comp-plane_seat-number {
+    padding: 0 25px 75px 0;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-35 .comp-plane_seat-sprite {
+    margin-left: -100px;
+    width: 200px;
+    height: 200px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-35 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 200px;
+    height: 280px
+}
+
+.comp-plane .comp-plane_seat.ST-35 .comp-plane_seat-avatar {
+    top: 62px;
+    left: 40px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-35 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-35 .comp-plane_seat-number {
+    padding: 72px 25px 0 0
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-35 .comp-plane_seat-number {
+    padding: 0 0 75px 25px;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-36 .comp-plane_seat-sprite {
+    margin-left: -275px;
+    width: 550px;
+    height: 435px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-36 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 560px;
+    height: 445px
+}
+
+.comp-plane .comp-plane_seat.ST-36 .comp-plane_seat-avatar {
+    top: 62px;
+    left: 40px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-36 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-36 .comp-plane_seat-number {
+    padding: 275px 115px 0 0
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-36 .comp-plane_seat-number {
+    padding: 0 0 275px 115px;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-37 .comp-plane_seat-sprite {
+    margin-left: -275px;
+    width: 550px;
+    height: 435px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-37 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 560px;
+    height: 445px
+}
+
+.comp-plane .comp-plane_seat.ST-37 .comp-plane_seat-avatar {
+    top: 62px;
+    left: 40px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-37 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-37 .comp-plane_seat-number {
+    padding: 275px 0 0 125px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-37 .comp-plane_seat-number {
+    padding: 0 125px 275px 0;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-38 .comp-plane_seat-sprite {
+    margin-left: -275px;
+    width: 550px;
+    height: 435px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-38 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 560px;
+    height: 445px
+}
+
+.comp-plane .comp-plane_seat.ST-38 .comp-plane_seat-avatar {
+    top: 62px;
+    left: 40px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-38 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-38 .comp-plane_seat-number {
+    padding: 115px 115px 0 0
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-38 .comp-plane_seat-number {
+    padding: 0 0 115px 115px;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-39 .comp-plane_seat-sprite {
+    margin-left: -275px;
+    width: 550px;
+    height: 435px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-39 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 560px;
+    height: 445px
+}
+
+.comp-plane .comp-plane_seat.ST-39 .comp-plane_seat-avatar {
+    top: 62px;
+    left: 40px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-39 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-39 .comp-plane_seat-number {
+    padding: 115px 0 0 125px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-39 .comp-plane_seat-number {
+    padding: 0 125px 115px 0;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-40 .comp-plane_seat-sprite {
+    margin-left: -137px;
+    width: 275px;
+    height: 1230px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-40 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 285px;
+    height: 1240px
+}
+
+.comp-plane .comp-plane_seat.ST-40 .comp-plane_seat-avatar {
+    top: 62px;
+    left: 40px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.ST-40 .comp-plane_seat-number {
+    padding: 1088px 0 0 24px
+}
+
+.comp-plane .comp-plane_seat.ST-41 .comp-plane_seat-sprite {
+    margin-left: -137px;
+    width: 275px;
+    height: 1230px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-41 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 285px;
+    height: 1240px
+}
+
+.comp-plane .comp-plane_seat.ST-41 .comp-plane_seat-avatar {
+    top: 62px;
+    left: 40px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.ST-41 .comp-plane_seat-number {
+    padding: 1088px 0 0 26px
+}
+
+.comp-plane .comp-plane_seat.ST-42 .comp-plane_seat-sprite {
+    margin-left: -275px;
+    width: 550px;
+    height: 325px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-42 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 560px;
+    height: 335px
+}
+
+.comp-plane .comp-plane_seat.ST-42 .comp-plane_seat-avatar {
+    top: 62px;
+    left: 40px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-42 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-42 .comp-plane_seat-number {
+    padding: 240px 0 0 250px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-42 .comp-plane_seat-number {
+    padding: 0 255px 230px 0;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-43 .comp-plane_seat-sprite {
+    margin-left: -275px;
+    width: 550px;
+    height: 325px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-43 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 560px;
+    height: 335px
+}
+
+.comp-plane .comp-plane_seat.ST-43 .comp-plane_seat-avatar {
+    top: 62px;
+    left: 40px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-43 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-43 .comp-plane_seat-number {
+    padding: 240px 255px 0 0
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-43 .comp-plane_seat-number {
+    padding: 0 0 230px 250px;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-44 .comp-plane_seat-sprite {
+    margin-left: -275px;
+    width: 550px;
+    height: 325px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-44 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 560px;
+    height: 335px
+}
+
+.comp-plane .comp-plane_seat.ST-44 .comp-plane_seat-avatar {
+    top: 62px;
+    left: 40px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-44 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-44 .comp-plane_seat-number {
+    padding: 55px 255px 0 0
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-44 .comp-plane_seat-number {
+    padding: 0 0 60px 255px;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-45 .comp-plane_seat-sprite {
+    margin-left: -275px;
+    width: 550px;
+    height: 325px;
+    z-index: 5
+}
+
+.comp-plane .comp-plane_seat.ST-45 .comp-plane_seat-sprite .color {
+    top: 0;
+    left: -5px;
+    width: 560px;
+    height: 335px
+}
+
+.comp-plane .comp-plane_seat.ST-45 .comp-plane_seat-avatar {
+    top: 62px;
+    left: 40px;
+    width: 100px;
+    height: 100px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-45 .comp-plane_seat-avatar {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-45 .comp-plane_seat-number {
+    padding: 55px 0 0 240px
+}
+
+.comp-plane .comp-plane_seat.R-s.ST-45 .comp-plane_seat-number {
+    padding: 0 255px 55px 0;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-4.R-s .comp-plane_seat-avatar {
+    top: 20px;
+    left: 19px;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-4.R-nw .comp-plane_seat-avatar {
+    top: 78px;
+    left: 12px
+}
+
+.comp-plane .comp-plane_seat.ST-4.R-nw45 .comp-plane_seat-avatar {
+    top: 70px;
+    left: 25px
+}
+
+.comp-plane .comp-plane_seat.ST-4.R-nw45 .comp-plane_seat-number {
+    padding-top: 70px;
+    text-indent: -50px
+}
+
+.comp-plane .comp-plane_seat.ST-4.R-ne .comp-plane_seat-avatar {
+    top: 75px;
+    left: 5px
+}
+
+.comp-plane .comp-plane_seat.ST-4.R-ne45 .comp-plane_seat-avatar {
+    top: 70px;
+    left: -3px
+}
+
+.comp-plane .comp-plane_seat.ST-4.R-ne45 .comp-plane_seat-number {
+    padding-top: 70px;
+    text-indent: 50px
+}
+
+.passengers-line {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: #d2d2d2;
+    z-index: 11
+}
+
+.passengers-line+.comp-plane,.passengers-line+.comp-plane+.identity,.passengers-line+.comp-plane+.identity+.floor-switcher {
+    margin-top: 50px
+}
+
+.passengers-line .passengers-line_passenger {
+    margin: 0;
+    padding: 10px 0;
+    width: 11%
+}
+
+.passengers-line .passengers-line_passenger:not([data-seat='']):after {
+    content: attr(data-seat);
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    font-size: 9px;
+    text-transform: uppercase
+}
+
+.passengers-line .passengers-line_passenger:before {
+    content: attr(data-index);
+    position: absolute;
+    top: 10px;
+    right: 60%;
+    font-size: 8px;
+    opacity: .4
+}
+
+.passengers-line .passengers-line_passenger-icon {
+    height: 30px;
+    max-width: 95%;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: 'FlipH'
+}
+
+.panorama-trigger-button {
+    left: 50%;
+    width: 80px;
+    margin: 0 0 0 -40px;
+    z-index: 9
+}
+
+.panorama-trigger-button:before {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 80px;
+    height: 40px;
+    line-height: 40px;
+    margin-left: -38px;
+    content: '\b7';
+    font-size: 300px;
+    color: #fff
+}
+
+.panorama-trigger-button img {
+    margin-top: 50px;
+    width: 100%
+}
+
+.panorama-close-button {
+    margin: 0;
+    top: 12px;
+    right: 10px;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 34px;
+    color: #fff;
+    z-index: 100;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.3)
+}
+
+.panorama-frame {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    z-index: 12
+}
+
+.floor-switcher {
+    right: 10px;
+    z-index: 10;
+    border-radius: 5px;
+    background: #fff;
+    background: rgba(255,255,255,0.3);
+    -webkit-transform-origin: right top;
+    -moz-transform-origin: right top;
+    -ms-transform-origin: right top;
+    -o-transform-origin: right top;
+    transform-origin: right top;
+    width: 40px;
+    height: 40px;
+    position: relative
+}
+
+.floor-switcher img {
+    top: 0;
+    left: 0;
+    display: none;
+    width: 100%;
+    height: 100%
+}
+
+.floor-switcher img.active {
+    display: block
+}
+
+.float-left,.float-right {
+    width: auto
+}
+
+.float-left {
+    float: left
+}
+
+.float-right {
+    float: right
+}
+
+.uppercase {
+    text-transform: uppercase
+}
+
+.lowercase {
+    text-transform: lowercase
+}
+
+.light {
+    font-weight: 300
+}
+
+.bold {
+    font-weight: 700
+}
+
+.center {
+    text-align: center
+}
+
+.right {
+    text-align: right
+}
+
+.left {
+    text-align: left
+}
+
+.block {
+    display: block
+}
+
+.inline-block {
+    display: inline-block
+}
+
+.absolute {
+    position: absolute
+}
+
+.fixed {
+    position: fixed
+}
+
+.axis {
+    position: relative
+}
+
+.pointer {
+    cursor: pointer
+}
+
+.circle {
+    border-radius: 50%
+}
+
+.nocallout {
+    -webkit-touch-callout: none
+}
+
+.pressed {
+    background-color: rgba(0,0,0,0.7)
+}
+
+textarea[contenteditable] {
+    -webkit-appearance: none
+}
+
+.gifhidden {
+    position: absolute;
+    left: -100%
+}
+
+.ir {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: 0;
+    direction: ltr;
+    display: block;
+    overflow: hidden;
+    text-align: left;
+    text-indent: -999em
+}
+
+.ir br {
+    display: none
+}
+
+.hidden {
+    display: none !important;
+    visibility: hidden
+}
+
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px
+}
+
+.visuallyhidden.focusable:active,.visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto
+}
+
+.invisible {
+    visibility: hidden
+}
+
+.clearfix:before,.clearfix:after {
+    content: '';
+    display: table
+}
+
+.clearfix:after {
+    clear: both
+}
+
+.clearfix {
+    *zoom:1}
+
+#plane-wrap {
+    z-index: 10;
+    pointer-events: none
+}
+
+.mirror-bulk .bulk-wrap svg {
+    -moz-transform: scale(-1,1);
+    -webkit-transform: scale(-1,1);
+    -o-transform: scale(-1,1);
+    -ms-transform: scale(-1,1)
+}
+
+.comp-plane_bulk-stickers-wrapper {
+    width: 100%;
+    height: 100%
+}
+
+.comp-plane_bulk-stickers-wrapper {
+    display: flex;
+    justify-content: center
+}
+
+.comp-plane .comp-plane_seat.ST-4 .comp-plane_seat-number {
+    font-size: 27px
+}
+
+.comp-plane .comp-plane_seat.ST-2 {
+    transform: scale(1.5)
+}
+
+.comp-plane .comp-plane_seat.ST-2 .comp-plane_seat-number {
+    font-size: 20px
+}
+
+.comp-plane .comp-plane_seat.ST-1 {
+    transform: scale(1.05)
+}
+
+.comp-plane .comp-plane_seat.ST-1 .comp-plane_seat-number {
+    font-size: 28px
+}
+
+.comp-plane .comp-plane_seat.ST-3 .comp-plane_seat-number {
+    font-size: 27px
+}
+
+.comp-plane .comp-plane_seat.R-s,.comp-plane .comp-plane_seat.comp-plane .comp-plane_seat.R-s .comp-plane_seat-number {
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.R-s .comp-plane_seat-number {
+    padding-bottom: 50px;
+    padding-left: 50px;
+    transform: rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.R-nw {
+    transform: scale(1.1) rotate(-20deg)
+}
+
+.comp-plane .comp-plane_seat.R-nw45 {
+    transform: scale(1.1) rotate(-45deg)
+}
+
+.comp-plane .comp-plane_seat.R-nw .comp-plane_seat-number {
+    padding: 46px 10px 0 0 !important;
+    transform: scale(1.1) rotate(20deg)
+}
+
+.comp-plane .comp-plane_seat.ST-2.R-nw .comp-plane_seat-number {
+    padding: 52px 0 0 20px !important
+}
+
+.comp-plane .comp-plane_seat.ST-2.R-s {
+    transform: scale(1.5) rotate(180deg)
+}
+
+.comp-plane .comp-plane_seat.ST-2.R-s .comp-plane_seat-number {
+    padding: 0 0 70px 0
+}
+
+.comp-plane .comp-plane_seat.R-nw45 .comp-plane_seat-number {
+    padding: 42px 0 0 68px !important;
+    transform: scale(1.1) rotate(45deg)
+}
+
+.comp-plane .comp-plane_seat.R-ne {
+    transform: scale(1.1) rotate(20deg)
+}
+
+.comp-plane .comp-plane_seat.R-ne45 {
+    transform: scale(1.1) rotate(45deg)
+}
+
+.comp-plane .comp-plane_seat.R-ne .comp-plane_seat-number {
+    transform: rotate(-20deg);
+    padding: 35px 45px 0 0 !important
+}
+
+.comp-plane .comp-plane_seat.ST-2.R-ne .comp-plane_seat-number {
+    padding: 52px 35px 0 0 !important
+}
+
+.comp-plane .comp-plane_seat.R-ne45 .comp-plane_seat-number {
+    transform: rotate(-45deg);
+    padding: 25px 105px 0 0 !important
+}
+
+.comp-plane .comp-plane_seat.ST-3.R-s .comp-plane_seat-number {
+    padding: 0 0 45px 0 !important
+}
+
+.disabled {
+    filter: invert(40%)
+}
+
+.comp-tooltip_order-button {
+    padding: 12px;
+    color: #fff;
+    border: solid 1px #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 2px
+}
+
+.comp-tooltip_order-button__content {
+    display: flex;
+    font-size: 20px;
+    line-height: 20px
+}
+
+.comp-tooltip_order-button__content :first-child {
+    margin-right: 10px
+}
+
+.comp-tooltip_order-button-description {
+    font-style: normal;
+    font-size: 13px;
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 16px;
+    display: flex;
+    justify-content: center
+}
+
+.seatbar {
+    z-index: 99;
+    display: flex;
+    font-size: 18px;
+    height: 64px;
+    line-height: 18px;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    text-align: center;
+    left: 0;
+    right: 0;
+    top: 0;
+    flex-wrap: wrap
+}
+
+.seatbar-info {
+    display: flex;
+    height: 100%;
+    justify-content: space-around;
+    box-sizing: border-box;
+    align-items: center;
+    flex-grow: 1;
+    align-self: center;
+    font-kerning: normal !important;
+    font-weight: 400 !important;
+    letter-spacing: normal !important;
+    text-transform: uppercase;
+    font-size: 17px;
+    padding: 0 20%
+}
+
+.seatbar-separator {
+    border-radius: 25%;
+    background-color: #fff;
+    height: 18px;
+    margin: 0;
+    padding: 0;
+    width: 4px
+}
+
+.seatbar-switcher__wrap {
+    align-self: center !important;
+    display: flex !important;
+    justify-content: flex-end;
+    align-items: center;
+    -webkit-box-flex: 0;
+    position: fixed;
+    flex: 0 0 16.66667%;
+    min-width: 34.66667%;
+    right: 0;
+    z-index: 10
+}
+
+.seatbar-arrow {
+    box-sizing: border-box;
+    -ms-grid-row-align: center !important;
+    align-self: center !important;
+    align-items: center;
+    -webkit-box-flex: 0;
+    position: fixed;
+    flex: 0 0 16.66667%;
+    min-width: 16.66667%;
+    width: 64px !important;
+    z-index: 10
+}
+
+.seatbar-icon {
+    -webkit-mask-image: url(data:image/svg+xml;base64,PHN2ZwoJaGVpZ2h0PSI0MyIKCXByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiCgl2aWV3Ym94PSIwIDAgNDMgNDMiCgl3aWR0aD0iNDMiCgl4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCj4KCTxwYXRoCgkJZD0ibTEzLjgzMzk5OSwzNS41bDIuMTY5LC0yLjIwMmwtMTAuMTIzLC0xMC4yNDNsMzcuMTIxLDBsMCwtMy4xMWwtMzcuMTIxLDBsMTAuMTIzLC0xMC4yNDVsLTIuMTY5LC0yLjJsLTEzLjgzNSwxNGwxMy44MzUsMTR6IgoJLz4KPC9zdmc+);
+    mask-image: url(data:image/svg+xml;base64,PHN2ZwoJaGVpZ2h0PSI0MyIKCXByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiCgl2aWV3Ym94PSIwIDAgNDMgNDMiCgl3aWR0aD0iNDMiCgl4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCj4KCTxwYXRoCgkJZD0ibTEzLjgzMzk5OSwzNS41bDIuMTY5LC0yLjIwMmwtMTAuMTIzLC0xMC4yNDNsMzcuMTIxLDBsMCwtMy4xMWwtMzcuMTIxLDBsMTAuMTIzLC0xMC4yNDVsLTIuMTY5LC0yLjJsLTEzLjgzNSwxNGwxMy44MzUsMTR6IgoJLz4KPC9zdmc+);
+    -webkit-mask-position: 50% 50%;
+    mask-position: 50% 50%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 43px;
+    mask-size: 43px;
+    -webkit-transform: scale(0.75);
+    transform: scale(0.75);
+    height: 48px;
+    margin: 0 2.5px 2.5px 11px;
+    padding: 0;
+    width: 48px
+}
+
+.hide {
+    opacity: 0
+}
+
+.tooltip-unit {
+    position: relative;
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    margin: 30px 9px 0;
+    border: 2px solid hsla(0,0%,100%,0.3);
+    font-size: 12px;
+    line-height: 100px;
+    border-radius: 50% 50% 50% 50%
+}
+
+.tooltip-unit svg {
+    width: 28px;
+    height: 35px;
+    display: block
+}
+
+.editor-selected {
+    background-color: rgba(1,255,1,0.4)
+}
+
+.editor-selected__bulk svg .bulk-base {
+    fill: rgba(1,255,1,0.5) !important
+}
+
+.editor-selected__bulk svg .bulk-cut {
+    fill: rgba(1,120,1,1) !important
+}
+
+.editor-selected__bulk .comp-plane_bulk-stickers-wrapper svg .bulk.icon {
+    fill: rgba(1,200,1,1) !important
+}
+
+.editor-selected__sticker {
+    background-color: rgba(1,200,1,0.8);
+    border-radius: 10px;
+    box-sizing: border-box
+}
+
+.editor-menu__wrap {
+    width: 210px;
+    border-radius: 2px;
+    position: absolute;
+    z-index: 30;
+    background-color: #fff;
+    outline: 0
+}
+
+.editor-menu__item {
+    height: 35px;
+    font-size: 15px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    color: #005296;
+    padding-left: 10px
+}
+
+.editor-menu__item:hover {
+    background-color: #ccc
+}
+
+.editor-menu__item__bordered {
+    border-bottom: 1px solid #ccc
+}
+
+.editor-menu__item-icon {
+    width: 23px;
+    height: 23px;
+    background-color: #005296;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 3px;
+    margin-right: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500
+}
+
+.comp-plane_seat-avatar--abbr {
+    border: 2px solid #ccc;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 30px
+}
+
+.watermark {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+    background-color: rgba(0,0,0,0.5);
+    color: rgba(255,255,255,0.884);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    font-size: 14px;
+    padding: 0 3px;
+    z-index: 999
+}
+
+.loading-cover {
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(#fff 0,#fdfdfd 16%,#fbfbfb 33%,#f8f8f8 49%,#efefef 66%,#dfdfdf 82%,#bfbfbf 100%);
+    z-index: 99;
+    display: none
+}
+
+.loading-cover .loading-img {
+    width: 100%;
+    height: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+.loading-cover.active {
+    display: flex;
+    justify-content: center;
+    align-items: center
+}

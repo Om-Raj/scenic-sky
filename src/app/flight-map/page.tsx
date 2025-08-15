@@ -10,7 +10,7 @@ import { useFlightPath } from '@/hooks/useFlightPath';
 import { interpolateDateTime, createDateTimeInTimezone } from '@/lib/solar-calculations';
 import { DEMO_AIRPORTS } from '@/lib/gis';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Plane } from 'lucide-react';
+import { ArrowLeft, Plane, Users } from 'lucide-react';
 import maplibregl from 'maplibre-gl';
 
 export default function FlightMapPage() {
@@ -116,6 +116,15 @@ export default function FlightMapPage() {
   const handleMapLoad = useCallback((mapInstance: maplibregl.Map) => {
     setMap(mapInstance);
   }, []);
+
+  // Navigate to seatmap with preserved URL parameters
+  const goToSeatmap = useCallback(() => {
+    const params = new URLSearchParams();
+    Object.entries(flightData).forEach(([key, value]) => {
+      if (value) params.set(key, value);
+    });
+    router.push(`/seatmap?${params.toString()}`);
+  }, [flightData, router]);
 
   // Calculate current flight time based on progress
   const calculateCurrentTime = () => {
@@ -231,6 +240,16 @@ export default function FlightMapPage() {
 
       {/* Full Screen Map with Centered Aircraft */}
       <div className="h-[calc(100vh-73px)] relative">
+        {/* Floating Seatmap Button */}
+        <Button
+          onClick={goToSeatmap}
+          className="absolute top-4 left-4 z-40 bg-white/90 hover:bg-white/95 text-gray-700 border border-gray-200 backdrop-blur-sm shadow-lg transition-all duration-200 hover:shadow-xl rounded-full w-12 h-12 p-0"
+          variant="outline"
+          aria-label="View seatmap"
+        >
+          <Users className="w-5 h-5" />
+        </Button>
+
         <MapWithCenteredAircraft
           aircraftPosition={currentAircraftData.position}
           onMapLoad={handleMapLoad}

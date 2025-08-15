@@ -17,7 +17,7 @@ interface HeroFormProps {
   isLoading?: boolean;
 }
 
-const AIRPLANE_MODELS = ['Boeing 737', 'Airbus A320', 'A380 Demo', 'Cessna 172'];
+const AIRPLANE_MODELS = ['B-787-9', 'Airbus A320', 'A380 Demo', 'Cessna 172'];
 
 export function HeroForm({ onSubmit, isLoading = false }: HeroFormProps) {
   const [formData, setFormData] = useState<FlightFormData>({
