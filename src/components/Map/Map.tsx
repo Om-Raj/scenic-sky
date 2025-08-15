@@ -47,7 +47,7 @@ export function Map({ onMapLoad, children }: MapProps) {
         ],
       },
       center: [0, 20], // Centered on equator for global view
-      zoom: 2,
+      zoom: 3,
       pitch: 0, // Can be adjusted for 3D effect
       bearing: 0,
     });

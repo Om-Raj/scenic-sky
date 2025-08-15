@@ -73,17 +73,21 @@ export function SunAngleOverlay({
     <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 5 }}>
       {/* Sun Image */}
       <div
-        className="absolute transition-all duration-1000 ease-out"
+        className="absolute ease-linear" // Use linear easing to match map animation
         style={{
           left: `${solarData.x}%`,
           top: `${solarData.y}%`,
           transform: 'translate(-50%, -50%)',
+          transition: 'left 16ms linear, top 16ms linear, transform 16ms linear', // Match map update frequency
         }}
       >
         <div
           className="relative"
           style={{
-            filter: `brightness(${0.8 + solarData.intensity * 0.4}) saturate(${0.9 + solarData.intensity * 0.3})`,
+            // Dynamic sizing based on solar elevation - made larger overall
+            transform: `scale(${1.0 + (Math.max(0, Math.sin(solarData.elevation)) * 0.8)})`, // Scale 1.0x to 1.8x based on elevation
+            filter: `brightness(${0.6 + solarData.intensity * 0.8}) saturate(${0.7 + solarData.intensity * 0.5}) contrast(${0.9 + Math.max(0, Math.sin(solarData.elevation)) * 0.3})`,
+            transition: 'transform 16ms linear, filter 16ms linear', // Smooth scaling and brightness changes
           }}
         >
           {/* Main sun flare image */}
@@ -110,81 +114,43 @@ export function SunAngleOverlay({
             />
           </div>
           
-          {/* Solar ray from sun to aircraft (center of screen) */}
+          {/* Solar ray from sun center to aircraft (center of screen) */}
           {solarData.intensity > 0.3 && (() => {
-            // Ray starts from sun position and points to screen center (aircraft)
-            const centerX = 50; // Screen center X (aircraft position)
-            const centerY = 50; // Screen center Y (aircraft position)
+            // Ray starts from the center of the small sun image (studio_shape_point.png) and points to aircraft
+            const centerX = 50; // Exact screen center X (aircraft position)
+            const centerY = 50; // Exact screen center Y (aircraft position)
             
-            // Calculate vector from sun to center (aircraft)
+            // Calculate vector from sun center to aircraft center
             const deltaX = centerX - solarData.x; // Horizontal distance from sun to aircraft
             const deltaY = centerY - solarData.y; // Vertical distance from sun to aircraft
             
-            // Calculate angle and length from sun to aircraft
+            // Calculate angle and length from sun center to aircraft
             const angleRadians = Math.atan2(deltaY, deltaX);
             const angleDegrees = angleRadians * (180 / Math.PI);
             const rayLength = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
             
-            // Calculate horizon point for elevation reference
-            const horizonRadius = 40; // Same as sun positioning radius
-            const horizonX = 50 + (Math.sin(solarData.azimuth) * horizonRadius);
-            const horizonY = 50 - (Math.cos(solarData.azimuth) * horizonRadius);
-            
             return (
               <>
-                {/* Main ray from sun to aircraft */}
+                {/* Main ray from sun center (small sun image) to aircraft */}
                 <div
-                  className="absolute"
+                  className="absolute ease-linear"
                   style={{
-                    left: `${solarData.x}%`, // Start from sun position
-                    top: `${solarData.y}%`,  // Start from sun position
-                    width: `${rayLength}vh`, // Extend to aircraft at center
-                    height: '3px',
-                    transformOrigin: 'left center', // Rotate around sun position
+                    left: `${solarData.x}%`, // Start from exact sun center (where small sun image is)
+                    top: `${solarData.y}%`,  // Start from exact sun center (where small sun image is)
+                    width: `${rayLength}vh`, // Extend exactly to aircraft at center
+                    height: '4px', // Make ray slightly thicker for visibility
+                    transformOrigin: 'left center', // Rotate around sun center (small sun image)
                     transform: `translate(0, -50%) rotate(${angleDegrees}deg)`,
+                    transition: 'left 16ms linear, top 16ms linear, width 16ms linear, transform 16ms linear',
                     background: `linear-gradient(to right, 
-                      rgba(255, 220, 100, ${solarData.intensity * 0.9}) 0%, 
-                      rgba(255, 240, 150, ${solarData.intensity * 0.7}) 30%, 
-                      rgba(255, 255, 200, ${solarData.intensity * 0.5}) 70%, 
-                      rgba(255, 255, 255, ${solarData.intensity * 0.2}) 100%)`,
-                    pointerEvents: 'none',
-                    boxShadow: `0 0 8px rgba(255, 220, 100, ${solarData.intensity * 0.4})`,
-                    zIndex: 1,
-                  }}
-                />
-                
-                {/* Horizon reference line from center to horizon point */}
-                <div
-                  className="absolute"
-                  style={{
-                    left: '50%',
-                    top: '50%',
-                    width: `${Math.sqrt((horizonX - 50) ** 2 + (horizonY - 50) ** 2)}vh`,
-                    height: '1px',
-                    transformOrigin: 'left center',
-                    transform: `translate(0, -50%) rotate(${Math.atan2(horizonY - 50, horizonX - 50) * (180 / Math.PI)}deg)`,
-                    background: `linear-gradient(to right, 
-                      rgba(255, 255, 255, 0.3) 0%, 
-                      rgba(255, 255, 255, 0.1) 50%, 
+                      rgba(255, 220, 100, ${solarData.intensity * 0.95}) 0%, 
+                      rgba(255, 240, 150, ${solarData.intensity * 0.8}) 20%, 
+                      rgba(255, 255, 200, ${solarData.intensity * 0.6}) 60%, 
+                      rgba(255, 255, 255, ${solarData.intensity * 0.3}) 90%,
                       transparent 100%)`,
                     pointerEvents: 'none',
-                    zIndex: 0,
-                  }}
-                />
-                
-                {/* Horizon reference point */}
-                <div
-                  className="absolute"
-                  style={{
-                    left: `${horizonX}%`,
-                    top: `${horizonY}%`,
-                    width: '3px',
-                    height: '3px',
-                    backgroundColor: `rgba(255, 255, 255, 0.4)`,
-                    borderRadius: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    pointerEvents: 'none',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    boxShadow: `0 0 12px rgba(255, 220, 100, ${solarData.intensity * 0.5})`,
+                    zIndex: 1,
                   }}
                 />
               </>
@@ -201,6 +167,7 @@ export function SunAngleOverlay({
           <div>Original Az: {(solarData.originalAzimuth * 180 / Math.PI).toFixed(1)}°</div>
           <div>Map Bearing: {mapBearing.toFixed(1)}°</div>
           <div>Sun Position: ({solarData.x.toFixed(1)}%, {solarData.y.toFixed(1)}%)</div>
+          <div>Sun Scale: {(1.0 + (Math.max(0, Math.sin(solarData.elevation)) * 0.8)).toFixed(2)}x</div>
           <div>Ray Length: {Math.sqrt((50 - solarData.x) ** 2 + (50 - solarData.y) ** 2).toFixed(1)}vh</div>
           <div>Ray Angle: {(Math.atan2(50 - solarData.y, 50 - solarData.x) * 180 / Math.PI).toFixed(1)}°</div>
           <div>Intensity: {solarData.intensity.toFixed(2)}</div>

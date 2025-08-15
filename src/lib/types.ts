@@ -5,6 +5,7 @@ export interface Airport {
   name: string;
   lat: number;
   lon: number;
+  timezone: string; // IANA timezone identifier (e.g., 'America/New_York')
 }
 
 export interface PathPoint {

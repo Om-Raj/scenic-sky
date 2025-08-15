@@ -3,10 +3,12 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { MapWithCenteredAircraft } from '@/components/MapWithCenteredAircraft';
-import { SunAngleOverlay } from '@/components/SunAngleOverlay';
+
+import SkyDomeVisualization from '@/components/SkyDomeVisualization';
 import { FlightPath } from '@/components/FlightPath';
 import { useFlightPath } from '@/hooks/useFlightPath';
-import { interpolateDateTime } from '@/lib/solar-calculations';
+import { interpolateDateTime, createDateTimeInTimezone } from '@/lib/solar-calculations';
+import { DEMO_AIRPORTS } from '@/lib/gis';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Plane } from 'lucide-react';
 import maplibregl from 'maplibre-gl';
@@ -48,9 +50,25 @@ export default function FlightMapPage() {
       return null;
     }
 
-    // Calculate current time based on flight progress
-    const departureDateTime = new Date(`${flightData.departureDate}T${flightData.departureTime}`);
-    const arrivalDateTime = new Date(`${flightData.arrivalDate}T${flightData.arrivalTime}`);
+    // Find airport timezone information
+    const departureAirport = DEMO_AIRPORTS.find(apt => apt.code === flightData.departure);
+    const arrivalAirport = DEMO_AIRPORTS.find(apt => apt.code === flightData.arrival);
+    
+    if (!departureAirport || !arrivalAirport) {
+      return null;
+    }
+
+    // Calculate current time based on flight progress with proper timezone handling
+    const departureDateTime = createDateTimeInTimezone(
+      flightData.departureDate, 
+      flightData.departureTime, 
+      departureAirport.timezone
+    );
+    const arrivalDateTime = createDateTimeInTimezone(
+      flightData.arrivalDate, 
+      flightData.arrivalTime, 
+      arrivalAirport.timezone
+    );
     const currentDateTime = interpolateDateTime(departureDateTime, arrivalDateTime, progress);
 
     return {
@@ -244,8 +262,8 @@ export default function FlightMapPage() {
           )}
         </MapWithCenteredAircraft>
 
-        {/* Solar angle visualization - positioned over the map */}
-        <SunAngleOverlay
+        {/* 3D Sky Dome Visualization - positioned over the map */}
+        <SkyDomeVisualization
           latitude={currentAircraftData.position.lat}
           longitude={currentAircraftData.position.lng}
           date={currentAircraftData.dateTime}

@@ -11,6 +11,43 @@ export interface SolarPosition {
 }
 
 /**
+ * Create a Date object with proper timezone handling
+ * @param date Date string (YYYY-MM-DD)
+ * @param time Time string (HH:MM)
+ * @param timezone IANA timezone identifier (e.g., 'America/New_York')
+ * @returns Date object in correct timezone
+ */
+export function createDateTimeInTimezone(
+  date: string,
+  time: string,
+  timezone: string
+): Date {
+  // Use the standard timezone offset format for proper parsing
+  const timezoneOffsets: { [key: string]: string } = {
+    'America/New_York': '-04:00', // EDT in summer
+    'America/Los_Angeles': '-07:00', // PDT in summer
+    'Europe/London': '+01:00', // BST in summer
+    'Asia/Kolkata': '+05:30', // IST (no DST)
+    'Asia/Dubai': '+04:00', // GST (no DST)
+  };
+  
+  const offset = timezoneOffsets[timezone] || '+00:00';
+  const isoString = `${date}T${time}:00${offset}`;
+  
+  return new Date(isoString);
+}
+
+/**
+ * Solar position data for 3D sun rendering
+ */
+export interface SolarPosition {
+  elevation: number; // Solar elevation in radians (-π/2 to π/2)
+  azimuth: number;   // Solar azimuth in radians (0 to 2π, 0 = north)
+  altitude: number;  // Same as elevation, in degrees for convenience
+  azimuthDeg: number; // Azimuth in degrees
+}
+
+/**
  * Calculate solar position (elevation and azimuth) for given coordinates and time
  * Uses precise astronomical calculations via suncalc library
  * 
