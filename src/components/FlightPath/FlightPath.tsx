@@ -39,6 +39,8 @@ export function FlightPath({
   onResetView 
 }: FlightPathProps) {
   const airplaneMarker = useRef<maplibregl.Marker | null>(null);
+  const departureMarker = useRef<maplibregl.Marker | null>(null);
+  const arrivalMarker = useRef<maplibregl.Marker | null>(null);
 
   // Add flight path to map when flightState changes
   useEffect(() => {
@@ -53,6 +55,16 @@ export function FlightPath({
     if (airplaneMarker.current) {
       airplaneMarker.current.remove();
       airplaneMarker.current = null;
+    }
+
+    if (departureMarker.current) {
+      departureMarker.current.remove();
+      departureMarker.current = null;
+    }
+
+    if (arrivalMarker.current) {
+      arrivalMarker.current.remove();
+      arrivalMarker.current = null;
     }
 
     // Add flight path as GeoJSON line
@@ -97,6 +109,24 @@ export function FlightPath({
       .setLngLat([startPosition.lon, startPosition.lat])
       .addTo(map);
 
+    // Create departure airport marker
+    const departureElement = createLocationPinElement('Departure', flightState.departure.code);
+    departureMarker.current = new maplibregl.Marker({
+      element: departureElement,
+      anchor: 'bottom',
+    })
+      .setLngLat([flightState.departure.lon, flightState.departure.lat])
+      .addTo(map);
+
+    // Create arrival airport marker
+    const arrivalElement = createLocationPinElement('Arrival', flightState.arrival.code);
+    arrivalMarker.current = new maplibregl.Marker({
+      element: arrivalElement,
+      anchor: 'bottom',
+    })
+      .setLngLat([flightState.arrival.lon, flightState.arrival.lat])
+      .addTo(map);
+
     // Fit map bounds to show entire path with padding
     const bounds = new maplibregl.LngLatBounds();
     pathCoordinates.forEach((coord) => bounds.extend(coord as [number, number]));
@@ -118,6 +148,16 @@ export function FlightPath({
       if (airplaneMarker.current) {
         airplaneMarker.current.remove();
         airplaneMarker.current = null;
+      }
+
+      if (departureMarker.current) {
+        departureMarker.current.remove();
+        departureMarker.current = null;
+      }
+
+      if (arrivalMarker.current) {
+        arrivalMarker.current.remove();
+        arrivalMarker.current = null;
       }
     };
   }, [flightState, map]);
@@ -158,6 +198,43 @@ export function FlightPath({
         <svg width="14" height="14" fill="white" viewBox="0 0 24 24">
           <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
         </svg>
+      </div>
+    `;
+    return element;
+  }
+
+  // Create location pin element for airports
+  function createLocationPinElement(type: string, code: string): HTMLElement {
+    const element = document.createElement('div');
+    element.className = 'location-pin-marker';
+    element.innerHTML = `
+      <div style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+      ">
+        <img 
+          src="/location_pin.png" 
+          alt="${type} Airport" 
+          style="
+            width: 32px;
+            height: 32px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+          "
+        />
+        <div style="
+          background: rgba(0,0,0,0.8);
+          color: white;
+          padding: 2px 6px;
+          border-radius: 4px;
+          font-size: 11px;
+          font-weight: bold;
+          margin-top: 2px;
+          white-space: nowrap;
+        ">
+          ${code}
+        </div>
       </div>
     `;
     return element;
