@@ -7,6 +7,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 interface MapWithCenteredAircraftProps {
   aircraftPosition: { lat: number; lng: number; bearing: number };
   onMapLoad?: (map: maplibregl.Map) => void;
+  onBearingChange?: (bearing: number) => void; // Callback for bearing updates
   children?: React.ReactNode;
 }
 
@@ -17,6 +18,7 @@ interface MapWithCenteredAircraftProps {
 export function MapWithCenteredAircraft({ 
   aircraftPosition, 
   onMapLoad, 
+  onBearingChange,
   children 
 }: MapWithCenteredAircraftProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -89,14 +91,20 @@ export function MapWithCenteredAircraft({
     // Map bearing formula: aircraftBearing (positive) - this rotates map to align direction with up
     const mapBearing = aircraftPosition.bearing || 0;
 
-    // Update map center and bearing to keep aircraft centered
+    // Use very short easeTo duration that matches animation frame rate (~16ms)
+    // This provides smooth movement while maintaining sync with aircraft position
     map.current.easeTo({
       center: [aircraftPosition.lng, aircraftPosition.lat],
       bearing: mapBearing, // Rotate map so aircraft direction points up and terrain moves correctly
-      duration: 300, // Shorter duration for smoother updates
+      duration: 16, // One frame duration for smooth but synchronized movement
       essential: true,
     });
-  }, [aircraftPosition, isLoaded]);
+
+    // Notify parent component of bearing change for sun calculations
+    if (onBearingChange) {
+      onBearingChange(mapBearing);
+    }
+  }, [aircraftPosition, isLoaded, onBearingChange]);
 
   return (
     <div className="relative w-full h-full">

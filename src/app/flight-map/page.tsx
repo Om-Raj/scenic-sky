@@ -16,6 +16,7 @@ export default function FlightMapPage() {
   const searchParams = useSearchParams();
   const [map, setMap] = useState<maplibregl.Map | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentMapBearing, setCurrentMapBearing] = useState(0); // Track current map bearing
   
   const { 
     flightState, 
@@ -59,12 +60,6 @@ export default function FlightMapPage() {
         bearing: currentPos.bearing || 0,
       },
       dateTime: currentDateTime,
-      // Convert lat/lng to 3D coordinates for sun ray (simplified mapping)
-      position3D: {
-        x: currentPos.lon / 180, // Normalize longitude to -1 to 1
-        y: 0, // Aircraft at ground level for now
-        z: currentPos.lat / 90, // Normalize latitude to -1 to 1
-      },
     };
   }, [getCurrentPosition, progress, flightData]);
 
@@ -93,6 +88,11 @@ export default function FlightMapPage() {
       router.push('/?error=missing-params');
     }
   }, [flightData.departure, flightData.arrival, generateFlightPath, router]);
+
+  // Callback when map bearing changes
+  const handleBearingChange = useCallback((bearing: number) => {
+    setCurrentMapBearing(bearing);
+  }, []);
 
   // Callback when map is initialized and ready
   const handleMapLoad = useCallback((mapInstance: maplibregl.Map) => {
@@ -216,6 +216,7 @@ export default function FlightMapPage() {
         <MapWithCenteredAircraft
           aircraftPosition={currentAircraftData.position}
           onMapLoad={handleMapLoad}
+          onBearingChange={handleBearingChange}
         >
           {/* Flight controls overlay */}
           {map && flightState && (
@@ -243,12 +244,12 @@ export default function FlightMapPage() {
           )}
         </MapWithCenteredAircraft>
 
-        {/* 3D Sun Overlay - positioned over the map */}
+        {/* Solar angle visualization - positioned over the map */}
         <SunAngleOverlay
           latitude={currentAircraftData.position.lat}
           longitude={currentAircraftData.position.lng}
           date={currentAircraftData.dateTime}
-          aircraftPosition={currentAircraftData.position3D}
+          mapBearing={currentMapBearing}
         />
       </div>
     </div>
