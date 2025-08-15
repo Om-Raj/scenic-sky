@@ -54,7 +54,7 @@ export function MapWithCenteredAircraft({
       center: [aircraftPosition.lng, aircraftPosition.lat],
       zoom: 8, // Close zoom to show aircraft perspective
       pitch: 45, // Tilted view for 3D effect
-      bearing: aircraftPosition.bearing ? aircraftPosition.bearing - 180 : 0, // Rotate map so aircraft direction points up
+      bearing: aircraftPosition.bearing || 0, // Initialize with correct bearing for forward movement
     });
 
     // Add navigation controls
@@ -83,16 +83,16 @@ export function MapWithCenteredAircraft({
   useEffect(() => {
     if (!map.current || !isLoaded) return;
 
-    // Calculate the bearing for map rotation to keep aircraft direction pointing up
-    // Aircraft bearing tells us which direction the aircraft is moving
-    // We need to rotate the map so that this direction points to the top of the screen
-    // Map bearing formula: aircraftBearing - 180 (to align movement direction with screen top)
-    const mapBearing = aircraftPosition.bearing ? aircraftPosition.bearing - 180 : 0;
+    // Calculate the bearing for map rotation to make aircraft appear to move forward
+    // To make the plane appear to move forward (map coming from top to bottom):
+    // We need to rotate the map so the aircraft's direction aligns with screen top
+    // Map bearing formula: aircraftBearing (positive) - this rotates map to align direction with up
+    const mapBearing = aircraftPosition.bearing || 0;
 
     // Update map center and bearing to keep aircraft centered
     map.current.easeTo({
       center: [aircraftPosition.lng, aircraftPosition.lat],
-      bearing: mapBearing, // Rotate map so aircraft movement direction points up
+      bearing: mapBearing, // Rotate map so aircraft direction points up and terrain moves correctly
       duration: 300, // Shorter duration for smoother updates
       essential: true,
     });
