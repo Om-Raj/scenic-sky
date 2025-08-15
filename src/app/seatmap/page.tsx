@@ -174,7 +174,7 @@ export default function SeatmapPage() {
         </div>
 
         {/* Seatmap Iframe */}
-        <div className="flex-1 lg:w-[60%] relative">
+        <div className="flex-1 lg:w-[40%] relative">
           <div className="h-full p-4">
             <div className="h-full bg-white rounded-lg shadow-lg overflow-hidden">
               {!iframeLoaded && (
@@ -197,7 +197,7 @@ export default function SeatmapPage() {
         </div>
 
         {/* Desktop: Seat Details (Right Side) */}
-        <div className="hidden lg:block lg:w-[40%] p-4">
+        <div className="hidden lg:block lg:w-[60%] p-4">
           <div className="h-full bg-white rounded-lg shadow-lg p-6">
             <div className="flex items-center space-x-2 mb-6">
               <MapPin className="w-6 h-6 text-blue-600" />

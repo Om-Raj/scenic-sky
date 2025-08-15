@@ -1,4 +1,9 @@
 import * as SunCalc from 'suncalc';
+import { 
+  createDateTimeInTimezone as createTimezoneAwareDateTime,
+  interpolateFlightDateTime,
+  getSolarTimeAtLongitude 
+} from './timezone-utils';
 
 /**
  * Solar position data for 3D sun rendering
@@ -12,6 +17,7 @@ export interface SolarPosition {
 
 /**
  * Create a Date object with proper timezone handling
+ * @deprecated Use timezone-utils functions for better timezone support
  * @param date Date string (YYYY-MM-DD)
  * @param time Time string (HH:MM)
  * @param timezone IANA timezone identifier (e.g., 'America/New_York')
@@ -22,19 +28,7 @@ export function createDateTimeInTimezone(
   time: string,
   timezone: string
 ): Date {
-  // Use the standard timezone offset format for proper parsing
-  const timezoneOffsets: { [key: string]: string } = {
-    'America/New_York': '-04:00', // EDT in summer
-    'America/Los_Angeles': '-07:00', // PDT in summer
-    'Europe/London': '+01:00', // BST in summer
-    'Asia/Kolkata': '+05:30', // IST (no DST)
-    'Asia/Dubai': '+04:00', // GST (no DST)
-  };
-  
-  const offset = timezoneOffsets[timezone] || '+00:00';
-  const isoString = `${date}T${time}:00${offset}`;
-  
-  return new Date(isoString);
+  return createTimezoneAwareDateTime(date, time, timezone);
 }
 
 /**
@@ -48,21 +42,28 @@ export interface SolarPosition {
 }
 
 /**
- * Calculate solar position (elevation and azimuth) for given coordinates and time
- * Uses precise astronomical calculations via suncalc library
+ * Calculate solar position for aircraft at specific coordinates and time
+ * Uses instantaneous position-based timezone calculations for accuracy
  * 
  * @param lat Latitude in degrees (-90 to 90)
  * @param lng Longitude in degrees (-180 to 180)  
- * @param date Date and time for calculation
+ * @param date Date and time for calculation (should be in appropriate timezone)
+ * @param useLocalSolarTime Whether to use solar time instead of civil time
  * @returns Solar position with elevation and azimuth angles
  */
 export function calculateSolarPosition(
   lat: number, 
   lng: number, 
-  date: Date
+  date: Date,
+  useLocalSolarTime: boolean = false
 ): SolarPosition {
+  // Optionally use solar time for more accurate sun position
+  const calculationTime = useLocalSolarTime 
+    ? getSolarTimeAtLongitude(date, lng)
+    : date;
+  
   // Use SunCalc library for precise astronomical calculations
-  const position = SunCalc.getPosition(date, lat, lng);
+  const position = SunCalc.getPosition(calculationTime, lat, lng);
   
   return {
     elevation: position.altitude, // Solar elevation angle in radians
@@ -70,6 +71,40 @@ export function calculateSolarPosition(
     altitude: position.altitude * (180 / Math.PI), // Convert to degrees
     azimuthDeg: (position.azimuth + Math.PI) * (180 / Math.PI), // Convert to degrees
   };
+}
+
+/**
+ * Calculate solar position for aircraft during flight with position-aware timezone
+ * This is the recommended function for flight-based solar calculations
+ * 
+ * @param aircraftPosition Current aircraft coordinates
+ * @param flightStartTime Flight departure time
+ * @param flightEndTime Flight arrival time
+ * @param progress Flight progress (0-1)
+ * @param useLocalSolarTime Whether to use solar time for calculations
+ * @returns Solar position data
+ */
+export function calculateFlightSolarPosition(
+  aircraftPosition: { lat: number; lng: number },
+  flightStartTime: Date,
+  flightEndTime: Date,
+  progress: number,
+  useLocalSolarTime: boolean = true
+): SolarPosition {
+  // Get the current time adjusted for aircraft position timezone
+  const currentTime = interpolateFlightDateTime(
+    flightStartTime,
+    flightEndTime,
+    progress,
+    aircraftPosition
+  );
+  
+  return calculateSolarPosition(
+    aircraftPosition.lat,
+    aircraftPosition.lng,
+    currentTime,
+    useLocalSolarTime
+  );
 }
 
 /**
@@ -125,18 +160,26 @@ export function calculateSunRayDirection(
 }
 
 /**
- * Get time progression factor for smooth animations
+ * Get time progression factor for smooth animations with timezone awareness
  * 
  * @param startTime Flight start time
  * @param endTime Flight end time
  * @param progress Current progress (0-1)
+ * @param aircraftPosition Optional aircraft position for timezone-aware interpolation
  * @returns Interpolated date/time
  */
 export function interpolateDateTime(
   startTime: Date,
   endTime: Date,
-  progress: number
+  progress: number,
+  aircraftPosition?: { lat: number; lng: number }
 ): Date {
+  if (aircraftPosition) {
+    // Use timezone-aware interpolation for flight calculations
+    return interpolateFlightDateTime(startTime, endTime, progress, aircraftPosition);
+  }
+  
+  // Fallback to simple linear interpolation
   const startMs = startTime.getTime();
   const endMs = endTime.getTime();
   const currentMs = startMs + (endMs - startMs) * progress;

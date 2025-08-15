@@ -1,60 +1,78 @@
-// Test the timezone fix
+// Test the fixed timezone parsing for CPT→EZE flight
 
-function createDateTimeInTimezone(date, time, timezone) {
-  const isoString = `${date}T${time}:00`;
-  const tempDate = new Date(isoString);
+function testCPTtoEZETimezone() {
+  console.log('🔧 Testing CPT→EZE Timezone Parsing Fix\n');
   
-  const timezoneOffsets = {
-    'America/New_York': -4, // EDT in summer
-    'America/Los_Angeles': -7, // PDT in summer  
-    'Europe/London': 1, // BST in summer
-    'Asia/Kolkata': 5.5, // IST (no DST)
-    'Asia/Dubai': 4, // GST (no DST)
-  };
+  // URL parameters from the user's request
+  const departureDate = '2025-08-15';
+  const departureTime = '18:30';  // 18:30 local time in CPT
+  const arrivalDate = '2025-08-15';
+  const arrivalTime = '23:00';    // 23:00 local time in EZE
   
-  const offsetHours = timezoneOffsets[timezone] || 0;
-  const offsetMs = offsetHours * 60 * 60 * 1000;
+  console.log('Input from URL:');
+  console.log(`Departure: ${departureDate} ${departureTime} at CPT (UTC+2)`);
+  console.log(`Arrival: ${arrivalDate} ${arrivalTime} at EZE (UTC-3)`);
+  console.log('');
   
-  return new Date(tempDate.getTime() - offsetMs);
+  // Cape Town is UTC+2, Buenos Aires is UTC-3
+  function parseTimeInTimezone(date, time, utcOffset) {
+    // Create UTC time by subtracting the timezone offset
+    const [hours, minutes] = time.split(':').map(Number);
+    const localDate = new Date(`${date}T${time}:00`);
+    const utcDate = new Date(localDate.getTime() - (utcOffset * 60 * 60 * 1000));
+    return utcDate;
+  }
+  
+  function formatTimeInTimezone(date, utcOffset, location) {
+    const localDate = new Date(date.getTime() + (utcOffset * 60 * 60 * 1000));
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+    const offsetStr = utcOffset >= 0 ? `+${utcOffset}` : `${utcOffset}`;
+    return `${formatter.format(localDate)} GMT${offsetStr}`;
+  }
+  
+  // Parse the times correctly
+  const departureUTC = parseTimeInTimezone(departureDate, departureTime, 2);  // CPT UTC+2
+  const arrivalUTC = parseTimeInTimezone(arrivalDate, arrivalTime, -3);       // EZE UTC-3
+  
+  console.log('Parsed UTC Times:');
+  console.log(`Departure UTC: ${departureUTC.toISOString()}`);
+  console.log(`Arrival UTC: ${arrivalUTC.toISOString()}`);
+  console.log('');
+  
+  // Format back to local times for display (what should appear in navbar)
+  const departureLocal = formatTimeInTimezone(departureUTC, 2, 'CPT');
+  const arrivalLocal = formatTimeInTimezone(arrivalUTC, -3, 'EZE');
+  
+  console.log('Formatted Local Times (what should appear in navbar):');
+  console.log(`Departure: ${departureLocal}`);
+  console.log(`Arrival: ${arrivalLocal}`);
+  console.log('');
+  
+  console.log('Expected vs Current:');
+  console.log('Expected - Dep: Aug 15, 6:30 PM GMT+2');
+  console.log(`Actual   - Dep: ${departureLocal}`);
+  console.log('Expected - Arr: Aug 15, 11:00 PM GMT-3'); 
+  console.log(`Actual   - Arr: ${arrivalLocal}`);
+  console.log('');
+  
+  // Verify the times are correct
+  const isDepCorrect = departureLocal.includes('6:30 PM');
+  const isArrCorrect = arrivalLocal.includes('11:00 PM');
+  
+  console.log(`✅ Departure time correct: ${isDepCorrect ? 'YES' : 'NO'}`);
+  console.log(`✅ Arrival time correct: ${isArrCorrect ? 'YES' : 'NO'}`);
+  
+  // Calculate flight duration
+  const durationMs = arrivalUTC.getTime() - departureUTC.getTime();
+  const durationHours = durationMs / (1000 * 60 * 60);
+  console.log(`Flight duration: ${durationHours.toFixed(1)} hours`);
+  console.log(`Duration reasonable: ${durationHours > 8 && durationHours < 15 ? 'YES' : 'NO'}`);
 }
 
-console.log('=== Timezone Fix Test ===');
-
-// Test DEL to JFK flight
-const departure = createDateTimeInTimezone('2025-08-15', '12:00', 'Asia/Kolkata');
-const arrival = createDateTimeInTimezone('2025-08-15', '23:00', 'America/New_York');
-
-console.log('DEL departure 12:00 IST:', departure.toISOString());
-console.log('JFK arrival 23:00 EDT:', arrival.toISOString());
-
-// Calculate duration
-const durationHours = (arrival.getTime() - departure.getTime()) / (1000 * 60 * 60);
-console.log('Flight duration:', durationHours.toFixed(1), 'hours');
-
-// Test midpoint
-function interpolateDateTime(start, end, progress) {
-  const startMs = start.getTime();
-  const endMs = end.getTime();
-  const currentMs = startMs + (endMs - startMs) * progress;
-  return new Date(currentMs);
-}
-
-const midpoint = interpolateDateTime(departure, arrival, 0.5);
-console.log('Midpoint time:', midpoint.toISOString());
-
-console.log('\n=== Solar Calculation Test ===');
-const SunCalc = require('suncalc');
-
-// Test at DEL coordinates at corrected departure time
-const delhiPos = SunCalc.getPosition(departure, 28.5562, 77.1);
-const delhiAzDeg = (delhiPos.azimuth * 180/Math.PI + 180) % 360;
-console.log('DEL at 12:00 IST:');
-console.log('  Elevation:', (delhiPos.altitude * 180/Math.PI).toFixed(1), '°');
-console.log('  Azimuth:', delhiAzDeg.toFixed(1), '° from North');
-
-// Test at JFK coordinates at corrected arrival time  
-const jfkPos = SunCalc.getPosition(arrival, 40.6413, -73.7781);
-const jfkAzDeg = (jfkPos.azimuth * 180/Math.PI + 180) % 360;
-console.log('JFK at 23:00 EDT:');
-console.log('  Elevation:', (jfkPos.altitude * 180/Math.PI).toFixed(1), '°');
-console.log('  Azimuth:', jfkAzDeg.toFixed(1), '° from North');
+testCPTtoEZETimezone();

@@ -6,11 +6,15 @@ import { MapWithCenteredAircraft } from '@/components/MapWithCenteredAircraft';
 
 import SkyDomeVisualization from '@/components/SkyDomeVisualization';
 import { FlightPath } from '@/components/FlightPath';
+import { SeatRecommendationDisplay } from '@/components/SeatRecommendation';
 import { useFlightPath } from '@/hooks/useFlightPath';
-import { interpolateDateTime, createDateTimeInTimezone } from '@/lib/solar-calculations';
+import { useAutoSeatRecommendation } from '@/hooks/useSeatRecommendation';
+import { interpolateDateTime, createDateTimeInTimezone, calculateFlightSolarPosition } from '@/lib/solar-calculations';
+import { formatAirportTime, formatFlightSchedule, parseAirportLocalTime, formatAirportLocalTime } from '@/lib/timezone-utils';
 import { DEMO_AIRPORTS } from '@/lib/gis';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Plane, Users } from 'lucide-react';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { ArrowLeft, Plane, Users, MapPin } from 'lucide-react';
 import maplibregl from 'maplibre-gl';
 
 export default function FlightMapPage() {
@@ -32,6 +36,9 @@ export default function FlightMapPage() {
     isAnimating 
   } = useFlightPath();
 
+  // Add seat recommendation hook
+  const seatRecommendation = useAutoSeatRecommendation(searchParams);
+
   // Extract flight data from URL parameters
   const flightData = useMemo(() => ({
     airplaneModel: searchParams.get('airplaneModel') || '',
@@ -42,6 +49,39 @@ export default function FlightMapPage() {
     departure: searchParams.get('departure') || '',
     arrival: searchParams.get('arrival') || '',
   }), [searchParams]);
+
+  // Calculate flight schedule with proper timezone display
+  const flightSchedule = useMemo(() => {
+    if (!flightData.departureDate || !flightData.departureTime || !flightData.arrivalDate || !flightData.arrivalTime) {
+      return null;
+    }
+
+    const departureAirport = DEMO_AIRPORTS.find(apt => apt.code === flightData.departure);
+    const arrivalAirport = DEMO_AIRPORTS.find(apt => apt.code === flightData.arrival);
+    
+    if (!departureAirport || !arrivalAirport) {
+      return null;
+    }
+
+    // Parse times in their respective airport timezones (FIXED)
+    const departureDateTime = parseAirportLocalTime(
+      flightData.departureDate, 
+      flightData.departureTime, 
+      departureAirport
+    );
+    const arrivalDateTime = parseAirportLocalTime(
+      flightData.arrivalDate, 
+      flightData.arrivalTime, 
+      arrivalAirport
+    );
+
+    return {
+      departureLocal: formatAirportLocalTime(departureDateTime, departureAirport),
+      arrivalLocal: formatAirportLocalTime(arrivalDateTime, arrivalAirport),
+      departureUTC: departureDateTime.toISOString(),
+      arrivalUTC: arrivalDateTime.toISOString()
+    };
+  }, [flightData]);
 
   // Calculate current aircraft position and time for solar calculations
   const currentAircraftData = useMemo(() => {
@@ -59,17 +99,24 @@ export default function FlightMapPage() {
     }
 
     // Calculate current time based on flight progress with proper timezone handling
-    const departureDateTime = createDateTimeInTimezone(
+    const departureDateTime = parseAirportLocalTime(
       flightData.departureDate, 
       flightData.departureTime, 
-      departureAirport.timezone
+      departureAirport
     );
-    const arrivalDateTime = createDateTimeInTimezone(
+    const arrivalDateTime = parseAirportLocalTime(
       flightData.arrivalDate, 
       flightData.arrivalTime, 
-      arrivalAirport.timezone
+      arrivalAirport
     );
-    const currentDateTime = interpolateDateTime(departureDateTime, arrivalDateTime, progress);
+    
+    // Use simple UTC interpolation for accurate solar calculations
+    // Solar position calculations require UTC time, not timezone-adjusted time
+    const currentDateTime = interpolateDateTime(
+      departureDateTime, 
+      arrivalDateTime, 
+      progress
+    );
 
     return {
       position: {
@@ -126,14 +173,31 @@ export default function FlightMapPage() {
     router.push(`/seatmap?${params.toString()}`);
   }, [flightData, router]);
 
-  // Calculate current flight time based on progress
+  // Calculate current flight time based on progress with proper timezone handling
   const calculateCurrentTime = () => {
     if (!flightData.departureDate || !flightData.departureTime || !flightData.arrivalDate || !flightData.arrivalTime) {
       return 'N/A';
     }
     
-    const departureDateTime = new Date(`${flightData.departureDate}T${flightData.departureTime}`);
-    const arrivalDateTime = new Date(`${flightData.arrivalDate}T${flightData.arrivalTime}`);
+    // Find airport timezone information
+    const departureAirport = DEMO_AIRPORTS.find(apt => apt.code === flightData.departure);
+    const arrivalAirport = DEMO_AIRPORTS.find(apt => apt.code === flightData.arrival);
+    
+    if (!departureAirport || !arrivalAirport) {
+      return 'N/A';
+    }
+    
+    // Create timezone-aware departure and arrival times (FIXED)
+    const departureDateTime = parseAirportLocalTime(
+      flightData.departureDate, 
+      flightData.departureTime, 
+      departureAirport
+    );
+    const arrivalDateTime = parseAirportLocalTime(
+      flightData.arrivalDate, 
+      flightData.arrivalTime, 
+      arrivalAirport
+    );
     
     // Calculate total flight duration in milliseconds
     const totalDuration = arrivalDateTime.getTime() - departureDateTime.getTime();
@@ -141,22 +205,42 @@ export default function FlightMapPage() {
     // Calculate current time based on progress
     const currentTime = new Date(departureDateTime.getTime() + (totalDuration * progress));
     
+    // Format current time in UTC for clarity during international flight
     return currentTime.toLocaleString('en-US', {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      timeZone: 'UTC',
+      timeZoneName: 'short'
     });
   };
 
-  // Calculate remaining flight time
+  // Calculate remaining flight time with proper timezone handling
   const calculateTimeLeft = () => {
     if (!flightData.departureDate || !flightData.departureTime || !flightData.arrivalDate || !flightData.arrivalTime) {
       return 'N/A';
     }
     
-    const departureDateTime = new Date(`${flightData.departureDate}T${flightData.departureTime}`);
-    const arrivalDateTime = new Date(`${flightData.arrivalDate}T${flightData.arrivalTime}`);
+    // Find airport timezone information
+    const departureAirport = DEMO_AIRPORTS.find(apt => apt.code === flightData.departure);
+    const arrivalAirport = DEMO_AIRPORTS.find(apt => apt.code === flightData.arrival);
+    
+    if (!departureAirport || !arrivalAirport) {
+      return 'N/A';
+    }
+    
+    // Create timezone-aware departure and arrival times (FIXED)
+    const departureDateTime = parseAirportLocalTime(
+      flightData.departureDate, 
+      flightData.departureTime, 
+      departureAirport
+    );
+    const arrivalDateTime = parseAirportLocalTime(
+      flightData.arrivalDate, 
+      flightData.arrivalTime, 
+      arrivalAirport
+    );
     
     // Calculate total flight duration in milliseconds
     const totalDuration = arrivalDateTime.getTime() - departureDateTime.getTime();
@@ -192,11 +276,20 @@ export default function FlightMapPage() {
             </Button>
 
             {flightData.departure && flightData.arrival && (
-              <div className="flex items-center space-x-2">
-                <Plane className="w-5 h-5 text-blue-600" />
-                <span className="text-lg font-semibold">
-                  {flightData.departure} → {flightData.arrival}
-                </span>
+              <div className="flex flex-col items-center space-y-1">
+                <div className="flex items-center space-x-2">
+                  <Plane className="w-5 h-5 text-blue-600" />
+                  <span className="text-lg font-semibold">
+                    {flightData.departure} → {flightData.arrival}
+                  </span>
+                </div>
+                {flightSchedule && (
+                  <div className="text-xs text-gray-600 flex items-center space-x-4">
+                    <span>Dep: {flightSchedule.departureLocal}</span>
+                    <span>•</span>
+                    <span>Arr: {flightSchedule.arrivalLocal}</span>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -228,11 +321,20 @@ export default function FlightMapPage() {
           </Button>
 
           {flightData.departure && flightData.arrival && (
-            <div className="flex items-center space-x-2">
-              <Plane className="w-5 h-5 text-blue-600" />
-              <span className="text-lg font-semibold">
-                {flightData.departure} → {flightData.arrival}
-              </span>
+            <div className="flex flex-col items-center space-y-1">
+              <div className="flex items-center space-x-2">
+                <Plane className="w-5 h-5 text-blue-600" />
+                <span className="text-lg font-semibold">
+                  {flightData.departure} → {flightData.arrival}
+                </span>
+              </div>
+              {flightSchedule && (
+                <div className="text-xs text-gray-600 flex items-center space-x-4">
+                  <span>Dep: {flightSchedule.departureLocal}</span>
+                  <span>•</span>
+                  <span>Arr: {flightSchedule.arrivalLocal}</span>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -249,6 +351,32 @@ export default function FlightMapPage() {
         >
           <Users className="w-5 h-5" />
         </Button>
+
+        {/* Floating Seat Recommendation Button */}
+        {seatRecommendation.result && (
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                className="absolute top-4 left-20 z-40 bg-white/90 hover:bg-white/95 text-gray-700 border border-gray-200 backdrop-blur-sm shadow-lg transition-all duration-200 hover:shadow-xl rounded-full w-12 h-12 p-0"
+                variant="outline"
+                aria-label="View seat recommendations"
+              >
+                <MapPin className="w-5 h-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[400px] sm:w-[540px] overflow-y-auto">
+              <SheetHeader>
+                <SheetTitle>Seat Recommendations</SheetTitle>
+                <SheetDescription>
+                  Scenic views and solar events for your flight
+                </SheetDescription>
+              </SheetHeader>
+              <div className="mt-6">
+                <SeatRecommendationDisplay result={seatRecommendation.result} />
+              </div>
+            </SheetContent>
+          </Sheet>
+        )}
 
         <MapWithCenteredAircraft
           aircraftPosition={currentAircraftData.position}

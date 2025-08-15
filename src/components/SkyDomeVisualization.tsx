@@ -5,6 +5,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Text, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import SunCalc from 'suncalc';
+import { getSolarTimeAtLongitude } from '@/lib/timezone-utils';
 
 type Props = {
   latitude: number;
@@ -20,19 +21,35 @@ const DEG2RAD = Math.PI / 180;
 
 /**
  * Convert SunCalc output to scene XYZ coordinates.
- * Returns x (east), y (up), z (north), plus azimuthDeg and elevationDeg.
- * Using coordinate system similar to reference implementation.
+ * Returns x (east), y (up), z (south), plus azimuthDeg and elevationDeg.
+ * Fixed coordinate system: x=East/West, y=Up/Down, z=North/South (positive South).
  */
-function getSunPosition(date: Date, latitude: number, longitude: number, radius = 1.5) {
-  const pos = SunCalc.getPosition(date, latitude, longitude);
+function getSunPosition(
+  date: Date, 
+  latitude: number, 
+  longitude: number, 
+  radius = 1.5,
+  useSolarTime = false  // DISABLED: Solar time adjustment was causing incorrect calculations
+) {
+  // Use the date directly without solar time adjustment for accurate flight calculations
+  const calculationTime = useSolarTime ? getSolarTimeAtLongitude(date, longitude) : date;
+  
+  const pos = SunCalc.getPosition(calculationTime, latitude, longitude);
   const elevationRad = pos.altitude; // radians, -π/2..+π/2
   const azimuthRad = pos.azimuth; // SunCalc azimuth in radians
 
-  // Use coordinate system similar to reference code
-  // This places sun at actual calculated position without additional transformations
-  const x = radius * Math.cos(elevationRad) * Math.cos(azimuthRad);
-  const z = radius * Math.cos(elevationRad) * Math.sin(azimuthRad);
-  const y = radius * Math.sin(elevationRad);
+  // Convert to proper degrees for geographic convention
+  const elevationDeg = elevationRad * RAD2DEG;
+  const azimuthDeg = (azimuthRad * RAD2DEG + 180) % 360; // Convert to 0-360 range
+  
+  // Convert to radians for coordinate calculation
+  const azimuthRadFromNorth = azimuthDeg * DEG2RAD;
+  
+  // Fixed coordinate system: geographic convention where positive Z is South
+  // This ensures sun appears in correct direction relative to compass
+  const x = radius * Math.cos(elevationRad) * Math.sin(azimuthRadFromNorth); // East positive
+  const z = -radius * Math.cos(elevationRad) * Math.cos(azimuthRadFromNorth); // South positive (inverted for viewer perspective)
+  const y = radius * Math.sin(elevationRad); // Up positive
 
   return {
     x,
@@ -40,8 +57,8 @@ function getSunPosition(date: Date, latitude: number, longitude: number, radius 
     z,
     elevationRad,
     azimuthRad,
-    elevationDeg: elevationRad * RAD2DEG,
-    azimuthDeg: (azimuthRad * RAD2DEG + 180) % 360, // Convert to 0-360 range
+    elevationDeg,
+    azimuthDeg,
   };
 }
 
@@ -91,9 +108,15 @@ function makeMeridianGeometry(azimuthDeg: number, radius = 1.5, segments = 36) {
 }
 
 /**
- * Generate sun day path geometry - shows sun trajectory for the current day
+ * Generate sun day path geometry - shows sun trajectory for the current day with UTC time
  */
-function makeSunDayPathGeometry(date: Date, latitude: number, longitude: number, radius = 1.5) {
+function makeSunDayPathGeometry(
+  date: Date, 
+  latitude: number, 
+  longitude: number, 
+  radius = 1.5,
+  useSolarTime = false  // DISABLED: Use UTC time for consistency with flight calculations
+) {
   const points: number[] = [];
   const currentDate = new Date(date);
   
@@ -101,7 +124,7 @@ function makeSunDayPathGeometry(date: Date, latitude: number, longitude: number,
     const testDate = new Date(currentDate);
     testDate.setHours(Math.floor(hour), (hour % 1) * 60, 0, 0);
     
-    const sunPos = getSunPosition(testDate, latitude, longitude, radius);
+    const sunPos = getSunPosition(testDate, latitude, longitude, radius, useSolarTime);
     
     // Only add points where sun is above horizon
     if (sunPos.elevationDeg > 0) {
@@ -171,9 +194,9 @@ function SkySphereScene({
   mapBearing?: number;
   radius?: number; 
 }) {
-  // Sun position memoized and adjusted for map bearing
+  // Sun position memoized and adjusted for map bearing with UTC time calculation
   const sun = useMemo(() => {
-    const rawSun = getSunPosition(date, latitude, longitude, 1.0); // Use fixed smaller radius for sun position
+    const rawSun = getSunPosition(date, latitude, longitude, 1.0, false); // Use UTC time for accuracy
     
     // Adjust sun position for map bearing (rotate opposite to map)
     // When map rotates clockwise, sun should appear to rotate counter-clockwise
@@ -192,7 +215,7 @@ function SkySphereScene({
     };
   }, [date, latitude, longitude, radius, mapBearing]);
 
-  // Sun day path geometry adjusted for map bearing
+  // Sun day path geometry adjusted for map bearing with corrected coordinates
   const sunDayPath = useMemo(() => {
     try {
       const points: number[] = [];
@@ -205,7 +228,7 @@ function SkySphereScene({
         const testDate = new Date(currentDate);
         testDate.setHours(Math.floor(hour), (hour % 1) * 60, 0, 0);
         
-        const sunPos = getSunPosition(testDate, latitude, longitude, radius);
+        const sunPos = getSunPosition(testDate, latitude, longitude, radius, false); // Use UTC time
         
         // Only add points where sun is above horizon
         if (sunPos.elevationDeg > 0) {
@@ -323,9 +346,9 @@ function SkySphereScene({
         const adjustedAz = (az - mapBearing + 360) % 360;
         const azRad = adjustedAz * DEG2RAD;
         
-        // Position using same coordinate system as sun
+        // Position using corrected coordinate system (positive Z = South)
         const x = Math.sin(azRad) * radius;
-        const z = -Math.cos(azRad) * radius;
+        const z = -Math.cos(azRad) * radius; // Negative for North, positive for South
         
         return (
           <group key={`label-${label}`} position={[x, 0.02, z]}>
