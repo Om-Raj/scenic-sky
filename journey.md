@@ -786,6 +786,75 @@ if (hoverElement) {
 ✅ Hover popups maintain proper layering hierarchy
 ✅ No visual conflicts between UI elements during flight visualization
 
+### Aug 16, 2025 - SeatmapPage Responsive Grid Layout Refactor
+**Summary**
+- Refactored SeatmapPage component from flex-based layout to responsive CSS grid system
+- Implemented future-ready structure for QuickStatsFooter integration
+- Enhanced responsive behavior and eliminated layout overflow issues
+
+**Technical Implementation**
+- **Main Structure**: Changed from single flex container to `flex flex-col` with `flex-1 min-h-0` main content area
+- **Grid System**: Implemented `grid-cols-1 lg:grid-cols-[1fr_auto_2fr]` for responsive three-column desktop layout
+- **Section Architecture**: Each section now uses consistent `flex flex-col` with fixed header and scrollable content
+
+**Layout Improvements**
+1. **Responsive Grid Columns**:
+   - Mobile: Single column stack with natural height flow
+   - Desktop: Three-column layout (Seat Details | Seatmap | Recommendations)
+   - Column proportions: 1fr (flexible) | auto (400px fixed) | 2fr (larger flexible)
+
+2. **Individual Section Structure**:
+```tsx
+<section className="flex flex-col overflow-hidden">
+  <div className="flex-shrink-0 p-4 border-b bg-gray-50">
+    {/* Fixed section header */}
+  </div>
+  <div className="flex-1 overflow-y-auto p-4">
+    {/* Scrollable content area */}
+  </div>
+</section>
+```
+
+3. **Height Management**:
+   - Removed hardcoded `h-[calc(100vh-89px)]` constraints
+   - Used `flex-1 min-h-0` for proper content distribution
+   - Each section scrolls independently without double scrollbars
+
+**Future-Ready Features**
+- **QuickStatsFooter Preparation**: Layout structure ready for footer integration
+- **Calculation Ready**: When footer added, will use `min-h-[calc(100vh-headerHeight-footerHeight)]`
+- **No Overlap Prevention**: Flex structure ensures content doesn't conflict with future footer
+
+**Visual Enhancements**
+- **Section Headers**: Added distinct header bars with titles, icons, and background colors
+- **Better Contrast**: Gray backgrounds for seatmap section and section headers
+- **Semantic Structure**: Proper `<header>`, `<main>`, `<section>` HTML5 elements
+- **Loading States**: Improved iframe loading overlay with proper z-index stacking
+
+**Responsive Behavior**
+- **Mobile Optimization**: Sections stack vertically, each takes natural content height
+- **Desktop Layout**: Sections share available height equally within grid constraints
+- **Independent Scrolling**: Each section maintains its own scroll state
+- **Clean Borders**: Visual separation between sections with consistent spacing
+
+**Technical Benefits**
+- **Performance**: Removed unnecessary `hidden` class toggling on iframe
+- **Maintainability**: Cleaner component structure with reduced nesting
+- **Accessibility**: Proper semantic HTML structure and ARIA considerations
+- **Scalability**: Easy to add/modify sections without layout breaking
+
+**Files Modified**
+- `src/app/seatmap/page.tsx` - Complete layout architecture refactor
+
+**Verification Results**
+✅ Responsive layout works smoothly from mobile to desktop
+✅ Each section scrolls independently without layout conflicts
+✅ Iframe loads properly with improved loading state display
+✅ Grid proportions maintain proper spacing across screen sizes
+✅ Future footer integration won't cause overlap issues
+✅ TypeScript compilation passes without errors
+✅ Clean semantic HTML structure for better accessibility
+
 
 
 ````

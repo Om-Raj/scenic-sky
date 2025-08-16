@@ -109,9 +109,9 @@ export default function SeatmapPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Header */}
-      <div className="relative z-50 p-4 bg-white/95 backdrop-blur-sm shadow-sm border-b">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
+      {/* Fixed Header */}
+      <header className="flex-shrink-0 p-4 bg-white/95 backdrop-blur-sm shadow-sm border-b z-50">
         <div className="flex items-center justify-between">
           <Button 
             variant="outline" 
@@ -138,137 +138,132 @@ export default function SeatmapPage() {
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Main Content */}
-      <div className="h-[calc(100vh-73px)] flex flex-col lg:flex-row">
-        {/* Mobile: Seat Details (Top) */}
-        <div className="lg:hidden p-4 bg-white border-b">
-          <div className="max-w-md mx-auto">
-            <div className="flex items-center space-x-2 mb-3">
+      {/* Main Grid Content - Responsive Layout */}
+      <main className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[1fr_auto_2fr]">
+        
+        {/* Seat Details Section */}
+        <section className="flex flex-col overflow-hidden border-b lg:border-b-0 lg:border-r bg-white">
+          <div className="flex-shrink-0 p-4 border-b bg-gray-50">
+            <div className="flex items-center space-x-2">
               <MapPin className="w-5 h-5 text-blue-600" />
               <h2 className="text-lg font-semibold">
                 {selectedSeat ? 'Selected Seat' : 'Recommended Seat'}
               </h2>
             </div>
-            
-            <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border">
-                <div>
-                  <div className="text-2xl font-bold text-blue-900">{currentSeat.seat}</div>
-                  <div className="text-sm text-blue-700">{currentSeat.position} Seat</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">Features</div>
-                  <div className="space-y-1">
-                    {currentSeat.features.map((feature, index) => (
-                      <div key={index} className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                        {feature}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              
-              {!selectedSeat && 'reason' in recommendedSeat && (
-                <div className="text-sm text-gray-600 italic">
-                  {recommendedSeat.reason}
-                </div>
-              )}
-            </div>
           </div>
-        </div>
-
-        {/* Seatmap Iframe - Compact */}
-        <div className="flex-shrink-0 lg:w-[400px] relative">
-          <div className="h-full p-4">
-            <div className="h-full max-w-[400px] bg-white rounded-lg shadow-lg overflow-hidden">
-              {!iframeLoaded && (
-                <div className="h-full flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
-                    <p className="text-gray-600 text-sm">Loading seatmap...</p>
-                  </div>
-                </div>
-              )}
-              
-              <iframe
-                src={`/aircraft/${getAircraftFileName(flightData.airplaneModel)}?seatbar=hide&tooltip_on_hover=true`}
-                className={`w-full h-full border-0 ${iframeLoaded ? 'block' : 'hidden'}`}
-                title="Aircraft Seatmap"
-                onLoad={() => setIframeLoaded(true)}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Desktop: Expanded Right Sidebar with Seat Comparison */}
-        <div className="hidden lg:block flex-1 p-4">
-          <div className="h-full space-y-4">
-            {/* Basic Seat Info Bar */}
-            <Card className="bg-white">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <MapPin className="w-5 h-5 text-blue-600" />
+          
+          <div className="flex-1 overflow-y-auto p-4">
+            <div className="max-w-md mx-auto lg:max-w-none space-y-4">
+              <Card className="bg-blue-50 border-blue-200">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-3">
                     <div>
-                      <div className="font-semibold text-lg">
-                        {selectedSeat ? 'Selected' : 'Recommended'}: {currentSeat.seat}
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        {currentSeat.position} Seat • {flightData.departure} → {flightData.arrival}
-                      </div>
+                      <div className="text-2xl font-bold text-blue-900">{currentSeat.seat}</div>
+                      <div className="text-sm text-blue-700">{currentSeat.position} Seat</div>
                     </div>
                   </div>
-                  <div className="flex flex-wrap gap-1">
-                    {currentSeat.features.slice(0, 3).map((feature, index) => (
-                      <span 
-                        key={index}
-                        className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded"
-                      >
-                        {feature}
-                      </span>
-                    ))}
+                  
+                  <div className="space-y-2">
+                    <div className="text-xs text-gray-600 uppercase tracking-wide">Features</div>
+                    <div className="flex flex-wrap gap-1">
+                      {currentSeat.features.map((feature, index) => (
+                        <span 
+                          key={index}
+                          className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded"
+                        >
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Seat Recommendation Comparison */}
-            {seatRecommendation.result ? (
-              <SeatComparisonDisplay 
-                result={seatRecommendation.result}
-                loading={seatRecommendation.loading}
-                error={seatRecommendation.error}
-                className="flex-1"
-              />
-            ) : seatRecommendation.loading ? (
-              <SeatComparisonDisplay 
-                result={null as any}
-                loading={true}
-                error={null}
-                className="flex-1"
-              />
-            ) : seatRecommendation.error ? (
-              <SeatComparisonDisplay 
-                result={null as any}
-                loading={false}
-                error={seatRecommendation.error}
-                className="flex-1"
-              />
-            ) : (
-              <Card className="flex-1">
-                <CardContent className="p-6 flex items-center justify-center h-full">
-                  <div className="text-center">
-                    <Sparkles className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-500">Loading seat recommendations...</p>
-                  </div>
+                  
+                  {!selectedSeat && 'reason' in recommendedSeat && (
+                    <div className="text-sm text-gray-600 italic mt-3 pt-3 border-t border-blue-200">
+                      {recommendedSeat.reason}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
-            )}
+            </div>
           </div>
-        </div>
-      </div>
+        </section>
+
+        {/* Seatmap Section */}
+        <section className="flex flex-col lg:w-[400px] bg-gray-50 border-b lg:border-b-0 lg:border-r">
+          <div className="flex-shrink-0 p-4 border-b bg-gray-100">
+            <h2 className="text-lg font-semibold text-gray-800">Aircraft Layout</h2>
+          </div>
+          
+          <div className="flex-1 overflow-hidden p-4 h-full">
+            <div className="h-full max-w-md mx-auto">
+              <div className="h-full min-h-[70vh] lg:min-h-0 bg-white rounded-lg shadow-lg overflow-hidden relative">
+                {!iframeLoaded && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                      <p className="text-gray-600 text-sm">Loading seatmap...</p>
+                    </div>
+                  </div>
+                )}
+                
+                <iframe
+                  src={`/aircraft/${getAircraftFileName(flightData.airplaneModel)}?seatbar=hide&tooltip_on_hover=true`}
+                  className="w-full h-full border-0"
+                  title="Aircraft Seatmap"
+                  onLoad={() => setIframeLoaded(true)}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Seat Recommendations Section */}
+        <section className="flex flex-col overflow-hidden bg-white">
+          <div className="flex-shrink-0 p-4 border-b bg-gray-50">
+            <div className="flex items-center space-x-2">
+              <Sparkles className="w-5 h-5 text-blue-600" />
+              <h2 className="text-lg font-semibold">Seat Recommendations</h2>
+            </div>
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-4">
+            <div className="h-full">
+              {seatRecommendation.result ? (
+                <SeatComparisonDisplay 
+                  result={seatRecommendation.result}
+                  loading={seatRecommendation.loading}
+                  error={seatRecommendation.error}
+                  className="h-full"
+                />
+              ) : seatRecommendation.loading ? (
+                <SeatComparisonDisplay 
+                  result={null as any}
+                  loading={true}
+                  error={null}
+                  className="h-full"
+                />
+              ) : seatRecommendation.error ? (
+                <SeatComparisonDisplay 
+                  result={null as any}
+                  loading={false}
+                  error={seatRecommendation.error}
+                  className="h-full"
+                />
+              ) : (
+                <Card className="h-full flex items-center justify-center">
+                  <CardContent className="p-6 text-center">
+                    <Sparkles className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-gray-500">Loading seat recommendations...</p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </div>
+        </section>
+        
+      </main>
     </div>
   );
 }
