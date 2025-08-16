@@ -233,7 +233,7 @@ export default function FlightMapPage() {
       // Auto-resume after 10 seconds or until user clicks resume
       modalTimerRef.current = setTimeout(() => {
         handleClosePopup();
-      }, 10000);
+      }, 5000);
     }
   }, [progress, isAnimating, nearbyScenic, visitedScenicIds, isAnimationPaused, pauseAnimation, map, handleClosePopup]);
 

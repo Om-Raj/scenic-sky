@@ -29,8 +29,9 @@ export function MapWithCenteredAircraft({
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const scenicMarkers = useRef<maplibregl.Marker[]>([]);
   const currentPopup = useRef<maplibregl.Popup | null>(null);
+  const hoverPopup = useRef<maplibregl.Popup | null>(null); // Popup for hover interactions
+  const currentHoverFeature = useRef<string | undefined>(undefined);
 
   // Function to create popup content HTML using shadcn-style components
   const createPopupContent = (location: ScenicLocationWithDetection) => {
@@ -107,6 +108,15 @@ export function MapWithCenteredAircraft({
     }
   }, [onScenicPopup]);
 
+  // Function to close hover popup
+  const closeHoverPopup = useCallback(() => {
+    if (hoverPopup.current) {
+      hoverPopup.current.remove();
+      hoverPopup.current = null;
+    }
+    currentHoverFeature.current = undefined;
+  }, []);
+
   // Expose popup functions to parent component
   useEffect(() => {
     if (map.current && isLoaded) {
@@ -165,14 +175,14 @@ export function MapWithCenteredAircraft({
     });
 
     return () => {
-      // Clean up scenic markers
-      scenicMarkers.current.forEach(marker => marker.remove());
-      scenicMarkers.current = [];
-      
-      // Clean up popup
+      // Clean up popups
       if (currentPopup.current) {
         currentPopup.current.remove();
         currentPopup.current = null;
+      }
+      if (hoverPopup.current) {
+        hoverPopup.current.remove();
+        hoverPopup.current = null;
       }
       
       if (map.current) {
@@ -182,55 +192,189 @@ export function MapWithCenteredAircraft({
     };
   }, [onMapLoad]);
 
-  // Add/update scenic location markers
+  // Add/update scenic location layers using GeoJSON source and symbol layer
   useEffect(() => {
     if (!map.current || !isLoaded || !scenicLocations.length) return;
 
-    // Clear existing markers
-    scenicMarkers.current.forEach(marker => marker.remove());
-    scenicMarkers.current = [];
+    // Remove existing scenic layers and source if they exist
+    if (map.current.getLayer('scenic-layer')) {
+      map.current.removeLayer('scenic-layer');
+    }
+    if (map.current.getLayer('scenic-hover-layer')) {
+      map.current.removeLayer('scenic-hover-layer');
+    }
+    if (map.current.getSource('scenic-locations')) {
+      map.current.removeSource('scenic-locations');
+    }
 
-    // Add new markers for scenic locations
-    scenicLocations.forEach(location => {
-      // Create custom marker element
-      const markerElement = document.createElement('div');
-      markerElement.innerHTML = `
-        <div class="scenic-marker" style="
-          width: 24px;
-          height: 24px;
-          background: #ef4444;
-          border: 2px solid white;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 12px;
-          color: white;
-          font-weight: bold;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-          cursor: pointer;
-          transition: transform 0.2s ease;
-        ">
-          📍
-        </div>
-      `;
+    // Create GeoJSON data for scenic locations
+    const geojsonData = {
+      type: 'FeatureCollection' as const,
+      features: scenicLocations.map(location => ({
+        type: 'Feature' as const,
+        properties: {
+          name: location.name,
+          type: location.type,
+          description: location.description || `Beautiful ${location.type} worth seeing during your flight.`,
+          likes: location.likes,
+          distanceFromPath: location.distanceFromPath,
+          id: `${location.lat}-${location.lon}`, // Unique identifier
+        },
+        geometry: {
+          type: 'Point' as const,
+          coordinates: [location.lon, location.lat],
+        },
+      })),
+    };
 
-      // Add hover effect
-      markerElement.addEventListener('mouseenter', () => {
-        markerElement.style.transform = 'scale(1.2)';
-      });
-      markerElement.addEventListener('mouseleave', () => {
-        markerElement.style.transform = 'scale(1)';
-      });
-
-      // Create and add marker
-      const marker = new maplibregl.Marker(markerElement)
-        .setLngLat([location.lon, location.lat])
-        .addTo(map.current!);
-
-      scenicMarkers.current.push(marker);
+    // Add GeoJSON source
+    map.current.addSource('scenic-locations', {
+      type: 'geojson',
+      data: geojsonData,
     });
-  }, [scenicLocations, isLoaded]);
+
+    // Load custom marker image and add symbol layer
+    map.current.loadImage('/map-marker.png')
+      .then((response) => {
+        if (!map.current) return;
+        
+        // Add image to map if not already added
+        if (!map.current.hasImage('custom-marker')) {
+          map.current.addImage('custom-marker', response.data);
+        }
+
+        // Add symbol layer for scenic markers
+        map.current.addLayer({
+          id: 'scenic-layer',
+          type: 'symbol',
+          source: 'scenic-locations',
+          layout: {
+            'icon-image': 'custom-marker',
+            'icon-size': 0.03, // Adjust size as needed
+            'icon-anchor': 'bottom',
+            'icon-allow-overlap': true,
+          },
+        });
+      })
+      .catch((error) => {
+        console.error('Error loading marker image:', error);
+        // Fallback to circle markers if image fails to load
+        if (map.current) {
+          map.current.addLayer({
+            id: 'scenic-layer',
+            type: 'circle',
+            source: 'scenic-locations',
+            paint: {
+              'circle-radius': 8,
+              'circle-color': '#ef4444',
+              'circle-stroke-color': '#ffffff',
+              'circle-stroke-width': 2,
+              'circle-opacity': 0.9,
+            },
+          });
+        }
+      });
+
+    // Add invisible hover detection layer with larger hit area
+    map.current.addLayer({
+      id: 'scenic-hover-layer',
+      type: 'circle',
+      source: 'scenic-locations',
+      paint: {
+        'circle-radius': 20, // Larger hover area
+        'circle-opacity': 0, // Invisible
+      },
+    });
+
+    // Add hover event listeners
+    const handleMouseEnter = (e: any) => {
+      const feature = e.features?.[0];
+      if (!feature) return;
+      
+      const featureId = feature.properties.id;
+      
+      // Only show popup if we're hovering over a different feature
+      if (currentHoverFeature.current !== featureId) {
+        currentHoverFeature.current = featureId;
+        
+        // Change cursor style
+        map.current!.getCanvas().style.cursor = 'pointer';
+        
+        const coordinates = (feature.geometry as any).coordinates.slice() as [number, number];
+        
+        // Handle longitude wrapping for popup positioning
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+        
+        // Create hover popup content
+        const hoverContent = `
+          <div class="p-3 max-w-xs">
+            <div class="relative mb-3">
+              <img 
+                src="/sun-flare.png" 
+                alt="${feature.properties.name}" 
+                class="w-full h-20 object-cover rounded-lg"
+              />
+            </div>
+            <h3 class="text-sm font-semibold text-gray-900 mb-2">${feature.properties.name}</h3>
+            <div class="flex items-center justify-between">
+              <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">${feature.properties.type}</span>
+              <span class="text-xs text-gray-600">${feature.properties.distanceFromPath.toFixed(1)}km away</span>
+            </div>
+          </div>
+        `;
+        
+        // Close existing hover popup
+        if (hoverPopup.current) {
+          hoverPopup.current.remove();
+        }
+        
+        // Create and show hover popup
+        hoverPopup.current = new maplibregl.Popup({
+          closeButton: false,
+          closeOnClick: false,
+          maxWidth: 'none',
+          className: 'scenic-hover-popup',
+        })
+          .setLngLat(coordinates)
+          .setHTML(hoverContent)
+          .addTo(map.current!);
+      }
+    };
+
+    const handleMouseLeave = () => {
+      map.current!.getCanvas().style.cursor = '';
+      closeHoverPopup();
+    };
+
+    // Attach event listeners to the hover layer
+    map.current.on('mouseenter', 'scenic-hover-layer', handleMouseEnter);
+    map.current.on('mouseleave', 'scenic-hover-layer', handleMouseLeave);
+
+    // Cleanup function for this effect
+    return () => {
+      if (map.current) {
+        // Remove hover event listeners
+        map.current.off('mouseenter', 'scenic-hover-layer', handleMouseEnter);
+        map.current.off('mouseleave', 'scenic-hover-layer', handleMouseLeave);
+        
+        // Remove layers and source
+        if (map.current.getLayer('scenic-layer')) {
+          map.current.removeLayer('scenic-layer');
+        }
+        if (map.current.getLayer('scenic-hover-layer')) {
+          map.current.removeLayer('scenic-hover-layer');
+        }
+        if (map.current.getSource('scenic-locations')) {
+          map.current.removeSource('scenic-locations');
+        }
+      }
+      
+      // Close hover popup
+      closeHoverPopup();
+    };
+  }, [scenicLocations, isLoaded, closeHoverPopup]);
 
   // Update aircraft position and keep it centered
   useEffect(() => {
