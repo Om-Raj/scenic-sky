@@ -6,7 +6,6 @@ import { MapWithCenteredAircraft } from '@/components/MapWithCenteredAircraft';
 
 import SkyDomeVisualization from '@/components/SkyDomeVisualization';
 import { FlightPath } from '@/components/FlightPath';
-import { SeatRecommendationDisplay } from '@/components/SeatRecommendation';
 import { useFlightPath } from '@/hooks/useFlightPath';
 import { useAutoSeatRecommendation } from '@/hooks/useSeatRecommendation';
 import { interpolateDateTime, createDateTimeInTimezone, calculateFlightSolarPosition } from '@/lib/solar-calculations';
@@ -19,6 +18,7 @@ import {
   type ScenicLocationWithDetection 
 } from '@/lib/scenic-detection';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { ArrowLeft, Plane, Users, MapPin } from 'lucide-react';
 import maplibregl from 'maplibre-gl';
@@ -452,27 +452,78 @@ export default function FlightMapPage() {
           <Users className="w-5 h-5" />
         </Button>
 
-        {/* Floating Seat Recommendation Button */}
-        {seatRecommendation.result && (
+        {/* Floating Scenic Locations Button */}
+        {nearbyScenic.length > 0 && (
           <Sheet>
             <SheetTrigger asChild>
               <Button
                 className="absolute top-4 left-20 z-40 bg-white/90 hover:bg-white/95 text-gray-700 border border-gray-200 backdrop-blur-sm shadow-lg transition-all duration-200 hover:shadow-xl rounded-full w-12 h-12 p-0"
                 variant="outline"
-                aria-label="View seat recommendations"
+                aria-label="View scenic locations"
               >
                 <MapPin className="w-5 h-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-[400px] sm:w-[540px] overflow-y-auto">
+            <SheetContent side="left" className="w-[400px] sm:w-[540px] overflow-y-auto bg-white">
               <SheetHeader>
-                <SheetTitle>Seat Recommendations</SheetTitle>
+                <SheetTitle>Scenic Locations</SheetTitle>
                 <SheetDescription>
-                  Scenic views and solar events for your flight
+                  Beautiful sights along your flight path
                 </SheetDescription>
               </SheetHeader>
-              <div className="mt-6">
-                <SeatRecommendationDisplay result={seatRecommendation.result} />
+              <div className="mt-6 space-y-4">
+                {nearbyScenic
+                  .sort((a, b) => a.detectionProgress - b.detectionProgress) // Sort by journey order
+                  .map((location, index) => (
+                    <Card key={`${location.lat}-${location.lon}`} className="overflow-hidden">
+                      <div className="relative">
+                        <img 
+                          src="/sun-flare.png" 
+                          alt={location.name} 
+                          className="w-full h-32 object-cover"
+                        />
+                        <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                          {Math.round(location.detectionProgress * 100)}% journey
+                        </div>
+                      </div>
+                      
+                      <div className="p-4">
+                        <div className="flex items-start justify-between mb-2">
+                          <h3 className="text-sm font-semibold text-gray-900 leading-tight">
+                            {location.name}
+                          </h3>
+                          <span className="text-xs text-gray-500 ml-2">
+                            #{index + 1}
+                          </span>
+                        </div>
+                        
+                        <p className="text-xs text-gray-600 mb-3 leading-relaxed">
+                          {location.description || `Beautiful ${location.type} worth seeing during your flight.`}
+                        </p>
+                        
+                        <div className="flex items-center justify-between">
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {location.type}
+                          </span>
+                          
+                          <div className="flex items-center space-x-3">
+                            <span className="text-xs text-gray-600">
+                              {location.distanceFromPath.toFixed(1)}km away
+                            </span>
+                            
+                            <div className="flex items-center space-x-1 text-xs text-red-500">
+                              <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                              </svg>
+                              <span className="font-medium">
+                                {(location.likes / 1000).toFixed(1)}k
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
               </div>
             </SheetContent>
           </Sheet>

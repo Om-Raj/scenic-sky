@@ -89,6 +89,12 @@ export function MapWithCenteredAircraft({
       .setHTML(createPopupContent(location))
       .addTo(map.current);
 
+    // Ensure popup appears on top by setting high z-index
+    const popupElement = currentPopup.current.getElement();
+    if (popupElement) {
+      popupElement.style.zIndex = '9999';
+    }
+
     // Notify parent component
     if (onScenicPopup) {
       onScenicPopup(location);
@@ -340,6 +346,12 @@ export function MapWithCenteredAircraft({
           .setLngLat(coordinates)
           .setHTML(hoverContent)
           .addTo(map.current!);
+
+        // Ensure hover popup appears on top
+        const hoverElement = hoverPopup.current.getElement();
+        if (hoverElement) {
+          hoverElement.style.zIndex = '9998';
+        }
       }
     };
 

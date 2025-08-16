@@ -629,6 +629,163 @@ export function findSolarEventsAlongPath(
 **Verification**
 - Dev server compiles and `/flight-map` loads. Quick runtime patch applied to replace leftover `setCurrentScenicModal` usage.
 
+### Aug 16, 2025 - GeoJSON Refactor: Custom Markers with Hover Functionality
+**Summary**
+- Replaced HTML div markers with GeoJSON-based MapLibre symbol layer for better performance and native map integration.
+- Added hover functionality that works alongside existing click-to-pause behavior.
+
+**Technical Implementation**
+- Created GeoJSON source with scenic location features in `MapWithCenteredAircraft.tsx`
+- Implemented symbol layer with custom `map-marker.png` image for consistent marker appearance
+- Added hover event listeners (`mouseenter`/`mouseleave`) for scenic location layer
+- Hover popup shows brief location name and type, distinct from detailed click popup
+
+**Bug Fixes**
+1. **MapLibre text-field glyphs error**: Initially tried to add text labels but MapLibre requires glyph fonts for text rendering. Removed text layer to avoid this requirement.
+2. **Custom marker image loading**: Implemented proper Promise-based image loading with fallback to default circle marker if custom image fails.
+3. **TypeScript compatibility**: Fixed type errors by properly typing GeoJSON feature properties and MapLibre event handlers.
+
+**Key Code Changes**
+```typescript
+// GeoJSON source creation
+const geojsonSource: GeoJSONSource = {
+  type: 'geojson',
+  data: {
+    type: 'FeatureCollection',
+    features: scenicLocations.map(location => ({
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [location.lon, location.lat]
+      },
+      properties: {
+        name: location.name,
+        type: location.type,
+        // ... other properties
+      }
+    }))
+  }
+};
+
+// Hover event handling
+map.on('mouseenter', 'scenic-locations', (e) => {
+  // Show hover popup
+});
+map.on('mouseleave', 'scenic-locations', () => {
+  // Hide hover popup
+});
+```
+
+**Performance Benefits**
+- Native MapLibre rendering instead of DOM manipulation
+- Better integration with map layers and zoom levels
+- Consistent behavior with map interactions
+
+**Files Modified**
+- `src/components/MapWithCenteredAircraft.tsx` - Complete GeoJSON refactor
+- `public/map-marker.png` - Added custom marker image asset
+
+### Aug 16, 2025 - Journey Documentation & Scenic Locations Integration
+**Summary**
+- Created comprehensive `journey.md` documenting all prompts, bugs, solutions, and technical decisions from project inception
+- Replaced seat recommendation UI with scenic locations discovery feature ordered by flight journey progress
+
+**Journey Documentation Features**
+- Chronological prompt history with implementation details
+- Complete bug catalog with root cause analysis and technical solutions
+- Code examples for major fixes (coordinate systems, timezone handling, solar calculations)
+- Performance optimization strategies and lessons learned
+- Architecture overview with component relationships and coordinate system mappings
+
+**Scenic Locations Integration**
+- Modified flight-map page to display scenic locations sheet instead of seat recommendations
+- Locations sorted by `detectionProgress` (journey percentage when discovered)
+- Card-based UI showing location name, type, distance from route, and journey completion percentage
+- Smooth sheet animation and responsive design for mobile/desktop
+
+**Technical Changes**
+```typescript
+// Journey-ordered scenic locations display
+const sortedScenicLocations = useMemo(() => {
+  return detectedScenicLocations
+    .filter(loc => loc.detectionProgress !== undefined)
+    .sort((a, b) => (a.detectionProgress || 0) - (b.detectionProgress || 0));
+}, [detectedScenicLocations]);
+
+// Card-based scenic location display
+{sortedScenicLocations.map((location, index) => (
+  <Card key={index} className="p-4 border-l-4 border-l-blue-500">
+    <h3 className="font-semibold text-lg">{location.name}</h3>
+    <p className="text-sm text-muted-foreground">{location.type}</p>
+    <p className="text-xs mt-2">
+      Journey: {Math.round(location.detectionProgress || 0)}% • 
+      Distance: {location.distance}km from route
+    </p>
+  </Card>
+))}
+```
+
+**Files Modified**
+- `journey.md` - Created comprehensive documentation (40+ entries)
+- `src/app/flight-map/page.tsx` - Scenic locations sheet integration
+- Removed flight details section as requested in original prompts
+
+### Aug 16, 2025 - UI Polish: Sheet Background & Popup Z-Index Fixes
+**Summary**
+- Fixed sheet background transparency issue causing poor readability
+- Resolved popup z-index conflicts with 3D sun sphere visualization
+
+**Issues Identified**
+1. **Sheet Background**: Scenic locations sheet had transparent background making text hard to read over map
+2. **Popup Z-Index**: Scenic location popups were appearing behind the 3D sun sphere, making them inaccessible during flight
+
+**Solutions Implemented**
+1. **Sheet Background Fix**:
+```typescript
+// Added explicit white background to SheetContent
+<SheetContent className="bg-white w-full sm:w-[400px] sm:max-w-[400px]">
+```
+
+2. **Popup Z-Index Fix**:
+```css
+/* CSS approach in globals.css */
+.scenic-popup {
+  z-index: 9999 !important;
+}
+.scenic-hover-popup {
+  z-index: 9998 !important;
+}
+```
+
+```typescript
+// Programmatic approach in MapWithCenteredAircraft.tsx
+const popupElement = popup.getElement();
+if (popupElement) {
+  popupElement.style.zIndex = '9999';
+}
+
+const hoverElement = hoverPopup.current.getElement();
+if (hoverElement) {
+  hoverElement.style.zIndex = '9998';
+}
+```
+
+**Technical Approach**
+- Used both CSS `!important` declarations and programmatic style manipulation for redundant coverage
+- Main scenic popup gets highest z-index (9999), hover popup slightly lower (9998)
+- Ensures popups always appear above 3D sun sphere and other map elements
+
+**Files Modified**
+- `src/app/flight-map/page.tsx` - Added `bg-white` class to SheetContent
+- `src/app/globals.css` - Added high z-index rules for popup elements
+- `src/components/MapWithCenteredAircraft.tsx` - Added programmatic z-index setting
+
+**Verification**
+✅ Sheet background now white and readable over map content
+✅ Scenic popups appear above sun sphere during flight animation
+✅ Hover popups maintain proper layering hierarchy
+✅ No visual conflicts between UI elements during flight visualization
+
 
 
 ````
