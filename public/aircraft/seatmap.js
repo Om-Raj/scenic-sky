@@ -10063,7 +10063,7 @@ tmpl.plane.map = function(e, t) {
             }
         o += "</div></div>"
     }
-    return o += '<div id="watermark" class="watermark">© seatmaps.com, ' + soy.$$escapeHtml(e.currentYear) + '</div></div>\x3c!-- DEBUG_SCRIPTS_BOF --\x3e<script src="./development/tools/closure-library/closure/goog/base.js"><\/script><script src="./deps.js"><\/script><script>goog.require(\'qjv\');<\/script>\x3c!-- DEBUG_SCRIPTS_EOF --\x3e</body></html>'
+    return o += '<div id="watermark" class="watermark">© Scenic Sky, ' + soy.$$escapeHtml(e.currentYear) + '</div></div>\x3c!-- DEBUG_SCRIPTS_BOF --\x3e<script src="./development/tools/closure-library/closure/goog/base.js"><\/script><script src="./deps.js"><\/script><script>goog.require(\'qjv\');<\/script>\x3c!-- DEBUG_SCRIPTS_EOF --\x3e</body></html>'
 }
 ,
 tmpl.plane.passengersLine = function(e, t) {
@@ -10608,7 +10608,7 @@ tmpl.tooltip.seat = function(e, t) {
         features: e.listFeatures
     }) : "") + (soy.$$getMapKeys(e.circleFeatures).length ? tmpl.tooltip.seatFeatureCircles({
         features: e.circleFeatures
-    }) : "") + '<footer class="axis comp-tooltip_footer ' + (e.profile || e.button || e.priceButton || e.statusTranslation ? "filled" : "") + '">' + (e.profile ? tmpl.tooltip.profile(e.profile) : "") + (e.button ? tmpl.tooltip.tooltipButton(e.button) : "") + (e.priceButton ? tmpl.tooltip.orderButton(e.priceButton) : "") + (e.statusTranslation ? '<p class="center comp-tooltip_footer-occupied ' + soy.$$escapeHtml(e.statusTranslation.key) + '">' + soy.$$escapeHtml(e.statusTranslation.value) + "</p>" : "") + '<p class="center copyright">© seatmaps.com</p></footer>' + (e.profile && e.profile.isAuthUser ? '<div id="tooltip.seat.flip" class="absolute block comp-tooltip_flip"><img class="comp-tooltip_flip-button" src="./images/broadcasting/' + soy.$$escapeHtml(e.profile.socialNetwork || "facebook") + '-icon_white.png" /></div>' : "") + "</div>"
+    }) : "") + '<footer class="axis comp-tooltip_footer ' + (e.profile || e.button || e.priceButton || e.statusTranslation ? "filled" : "") + '">' + (e.profile ? tmpl.tooltip.profile(e.profile) : "") + (e.button ? tmpl.tooltip.tooltipButton(e.button) : "") + (e.priceButton ? tmpl.tooltip.orderButton(e.priceButton) : "") + (e.statusTranslation ? '<p class="center comp-tooltip_footer-occupied ' + soy.$$escapeHtml(e.statusTranslation.key) + '">' + soy.$$escapeHtml(e.statusTranslation.value) + "</p>" : "") + '<p class="center copyright">© Scenic Sky</p></footer>' + (e.profile && e.profile.isAuthUser ? '<div id="tooltip.seat.flip" class="absolute block comp-tooltip_flip"><img class="comp-tooltip_flip-button" src="./images/broadcasting/' + soy.$$escapeHtml(e.profile.socialNetwork || "facebook") + '-icon_white.png" /></div>' : "") + "</div>"
 }
 ,
 tmpl.tooltip.button = function(e, t) {

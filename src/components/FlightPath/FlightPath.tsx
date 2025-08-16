@@ -109,8 +109,8 @@ export function FlightPath({
   if (!flightState) return null;
 
   return (
-    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-40 w-full max-w-sm mx-4">
-      <div className="bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-lg border border-white/20">
+    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-40 w-full max-w-sm px-4">
+      <div className="bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-lg border border-white/20 mx-auto">
         <div className="flex flex-col space-y-3">
           {/* Current Time and Progress */}
           <div className="text-center">
@@ -129,7 +129,7 @@ export function FlightPath({
               onValueChange={handleSliderChange}
               max={100}
               step={1}
-              className="w-full"
+              className="w-full [&_.relative.h-2]:bg-blue-200 [&_.absolute.h-full]:bg-blue-500 [&_[role=slider]]:border-blue-500 [&_[role=slider]]:bg-white"
               disabled={isPlaying}
             />
           </div>

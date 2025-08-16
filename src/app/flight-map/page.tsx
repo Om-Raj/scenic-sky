@@ -429,7 +429,7 @@ export default function FlightMapPage() {
                 </span>
               </div>
               {flightSchedule && (
-                <div className="text-xs text-gray-600 flex items-center space-x-4">
+                <div className="text-xs text-gray-600 hidden sm:flex items-center space-x-4">
                   <span>Dep: {flightSchedule.departureLocal}</span>
                   <span>•</span>
                   <span>Arr: {flightSchedule.arrivalLocal}</span>
@@ -475,7 +475,7 @@ export default function FlightMapPage() {
                 {nearbyScenic
                   .sort((a, b) => a.detectionProgress - b.detectionProgress) // Sort by journey order
                   .map((location, index) => (
-                    <Card key={`${location.lat}-${location.lon}`} className="overflow-hidden">
+                    <Card key={`${location.lat}-${location.lon}`} className="overflow-hidden mx-4">
                       <div className="relative">
                         <img 
                           src="/sun-flare.png" 

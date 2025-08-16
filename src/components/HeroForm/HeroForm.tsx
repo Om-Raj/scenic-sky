@@ -17,7 +17,7 @@ interface HeroFormProps {
   isLoading?: boolean;
 }
 
-const AIRPLANE_MODELS = ['B-787-9', 'Airbus A320', 'A380 Demo', 'Cessna 172'];
+const AIRPLANE_MODELS = ['Boeing-787-9', 'Airbus-A320', 'Boeing-747'];
 
 export function HeroForm({ onSubmit, isLoading = false }: HeroFormProps) {
   const [formData, setFormData] = useState<FlightFormData>({
@@ -59,12 +59,14 @@ export function HeroForm({ onSubmit, isLoading = false }: HeroFormProps) {
             <Label htmlFor="airplane-model">Aircraft Model</Label>
             <Select
               value={formData.airplaneModel}
-              onValueChange={(value) => setFormData((prev) => ({ ...prev, airplaneModel: value }))}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, airplaneModel: value }))
+              }
             >
               <SelectTrigger id="airplane-model">
                 <SelectValue placeholder="Select aircraft" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border border-gray-200 shadow-md rounded-md">
                 {AIRPLANE_MODELS.map((model) => (
                   <SelectItem key={model} value={model}>
                     {model}
@@ -81,7 +83,12 @@ export function HeroForm({ onSubmit, isLoading = false }: HeroFormProps) {
               id="departure-date"
               type="date"
               value={formData.departureDate}
-              onChange={(e) => setFormData((prev) => ({ ...prev, departureDate: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  departureDate: e.target.value,
+                }))
+              }
             />
           </div>
 
@@ -92,7 +99,12 @@ export function HeroForm({ onSubmit, isLoading = false }: HeroFormProps) {
               id="departure-time"
               type="time"
               value={formData.departureTime}
-              onChange={(e) => setFormData((prev) => ({ ...prev, departureTime: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  departureTime: e.target.value,
+                }))
+              }
             />
           </div>
 
@@ -103,13 +115,18 @@ export function HeroForm({ onSubmit, isLoading = false }: HeroFormProps) {
               id="arrival-date"
               type="date"
               value={formData.arrivalDate}
-              onChange={(e) => setFormData((prev) => ({ ...prev, arrivalDate: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  arrivalDate: e.target.value,
+                }))
+              }
             />
           </div>
 
           {/* Action Button - spans remaining space on large screens */}
-          <div className="space-y-2 lg:flex lg:items-end">
-            <Button type="submit" disabled={isLoading} className="w-full lg:h-10">
+          <div className="mb-2 lg:flex lg:items-end">
+            <Button type="submit" disabled={isLoading} className="bg-blue-500 text-white w-full lg:h-10">
               {isLoading ? 'Processing...' : 'Plan Flight Route'}
             </Button>
           </div>
@@ -123,7 +140,12 @@ export function HeroForm({ onSubmit, isLoading = false }: HeroFormProps) {
               id="arrival-time"
               type="time"
               value={formData.arrivalTime}
-              onChange={(e) => setFormData((prev) => ({ ...prev, arrivalTime: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  arrivalTime: e.target.value,
+                }))
+              }
             />
           </div>
 
@@ -132,12 +154,14 @@ export function HeroForm({ onSubmit, isLoading = false }: HeroFormProps) {
             <Label htmlFor="departure">Departure Airport</Label>
             <Select
               value={formData.departure}
-              onValueChange={(value) => setFormData((prev) => ({ ...prev, departure: value }))}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, departure: value }))
+              }
             >
               <SelectTrigger id="departure">
                 <SelectValue placeholder="Select departure airport" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border border-gray-200 shadow-md rounded-md">
                 {DEMO_AIRPORTS.map((airport) => (
                   <SelectItem key={airport.code} value={airport.code}>
                     {airport.code} - {airport.name}
@@ -152,12 +176,14 @@ export function HeroForm({ onSubmit, isLoading = false }: HeroFormProps) {
             <Label htmlFor="arrival">Arrival Airport</Label>
             <Select
               value={formData.arrival}
-              onValueChange={(value) => setFormData((prev) => ({ ...prev, arrival: value }))}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, arrival: value }))
+              }
             >
               <SelectTrigger id="arrival">
                 <SelectValue placeholder="Select arrival airport" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border border-gray-200 shadow-md rounded-md">
                 {DEMO_AIRPORTS.map((airport) => (
                   <SelectItem key={airport.code} value={airport.code}>
                     {airport.code} - {airport.name}

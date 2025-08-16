@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Scenic Sky - Flight Path Visualizer',
+  title: 'Scenic Sky',
   description: 'Interactive flight path planning and visualization with great-circle routes between major airports',
 };
 

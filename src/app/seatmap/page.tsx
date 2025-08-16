@@ -1,27 +1,33 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, MapPin, Plane, Users, Sparkles } from 'lucide-react';
-import { CompactSeatRecommendationDisplay, SeatComparisonDisplay } from '@/components/SeatRecommendation';
+import { CompactSeatRecommendationDisplay, SeatComparisonDisplay, IframeSeatDisplay, ScrapedSeatDisplay } from '@/components/SeatRecommendation';
 import { useAutoSeatRecommendation } from '@/hooks/useSeatRecommendation';
-
-interface SeatData {
-  seat: string;
-  position: 'Window' | 'Aisle' | 'Middle';
-  features: string[];
-}
+import { useIframeSeatScraping, useIframeLoadState } from '@/hooks/useIframeSeatScraping';
 
 export default function SeatmapPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [selectedSeat, setSelectedSeat] = useState<SeatData | null>(null);
   const [iframeLoaded, setIframeLoaded] = useState(false);
+  
+  // Refs for iframe integration
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   // Use the seat recommendation hook with URL parameters
   const seatRecommendation = useAutoSeatRecommendation(searchParams);
+  
+  // Use iframe seat scraping hook
+  const iframeSeatScraping = useIframeSeatScraping(
+    seatRecommendation.result,
+    false // Don't auto-scrape on recommendation change, we'll do it manually
+  );
+  
+  // Monitor iframe load state
+  const iframeLoadState = useIframeLoadState(iframeRef.current);
 
   // Extract flight data from URL parameters
   const flightData = {
@@ -34,70 +40,41 @@ export default function SeatmapPage() {
     arrival: searchParams.get('arrival') || '',
   };
 
-  // Map airplane model to HTML file name
-  const getAircraftFileName = (model: string) => {
-    switch (model.toLowerCase()) {
-      case 'boeing 737':
-        return 'B-737-9.html';
-      case 'boeing 787':
-        return 'B-787-9.html';
-      case 'airbus a320':
-        return 'airbus-a320.html';
-      case 'a380 demo':
-        return 'a380-demo.html';
-      case 'cessna 172':
-        return 'cessna-172.html';
-      default:
-        return 'B-787-9.html'; // fallback to existing file (case-sensitive)
-    }
-  };
-
-  // Handle messages from iframe (seat selection)
+  // Handle messages from iframe (seat selection) - keeping for future compatibility
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data.type === 'seatSelected') {
-        setSelectedSeat(event.data.data);
+        console.log('Seat selected from iframe:', event.data.data);
       }
     };
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
   }, []);
-
-  // Get seat recommendation based on flight details
-  const getSeatRecommendation = () => {
-    if (!flightData.departure || !flightData.arrival) {
-      return {
-        seat: '12A',
-        position: 'Window' as const,
-        features: ['Recommended', 'Great view'],
-        reason: 'Window seat for scenic views'
-      };
-    }
-
-    // Simple recommendation logic based on route
-    const isLongHaul = ['LAX', 'LHR', 'DEL', 'DXB'].includes(flightData.departure) && 
-                      ['LAX', 'LHR', 'DEL', 'DXB'].includes(flightData.arrival);
+  
+  // Handle iframe load completion
+  const handleIframeLoad = () => {
+    setIframeLoaded(true);
     
-    if (isLongHaul) {
-      return {
-        seat: '7A',
-        position: 'Window' as const,
-        features: ['Extra legroom', 'Window view', 'Quiet zone'],
-        reason: 'Premium economy with extra comfort for long flights'
-      };
-    } else {
-      return {
-        seat: '12C',
-        position: 'Aisle' as const,
-        features: ['Easy access', 'Quick boarding'],
-        reason: 'Convenient aisle access for shorter flights'
-      };
+    // Trigger seat scraping when iframe is loaded and we have seat recommendation
+    if (iframeRef.current && seatRecommendation.result && !seatRecommendation.loading) {
+      console.log('Iframe loaded, starting seat analysis...');
+      // Small delay to ensure content is fully rendered
+      setTimeout(() => {
+        if (iframeRef.current) {
+          iframeSeatScraping.scrapeSeats(iframeRef.current);
+        }
+      }, 1000);
     }
   };
-
-  const recommendedSeat = getSeatRecommendation();
-  const currentSeat = selectedSeat || recommendedSeat;
+  
+  // Trigger seat scraping when seat recommendation becomes available
+  useEffect(() => {
+    if (seatRecommendation.result && iframeRef.current && iframeLoadState.isReady && !iframeSeatScraping.loading) {
+      console.log('Seat recommendation available, triggering seat analysis...');
+      iframeSeatScraping.scrapeSeats(iframeRef.current);
+    }
+  }, [seatRecommendation.result, iframeLoadState.isReady]);
 
   // Navigate back to flight map with preserved parameters
   const goBackToMap = () => {
@@ -141,57 +118,36 @@ export default function SeatmapPage() {
       </header>
 
       {/* Main Grid Content - Responsive Layout */}
-      <main className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[1fr_auto_2fr]">
+      <main className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[1fr_auto_2fr] max-h-[100vh]">
         
         {/* Seat Details Section */}
-        <section className="flex flex-col overflow-hidden border-b lg:border-b-0 lg:border-r bg-white">
+        <section className="flex flex-col overflow-hidden border-b lg:border-b-0 lg:border-r bg-white max-h-[100vh]">
           <div className="flex-shrink-0 p-4 border-b bg-gray-50">
             <div className="flex items-center space-x-2">
               <MapPin className="w-5 h-5 text-blue-600" />
-              <h2 className="text-lg font-semibold">
-                {selectedSeat ? 'Selected Seat' : 'Recommended Seat'}
-              </h2>
+              <h2 className="text-lg font-semibold">Recommended Seats</h2>
             </div>
           </div>
           
           <div className="flex-1 overflow-y-auto p-4">
-            <div className="max-w-md mx-auto lg:max-w-none space-y-4">
-              <Card className="bg-blue-50 border-blue-200">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <div>
-                      <div className="text-2xl font-bold text-blue-900">{currentSeat.seat}</div>
-                      <div className="text-sm text-blue-700">{currentSeat.position} Seat</div>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <div className="text-xs text-gray-600 uppercase tracking-wide">Features</div>
-                    <div className="flex flex-wrap gap-1">
-                      {currentSeat.features.map((feature, index) => (
-                        <span 
-                          key={index}
-                          className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded"
-                        >
-                          {feature}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {!selectedSeat && 'reason' in recommendedSeat && (
-                    <div className="text-sm text-gray-600 italic mt-3 pt-3 border-t border-blue-200">
-                      {recommendedSeat.reason}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+            <div className="max-w-md mx-auto lg:max-w-none">
+              <ScrapedSeatDisplay
+                scrapedSeats={iframeSeatScraping.scrapedSeats}
+                loading={iframeSeatScraping.loading || !iframeLoadState.isReady}
+                error={iframeSeatScraping.error || iframeLoadState.error}
+                onRefresh={() => {
+                  if (iframeRef.current) {
+                    iframeSeatScraping.scrapeSeats(iframeRef.current);
+                  }
+                }}
+                maxSeats={30}
+              />
             </div>
           </div>
         </section>
 
         {/* Seatmap Section */}
-        <section className="flex flex-col lg:w-[400px] bg-gray-50 border-b lg:border-b-0 lg:border-r">
+        <section className="flex flex-col lg:w-[400px] bg-gray-50 border-b lg:border-b-0 lg:border-r max-h-[100vh]">
           <div className="flex-shrink-0 p-4 border-b bg-gray-100">
             <h2 className="text-lg font-semibold text-gray-800">Aircraft Layout</h2>
           </div>
@@ -209,10 +165,11 @@ export default function SeatmapPage() {
                 )}
                 
                 <iframe
-                  src={`/aircraft/${getAircraftFileName(flightData.airplaneModel)}?seatbar=hide&tooltip_on_hover=true`}
+                  ref={iframeRef}
+                  src={`/aircraft/${flightData.airplaneModel}.html?seatbar=hide&tooltip_on_hover=true`}
                   className="w-full h-full border-0"
                   title="Aircraft Seatmap"
-                  onLoad={() => setIframeLoaded(true)}
+                  onLoad={handleIframeLoad}
                 />
               </div>
             </div>
@@ -220,7 +177,7 @@ export default function SeatmapPage() {
         </section>
 
         {/* Seat Recommendations Section */}
-        <section className="flex flex-col overflow-hidden bg-white">
+        <section className="flex flex-col overflow-hidden bg-white max-h-[100vh]">
           <div className="flex-shrink-0 p-4 border-b bg-gray-50">
             <div className="flex items-center space-x-2">
               <Sparkles className="w-5 h-5 text-blue-600" />
@@ -255,7 +212,7 @@ export default function SeatmapPage() {
                 <Card className="h-full flex items-center justify-center">
                   <CardContent className="p-6 text-center">
                     <Sparkles className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-500">Loading seat recommendations...</p>
+                    <p className="text-gray-500 text-sm">Loading scenic analysis...</p>
                   </CardContent>
                 </Card>
               )}

@@ -35,411 +35,148 @@ A modern Next.js application that visualizes Great-Circle flight paths between a
 **Root Cause**: Code was accessing `locationToShow.coordinates[0]` but `ScenicLocationWithDetection` uses `lat`/`lon` properties
 **Fix**: Updated `src/app/flight-map/page.tsx` to use `locationToShow.lon` and `locationToShow.lat` instead of coordinates array
 **Files Changed**: 
-- `src/app/flight-map/page.tsx` - Fixed marker position calculation for tooltip positioning
+# Development Journey: Scenic Sky Flight Visualization
 
-## Key Prompts & Evolution
+## Project Overview
+A modern Next.js application that visualizes Great-Circle flight paths between airports with a 3D sky dome showing real-time sun positioning based on aircraft location, date, and time.
 
-### Prompt 1: Initial Project Setup
-**Request**: Create a modern Next.js + TypeScript app with Great-Circle flight path visualization and interactive map.
+---
 
-**Implementation**:
-- Next.js with App Router and TypeScript
-- MapLibre GL for interactive maps
-- Turf.js for Great-Circle calculations
-- shadcn/ui + Tailwind CSS for styling
-- Airplane animation along flight paths
-
-### Prompt 2: Route-Based Architecture
-**Request**: Restructure to send form data to `/flight-map` route with URL parameters.
-
-**Implementation**:
-- Form submission redirects to `/flight-map` with query parameters
-- Separated hero form from map visualization
-- URL-based state management for flight parameters
-
-### Prompt 3: UI Refinement
-**Request**: Remove flight details section, create floating compact control deck with time/distance info.
-
-**Implementation**:
-- Compact floating controls at bottom center (max 400px width)
-- Current time calculation from start/arrival times
-- Progress percentage display
-
-### Prompt 4: International Date Line Fix
-**Request**: Fix flight path wrapping around globe when crossing international date line.
-
-**Implementation**:
-- Detected longitude jumps from ~180° to ~-180°
-- Implemented path segmentation to avoid incorrect globe wrapping
-- Used great-circle calculations that respect shortest path
-
-### Prompt 5: 3D Sun Visualization
-**Request**: Create realistic 3D sun with Three.js, solar calculations, and aircraft-centered map.
-
-**Implementation**:
-- Three.js integration with @react-three/fiber
-- SunCalc library for astronomical calculations
-- 3D sky dome with hemisphere visualization
-- Aircraft-centered map with fixed positioning
-- Real-time sun positioning based on coordinates, date, and time
-
-### Prompt 6: Seatmap Integration
-**Request**: Create a floating seatmap button and dedicated seatmap page with aircraft seat selection.
-
-**Implementation**:
-- Floating button in top-left corner of flight map
-- Seat recommendation logic based on flight type (long-haul vs short-haul)
-- Real-time seat selection with postMessage API communication
-
-## Major Bugs & Solutions
-
-### Bug 1: Compass Orientation Issues
-**Problem**: Sky dome compass was 180° wrong and not accounting for map tilt.
-
-**Root Cause**: Coordinate system mismatch between map view and 3D sphere orientation.
-
-**Solution**:
-```typescript
-// Fixed coordinate system mapping
-const x = Math.sin(azRad) * radius; // East-West
-const z = -Math.cos(azRad) * radius; // North-South (negative Z = North)
-
-// Fixed compass rotation for map bearing
-const adjustedAz = (az - mapBearing + 360) % 360; // Counter-rotate compass
-```
-
-### Bug 2: Sphere Rotating in Opposite Direction
-**Problem**: When map bearing changed, sphere rotated in wrong direction.
-
-**Root Cause**: Map bearing adjustment was adding instead of subtracting bearing.
-
-**Solution**:
-```typescript
-**Problem**: Sun appeared on incorrect side of aircraft.
-
-**Root Cause**: Sun position rotation was in same direction as map bearing instead of opposite.
-
-
-### Bug 4: Incorrect Timezone Handling
-**Problem**: Times interpreted as browser's local timezone instead of airport timezones.
-
-**Root Cause**: JavaScript Date parsing without timezone information.
-
-**Initial Issue**:
-- DEL departure "12:00" → interpreted as local browser time (IST)
-- JFK arrival "23:00" → also interpreted as local browser time (IST)
-- Solar calculations completely wrong
-
-**Solution**:
-```typescript
-// Added timezone support to airports
-export interface Airport {
-  code: string;
-  name: string;
-  lat: number;
-  lon: number;
-  timezone: string; // IANA timezone identifier
-  // ... other airports
-];
-    'Asia/Kolkata': '+05:30', // IST
-    // ... other timezones
-  };
-}
-```
-**Root Cause**: Case-sensitive file paths and incorrect directory references.
-
-**Initial Issue**:
-- Seatmap page looking for `/aircraft/b-787-9.html` (lowercase 'b')
-- Actual file was `B-787-9.html` (uppercase 'B')
-- Files were in `/public/aircraft/` but code was referencing `/src/app/aircraft/`
-
-**Solution**:
-```typescript
-// Fixed file mapping with correct case
-const getAircraftFileName = (model: string) => {
-  switch (model.toLowerCase()) {
-    case 'boeing 737':
-      return 'B-737-9.html';
-    case 'boeing 787':
-      return 'B-787-9.html';
-    default:
-      return 'B-787-9.html'; // Correct case for fallback
-  }
-};
-
-// Fixed iframe source path
-<iframe 
-  src={`/aircraft/${getAircraftFileName(flightData.airplaneModel)}?seatbar=hide&tooltip_on_hover=true`}
-  className="w-full h-full border-0"
-  title="Aircraft Seatmap"
-/>
-```
-
-**Key Learnings**:
-- File paths are case-sensitive on Linux systems
-- Public directory files are served from root path (`/aircraft/...` not `/public/aircraft/...`)
-- Query parameters can be used to configure iframe behavior
-
-### Prompt 12: Comprehensive Timezone & Solar Position Overhaul
-**Request**: Check for timezone and sun position calculation issues throughout the project. Ensure instantaneous aircraft position is used for calculations with best practices and modular code.
-
-**Major Issues Identified**:
-- Static timezone offsets using summer DST in winter
-- Browser timezone display causing confusion during international flights
-- Unrealistic solar event timing (afternoon sunrise at 1:40 PM)
-- Events clustered at 88-95% of flight completion
-- Incorrect timezone display (GMT+5:30 for Atlantic Ocean positions)
-
-**Comprehensive Solution Implemented**:
-
-1. **Created Enhanced Timezone Utilities** (`src/lib/timezone-utils.ts`):
-   - Position-based timezone detection using longitude coordinates
-   - Dynamic DST-aware offset calculations based on flight date
-   - Solar time calculations for accurate sun positioning
-   - Consistent UTC formatting for international flights
-   - Flight-aware datetime interpolation with position context
-
-2. **Updated Solar Calculations** (`src/lib/solar-calculations.ts`):
-   - Enhanced `calculateSolarPosition()` with optional solar time usage
-   - New `calculateFlightSolarPosition()` for position-aware calculations
-   - Updated `interpolateDateTime()` to support timezone-aware interpolation
-   - Integration with timezone utilities for accurate positioning
-
-3. **Improved Solar Event Detection** (`src/lib/solar-event-calculations.ts`):
-   - Enhanced sampling frequency (8-minute intervals instead of 10-15)
-   - Position-based timezone handling for each flight path point
-   - Proper astronomical thresholds (-0.833° for sunrise/sunset)
-   - UTC time formatting to avoid timezone confusion
-   - Better event distribution along flight path
-
-4. **Enhanced 3D Sky Dome** (`src/components/SkyDomeVisualization.tsx`):
-   - Solar time calculations for accurate sun positioning
-   - Position-aware solar calculations based on aircraft coordinates
-   - Enhanced sun trajectory calculations for daily path
-   - Improved accuracy for map bearing adjustments
-
-5. **Updated Flight Map Integration** (`src/app/flight-map/page.tsx`):
-   - Position-aware datetime interpolation for current aircraft position
-   - Enhanced solar calculations using instantaneous coordinates
-   - Consistent timezone handling throughout the flight
-
-**Key Technical Improvements**:
-- `getTimezoneForCoordinates()`: Automatic timezone detection based on longitude
-- `interpolateFlightDateTime()`: Position-aware time interpolation during flight
-- `getSolarTimeAtLongitude()`: Solar time calculations for accurate sun position
-- `formatFlightTime()`: Consistent UTC formatting for international clarity
-- Enhanced event detection with proper astronomical angles and sampling
-
-**Results**:
-✅ Realistic solar event timing (sunrise over Atlantic, not afternoon)
-✅ Proper timezone handling based on aircraft position
-✅ Consistent UTC display avoiding confusion
-✅ Better event distribution throughout flight (not clustered at end)
-✅ Accurate solar positioning using both civil and solar time
-✅ Modular, reusable timezone utilities for future features
-
-**Testing Results**:
-- JFK departure: -61.0° elevation (deep night) ✓
-- Mid-Atlantic: Gradual progression from night to dawn ✓
-- LHR arrival: +10.9° elevation (daylight) ✓
-- Sunrise detection between 75%-100% of flight ✓
-- Position-based timezone detection working correctly ✓
-
-This comprehensive overhaul ensures accurate solar calculations throughout the entire flight experience, from the seat recommendation engine to the real-time 3D sky dome visualization.
-
-### Prompt 13: Critical Solar Time Adjustment Bug Fix
-**Request**: Fix sun showing below horizon during JFK→LAX daytime flight despite calculations showing 30-60° elevation.
-
-**Root Cause Identified**:
-The issue was in the SkyDomeVisualization component using `getSolarTimeAtLongitude()` which applies a **4 minutes per degree longitude offset**. For a flight over Kansas (-99° longitude), this shifted the time by **-396 minutes (-6.6 hours)**, turning a 62° midday sun into a -9.2° pre-dawn sun.
-
-**Technical Analysis**:
-- Backend calculations were correct: 31-63° elevation throughout flight ✓
-- Frontend 3D visualization was applying double timezone adjustment ❌
-- Solar time adjustment: `longitude * 4 minutes` was inappropriate for flight tracking
-- Time shift example: 12:40 PM → 6:04 AM (sun below horizon)
-
-**Solution Implemented**:
-1. **Disabled solar time adjustment** in SkyDomeVisualization component
-2. **Changed `useSolarTime` parameter** from `true` to `false` in all `getSunPosition()` calls
-3. **Updated comments** to explain why solar time adjustment is disabled for flight calculations
-4. **Maintained UTC time consistency** between backend calculations and frontend visualization
-
-**Files Modified**:
-- `src/components/SkyDomeVisualization.tsx`: Disabled `useSolarTime` in `getSunPosition()`
-- `src/app/flight-map/page.tsx`: Fixed `interpolateDateTime()` usage for UTC calculations
-- `src/lib/solar-event-calculations.ts`: Removed timezone-aware interpolation
-
-**Test Results**:
-- ✅ Sun elevation now shows 31-63° throughout JFK→LAX flight
-- ✅ Sun appears above horizon during all daylight hours
-- ✅ 3D sky dome visualization matches backend calculations
-- ✅ No more below-horizon sun during afternoon flights
-
-**Key Learning**: 
-Solar time adjustments are useful for astronomical applications but inappropriate for real-time flight tracking where UTC consistency between backend and frontend is critical.
-
-## Technical Architecture
-
-### Core Components
-- **SkyDomeVisualization.tsx**: 3D hemisphere with Three.js, compass, sun positioning
-- **MapWithCenteredAircraft.tsx**: Aircraft-centered map with MapLibre GL
-- **FlightPath/**: Great-circle path calculation and animation
-- **HeroForm/**: Airport selection and flight parameters
-- **SeatmapPage**: Interactive aircraft seat selection and recommendations
-- **Aircraft HTML Files**: Standalone seatmap visualizations with postMessage communication
-
-### Key Libraries
-- **Three.js/@react-three/fiber**: 3D rendering
-- **SunCalc**: Astronomical calculations
-- **MapLibre GL**: Interactive maps
-- **Turf.js**: Geospatial calculations
-
-### Coordinate Systems
-- **Geographic**: Latitude/Longitude (WGS84)
-- **Map Projection**: Web Mercator for map tiles
-- **3D Scene**: Cartesian coordinates (x=East, y=Up, z=North with z negated)
-- **Solar**: Azimuth from North (0-360°), Elevation from horizon (-90° to +90°)
-
-## Lessons Learned
-
-### 1. Coordinate System Alignment
-Multiple coordinate systems require careful transformation:
-- Map coordinates vs. 3D scene coordinates
-- Solar azimuth reference systems (SunCalc uses South, we need North)
-- Rotation directions and reference frames
-
-### 2. Timezone Complexity
-Never assume timezone context:
-- HTML time inputs have no timezone information
-- JavaScript Date parsing is timezone-dependent
-- Airport times must use local airport timezones
-- Solar calculations require precise UTC times
-
-### 3. Rotation Mathematics
-3D rotations require careful consideration of:
-- Rotation direction (clockwise vs counter-clockwise)
-- Reference frames (global vs local)
-- Composition of multiple rotations
-
-### 4. Real-World Testing
-Astronomical calculations must be validated against:
-- Known sun positions at specific times/locations
-- Expected daylight/nighttime periods
-- Seasonal variations and geographic latitude effects
-
-## Performance Optimizations
-
-### 1. Memoization
-```typescript
-const sun = useMemo(() => {
-  // Expensive solar calculations
-}, [date, latitude, longitude, radius, mapBearing]);
-```
-
-### 2. GPU Acceleration
-- Three.js WebGL rendering
-- Efficient geometry updates
-- Minimal re-renders with React state management
-
-### 3. Path Calculations
-- Pre-computed great-circle points
-- Optimized bearing calculations
-- Throttled animation updates
-
-### Prompt 7: Flight Seat Recommendation System
-**Request**: Create a modular, reusable flight seat recommendation feature that analyzes scenic views and solar events along flight paths.
-
-**Requirements**:
-- Scenic view detection along great circle paths
-- Solar event calculations (sunrise/sunset) with aircraft side determination
-- Output two objects: scenic locations by side and solar events by side
-- Modular architecture for reusability
-- Integration with existing flight visualization
-
-**Implementation**:
-
-**Core Architecture**:
-- `seat-recommendation-types.ts`: TypeScript interfaces for the system
-- `scenic-locations-data.ts`: Curated dataset of 40+ worldwide scenic locations
-- `scenic-location-calculations.ts`: Geospatial visibility and side detection logic
-- `solar-event-calculations.ts`: Astronomical solar position calculations
-- `seat-recommendation-engine.ts`: Main orchestration engine
-- `useSeatRecommendation.ts`: React hook for state management
-- `SeatRecommendationDisplay.tsx`: Comprehensive UI component
-
-**Key Features**:
-1. **Scenic Location Detection**: 
-   - 100km visibility for mountains/volcanoes
-   - 50km visibility for cities/oceans/landmarks
-   - Geographic bearing calculations for left/right side determination
-   - Quality scoring based on distance and popularity
-
-2. **Solar Event Analysis**:
-   - Precise astronomical calculations using SunCalc library
-   - Cruising altitude adjustments (36,000 feet horizon)
-   - Sunrise, sunset, golden hour, blue hour detection
-   - Real-time sun position relative to aircraft heading
-
-3. **Intelligent Recommendations**:
-   - Combined scoring of scenic views and solar events
-   - Clear left/right side recommendations with reasoning
-   - Visibility quality ratings (excellent/good/fair/poor)
-
-**Dataset Integration**:
-- 40+ curated scenic locations worldwide
-- Mountains: Everest, Fuji, Matterhorn, Kilimanjaro, Alps, Rockies, Andes
-- Natural landmarks: Grand Canyon, Niagara Falls, Yellowstone, Amazon
-- Oceans: Great Barrier Reef, Maldives, Norwegian Fjords
-- Cities: Manhattan, Dubai, Hong Kong skylines
-- Cultural sites: Pyramids, Taj Mahal, Machu Picchu, Great Wall
-
-**UI Integration**:
-- Standalone demo page at `/seat-recommendation`
-- Integrated sheet overlay in flight-map page
-- Interactive form with preset routes (transatlantic, transpacific, polar)
-- Side-by-side comparison display
-- Detailed statistics and priority scoring
-
-**Technical Solutions**:
-
-**Module Import Resolution**:
-```typescript
-// Fixed import paths to use configured alias
-import { Card } from '@/components/ui/card';
-// Instead of relative paths that failed
-import { Card } from '../../components/ui/card';
-```
-
-**Missing UI Components**:
-Created missing card component:
-```typescript
-// Added card.tsx with proper shadcn/ui structure
-const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("rounded-lg border bg-card text-card-foreground shadow-sm", className)} {...props} />
-  )
-);
-```
-
-**Great Circle Calculations**:
-```typescript
-// Accurate flight path generation with 200 sample points
-export function greatCirclePoints(start: Airport, end: Airport, numPoints: number = 200): PathPoint[] {
-  const line = greatCircle(startPoint, endPoint);
-  // Sample points evenly for smooth animation and accurate visibility detection
-}
-```
-
-**Side Determination Logic**:
-```typescript
-// Determine which side of aircraft a location appears on
-export function determineSideOfAircraft(
-  aircraftPosition: { lat: number; lon: number },
-  aircraftBearing: number,
-  targetLocation: { lat: number; lon: number }
-): 'left' | 'right' {
-  const bearingToTarget = bearing(aircraftPoint, targetPoint);
+## Recent Fixes (high level)
+
+- Aug 16, 2025 — Fixed modal positioning and animation resume (ScenicModal centering and resume logic)
+- Aug 16, 2025 — UX polish for ScenicModal and flight controls (Resume button moved to flight controls)
+- Aug 16, 2025 — Fixed ScenicModal coordinate access bug (use lat/lon)
+
+---
+
+## Key Prompts & Feature Evolution (chronological)
+
+1. Initial Project Setup — Next.js + TypeScript, MapLibre GL, Turf.js, Tailwind/shadcn UI, airplane animation
+2. Route-based architecture — form redirects to `/flight-map` with URL params
+3. UI refinement — floating control deck with current time and progress
+4. International Date Line fix — path segmentation to avoid wraparound
+5. 3D Sun Visualization — Three.js sky dome with sun positioning
+6. Seatmap integration — iframe seatmaps with postMessage-based selection
+7. Flight seat recommendation system — scenic + solar scoring by side
+
+---
+
+## Major Bugs & Fixes (concise)
+
+- Compass orientation: fixed coordinate mapping and bearing adjustments for the 3D dome
+- Sphere rotation: corrected rotation math to match map bearing changes
+- Timezone handling: added timezone-aware datetime parsing for airports and UTC consistency for solar calcs
+- Case-sensitive paths: fixed aircraft file name resolution (B-787-9.html) and correct `/aircraft/...` public path
+- Solar time bug: disabled inappropriate solar-time adjustment for flight visualization — keep UTC
+- International date line: omitted problematic path segments to prevent wraparound
+
+---
+
+## Technical Architecture (summary)
+
+- Core components: SkyDomeVisualization, MapWithCenteredAircraft, FlightPath, HeroForm, SeatmapPage
+- Key libs: Three.js/@react-three/fiber, SunCalc, MapLibre GL, Turf.js
+- Coordinate systems: WGS84 (lat/lon), Web Mercator for tiles, 3D Cartesian for scene
+
+---
+
+## Seat Recommendation & Seatmap Integration
+
+- Modular seat recommendation engine (`src/lib/seat-recommendation-engine.ts`) that computes scenic locations and solar events along great-circle paths and scores left vs right
+- Hooks: `useSeatRecommendation`, `useAutoSeatRecommendation`
+- UI components: `SeatComparisonDisplay`, `CompactSeatRecommendationDisplay`
+- Iframe integration: postMessage for seat selection, utilities to scrape iframe seat elements and filter by features
+
+---
+
+## Quick Log — Prompts, Bugs, Solutions (appendix)
+
+### Prompt: Replace ScenicModal with MapLibre Popup
+- Bug: leftover `setCurrentScenicModal` after refactor
+- Fix: replaced with `setCurrentScenicLocation`, added robust popup lifecycle handlers and exposed `showScenicPopup`/`closeScenicPopup`
+
+### Prompt: GeoJSON & Hover Markers
+- Bug: `text-field` requires glyphs in map style
+- Fix: removed text labels, used custom `/map-marker.png` image via `map.loadImage(...).then(...)` fallback to circle markers
+
+### Bug: loadImage Type/Response Fixes
+- Symptom: Type mismatch for `addImage` and incorrect `loadImage` usage
+- Fix: use `response.data` from Promise-based `map.loadImage` and fallback gracefully
+
+### Prompt: Solar Time Adjustment Bug
+- Symptom: Sun below horizon during daytime flights
+- Root cause: double timezone/solar-time adjustment (longitude * 4 minutes) applied on frontend
+- Fix: disable solar-time offset for flight visualization, use UTC-consistent solar calculations
+
+### Prompt: Seat Scraper & Filtering
+- Feature: Scrape iframe seat elements, detect best side using recommendation summary, collect seats (A for left, highest letter for right), parse `data-features`, exclude seats with any `"-"` value, map seat fields for display
+- Utility files: `src/lib/iframe-seat-scraper.ts`, `src/hooks/useIframeSeatScraping.ts`, UI `IframeSeatDisplay.tsx`
+
+---
+
+## Files Changed (high level)
+
+- `src/components/MapWithCenteredAircraft.tsx` — popup & GeoJSON refactor
+- `src/app/flight-map/page.tsx` — popup integration, timezone fixes
+- `src/components/SkyDomeVisualization.tsx` — solar-time adjustments
+- `src/lib/*` — timezone, solar, scenic detection utilities
+- `src/components/SeatRecommendation/*` — comparison and compact displays
+- `src/lib/iframe-seat-scraper.ts`, `src/hooks/useIframeSeatScraping.ts`, `src/components/SeatRecommendation/IframeSeatDisplay.tsx` — new seat scraping integration
+
+---
+
+## Next Steps
+
+1. Verify `/aircraft/*` images and HTML load correctly on Linux (case-sensitive)
+2. Add seat ranking by positive features count and cap recommended seats (UI limit: 15)
+3. Add telemetry for image loading & popup failures
+4. Improve mobile touch interactions for scenic popups & hover fallbacks
+
+---
+
+## Short Log — Recent Prompts & Resolutions
+
+- 2025-08-16: Fixed major solar/timezone issues and 3D sun visualization (see `SkyDomeVisualization.tsx`) — solution: use UTC and disable solar-time offsets
+- 2025-08-16: Replaced ScenicModal with MapLibre popups; fixed leftover state bug
+- 2025-08-16: Implemented iframe seat scraping and integrated with seat recommendation results
+- 2025-08-16: Added quick stats and side-by-side comparisons for scenic/solar recommendations
+
+### Aug 16, 2025 - Iframe Seat Scraper Integration
+**Prompt**: Build a modular, reusable script that integrates into the existing seat recommendation system to scrape iframe seatmap content and recommend seats based on best view side.
+**Implementation**: 
+- Created `src/lib/iframe-seat-scraper.ts` with utilities for iframe access, seat collection, feature filtering, and data extraction
+- Added `src/hooks/useIframeSeatScraping.ts` for React state management and integration
+- Built `src/components/SeatRecommendation/IframeSeatDisplay.tsx` for displaying scraped seats
+- Integrated with existing seat recommendation engine to determine best aircraft side
+- Filters seats by positive features (excludes any seat with "-" value in features)
+- Sorts by positive feature count and limits display to 15 seats maximum
+
+### Aug 16, 2025 - Text Overflow Fix
+**Prompt**: Make overflow text use ellipsis in SeatComparisonDisplay component
+**Bug**: Long text in summary reasoning and solar event titles could overflow containers
+**Solution**: Added `truncate` class to summary reason and solar event title elements for clean ellipsis display
+
+### Aug 16, 2025 - Flight Controls UI Fixes
+**Prompt 1**: Fix trackClassName error in FlightPath slider and add blue color theme
+**Bug**: `trackClassName` and `rangeClassName` props don't exist on Slider component
+**Solution**: Replaced with Tailwind CSS selectors targeting internal slider elements with blue theme colors
+
+**Prompt 2**: Hide date/time data in flight map navbar on small screens
+**Solution**: Added `hidden sm:flex` classes to flight schedule div to hide departure/arrival times on mobile while keeping airport codes visible
+
+**Prompt 3**: Flight control deck not centered on small screens
+**Bug**: Control deck positioning issues on mobile due to `mx-4` margin and centering conflicts
+**Solution**: Changed `mx-4` to `px-4` on outer container and added `mx-auto` to inner container for proper centering
+
+### Aug 16, 2025 - Journey Documentation Merge
+**Prompt**: Combine journey-doc.md into journey.md and add prompts/bugs/solutions log
+**Implementation**: Merged both documentation files into single source of truth, organized chronologically with technical details and solution summaries
+
+---
+
+*This file is the single source of truth for development prompts, bug reports, fixes, and architectural notes.*
+
   let relativeBearing = bearingToTarget - aircraftBearing;
   // Normalize to -180 to 180 range
   return relativeBearing > 0 ? 'right' : 'left';

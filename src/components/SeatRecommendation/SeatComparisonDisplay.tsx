@@ -147,8 +147,40 @@ export function SeatComparisonDisplay({
         </CardContent>
       </Card>
 
+      {/* Quick Stats Section */}
+      <Card>
+        <CardContent className="pt-4">
+          <div className="grid grid-cols-4 gap-4 text-center text-xs">
+            <div className="p-2 bg-green-50 rounded border border-green-200">
+              <div className="text-lg font-bold text-green-600">
+                {result.detailedScenicLocations.filter(l => l.visibility === 'excellent').length}
+              </div>
+              <div className="text-green-700">Excellent Views</div>
+            </div>
+            <div className="p-2 bg-blue-50 rounded border border-blue-200">
+              <div className="text-lg font-bold text-blue-600">
+                {result.detailedScenicLocations.filter(l => l.type === 'mountain' || l.type === 'volcano').length}
+              </div>
+              <div className="text-blue-700">Mountains</div>
+            </div>
+            <div className="p-2 bg-orange-50 rounded border border-orange-200">
+              <div className="text-lg font-bold text-orange-600">
+                {result.detailedSolarEvents.filter(e => e.type === 'sunrise' || e.type === 'sunset').length}
+              </div>
+              <div className="text-orange-700">Sunrise / Sunset</div>
+            </div>
+            <div className="p-2 bg-purple-50 rounded border border-purple-200">
+              <div className="text-lg font-bold text-purple-600">
+                {result.detailedSolarEvents.filter(e => e.type === 'golden-hour').length}
+              </div>
+              <div className="text-purple-700">Golden Hours</div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Side-by-Side Comparison */}
-      <div className="grid grid-cols-2 gap-4 h-[calc(100%-200px)]">
+      <div className="grid grid-cols-2 gap-4 flex-1">
         {/* Left Side */}
         <Card className={`h-full ${summary.recommendedSide === 'left' ? 'ring-2 ring-green-500 bg-green-50' : ''}`}>
           <CardHeader className="pb-2">
@@ -325,38 +357,6 @@ export function SeatComparisonDisplay({
           </CardContent>
         </Card>
       </div>
-
-      {/* Quick Stats Footer */}
-      <Card>
-        <CardContent className="pt-4">
-          <div className="grid grid-cols-4 gap-4 text-center text-xs">
-            <div className="p-2 bg-green-50 rounded border border-green-200">
-              <div className="text-lg font-bold text-green-600">
-                {result.detailedScenicLocations.filter(l => l.visibility === 'excellent').length}
-              </div>
-              <div className="text-green-700">Excellent Views</div>
-            </div>
-            <div className="p-2 bg-blue-50 rounded border border-blue-200">
-              <div className="text-lg font-bold text-blue-600">
-                {result.detailedScenicLocations.filter(l => l.type === 'mountain' || l.type === 'volcano').length}
-              </div>
-              <div className="text-blue-700">Mountains</div>
-            </div>
-            <div className="p-2 bg-orange-50 rounded border border-orange-200">
-              <div className="text-lg font-bold text-orange-600">
-                {result.detailedSolarEvents.filter(e => e.type === 'sunrise' || e.type === 'sunset').length}
-              </div>
-              <div className="text-orange-700">Sunrise/Sunset</div>
-            </div>
-            <div className="p-2 bg-purple-50 rounded border border-purple-200">
-              <div className="text-lg font-bold text-purple-600">
-                {result.detailedSolarEvents.filter(e => e.type === 'golden-hour').length}
-              </div>
-              <div className="text-purple-700">Golden Hours</div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

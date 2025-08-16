@@ -1,36 +1,76 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# scenic-sky (local developer notes)
 
-## Getting Started
+Lightweight Next.js + TypeScript demo that visualizes Great-Circle flights and seatmap recommendations.
 
-First, run the development server:
+## Prerequisites
+
+- Node.js 18+ (LTS recommended)
+- npm, pnpm, or yarn (examples below use npm/pnpm)
+
+## Install
+
+Install dependencies with your preferred package manager:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# npm
+npm install
+
+# or pnpm
+pnpm install
+
+# or yarn
+yarn install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Run (development)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Start the dev server (hot reload):
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# npm
+npm run dev
 
-## Learn More
+# or pnpm
+pnpm dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Then open http://localhost:3000 in your browser.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Build & Start (production)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+# build
+npm run build
 
-## Deploy on Vercel
+# run the production server
+npm run start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Replace `npm` with `pnpm` or `yarn` if you prefer those tools.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Lint & Format
+
+```bash
+# lint
+npm run lint
+
+# format (prettier)
+npm run format
+```
+
+## Notes / Troubleshooting
+
+- Demo mode: the app ships with hard-coded demo airports and coordinates. No external airport API is required.
+- Iframe scraping: the seatmap scraper will only access iframe content when the iframe is same-origin. For cross-origin seatmaps use a backend extractor or a postMessage-based integration.
+- If the map tiles or satellite imagery require a token, check for a `.env` or `.env.local` in the project root and set tokens there (no token is required for the demo behavior included in this repo).
+- If you see TypeScript or ESLint errors after editing, run `npm run build` to surface issues and follow the diagnostics.
+
+## Project layout (quick)
+
+- `app/` — Next.js App Router pages and layouts (UI entrypoints)
+- `src/components/` — React components (map, flight path, seat UI)
+- `src/hooks/` — React hooks and local logic
+- `src/lib/` — domain logic (gis, solar calculations, seat scraping)
+
+If you need help running the project or want me to add a short troubleshooting checklist for a specific OS, tell me which OS and package manager you use.
