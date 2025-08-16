@@ -3,6 +3,40 @@
 ## Project Overview
 A modern Next.js application that visualizes Great-Circle flight paths between airports with a 3D sky dome showing real-time sun positioning based on aircraft location, date, and time.
 
+## Recent Fixes
+
+### Aug 16, 2025 - Fixed Modal Positioning and Animation Resume
+**Issues**: 
+- Modal was positioned to the side of sun sphere instead of above airplane
+- Map movement didn't resume automatically when modal closed
+**Fixes**: 
+- Changed modal positioning to be centered above airplane (50% left, 40% top)
+- Removed marker position calculation since modal is now centered
+- Fixed animation resume logic to always restart animation when closing scenic modal
+- Simplified ScenicModal props by removing unused markerPosition
+**Files Changed**: 
+- `src/components/ScenicModal.tsx` - Updated positioning to center above airplane
+- `src/app/flight-map/page.tsx` - Fixed resume animation logic and removed marker position state
+
+### Aug 16, 2025 - Updated ScenicModal UX and Flight Controls
+**Changes**: 
+- Removed Resume/Close buttons from ScenicModal component for cleaner UI
+- Modified modal to be visually anchored so marker pin appears at bottom-center
+- Updated FlightPath component to show "Resume" button when scenic modal is active
+- Centralized resume functionality in flight control deck instead of modal
+- Modal now uses `pointerEvents: 'none'` since it has no interactive elements
+**Files Changed**: 
+- `src/components/ScenicModal.tsx` - Removed buttons, updated positioning and styling
+- `src/components/FlightPath/FlightPath.tsx` - Added Resume button logic for scenic paused state
+- `src/app/flight-map/page.tsx` - Updated props and resume handling integration
+
+### Aug 16, 2025 - Fixed Scenic Modal Coordinate Access Error
+**Issue**: Runtime error "Cannot read properties of undefined (reading '0')" when accessing scenic location coordinates
+**Root Cause**: Code was accessing `locationToShow.coordinates[0]` but `ScenicLocationWithDetection` uses `lat`/`lon` properties
+**Fix**: Updated `src/app/flight-map/page.tsx` to use `locationToShow.lon` and `locationToShow.lat` instead of coordinates array
+**Files Changed**: 
+- `src/app/flight-map/page.tsx` - Fixed marker position calculation for tooltip positioning
+
 ## Key Prompts & Evolution
 
 ### Prompt 1: Initial Project Setup
@@ -532,6 +566,69 @@ export function findSolarEventsAlongPath(
 - Added "Journey Completed: X%" display for scenic locations across all seat recommendation UIs so scenic views match solar events' progress formatting.
 - Files changed: `src/lib/seat-recommendation-engine.ts`, `src/components/SeatRecommendation/SeatComparisonDisplay.tsx`, `src/components/SeatRecommendation/CompactSeatRecommendationDisplay.tsx`, `src/components/SeatRecommendation/SeatRecommendationDisplay.tsx`.
 - Also updated `journey.md` to document the change and verified TypeScript checks for modified files (no errors).
+
+## 2025-08-16 — Enhanced Flight Map with Scenic Location Markers & Animated Modals
+
+**Major Feature Implementation**: Added interactive scenic location markers and animated modals to the flight map page using MapLibre GL (adapted from original Leaflet request).
+
+**New Components**:
+- `ScenicModal.tsx`: Animated modal component using Framer Motion with ShadCN UI styling, displays scenic location info with image, description, likes count, and type badge.
+- `scenic-detection.ts`: Utility library for detecting scenic locations near flight paths with configurable detection radii (mountains/volcanoes: 100km, others: 50km).
+
+**Enhanced Features**:
+- **Scenic Markers**: Red pin markers automatically placed on map for scenic locations within detection range of flight path.
+- **Smart Animation Pausing**: Plane animation automatically pauses for 3 seconds when reaching scenic locations, with smooth resume.
+- **Progressive Triggering**: Each scenic location triggers only once during flight, with visited state tracking.
+- **Hover Effects**: Scenic markers scale on hover with informational popups showing distance from route.
+- **Modal Animations**: Smooth fade-in/slide-up animations using Framer Motion with backdrop blur effects.
+
+**Technical Implementation**:
+- Pre-computes scenic locations within detection range during flight path generation.
+- Monitors flight progress for automatic triggering based on route position (0.5% trigger range).
+- Integrates with existing MapLibre GL infrastructure and flight animation system.
+- Performance optimized with efficient distance calculations and visited location tracking.
+
+**Files Modified**:
+- `src/app/flight-map/page.tsx`: Added scenic state management, progress monitoring, and modal triggering logic.
+- `src/components/MapWithCenteredAircraft.tsx`: Enhanced to accept and render scenic location markers with popups.
+- Added Framer Motion dependency for smooth animations.
+
+**UI/UX Enhancements**:
+- Clean, modern modal design with placeholder images and proper information hierarchy.
+- Responsive positioning with automatic centering and backdrop blur.
+- Manual close option for user control while maintaining 3-second auto-close.
+- Visual feedback with marker scaling and smooth transitions.
+
+**Testing Results**:
+✅ Scenic locations correctly detected and marked along flight paths
+✅ Animation pausing/resuming works smoothly 
+✅ Modal animations and styling render properly
+✅ TypeScript compilation passes with no errors
+✅ Development server starts successfully
+✅ Performance remains smooth with scenic marker rendering
+
+### Aug 16, 2025 - Refactor: Replace ScenicModal with maplibregl.Popup
+**Summary**
+- Replaced the client-side `ScenicModal` component with `maplibregl.Popup` anchored to scenic markers so the popup content is rendered inside the map and attached to coordinates.
+
+**Bug & fix**
+- Bug: During the refactor a leftover call to `setCurrentScenicModal(null)` caused a runtime error since the state was renamed to `currentScenicLocation`.
+- Fix: Replaced all references to `setCurrentScenicModal` with `setCurrentScenicLocation` in `src/app/flight-map/page.tsx` and added robust popup lifecycle handlers in `src/components/MapWithCenteredAircraft.tsx`.
+
+**Implementation notes**
+- Popups are created with `new maplibregl.Popup()` and `.setHTML()` using a compact shadcn-style card markup.
+- Only one popup is allowed at a time: the code tracks `currentPopup` and removes it before opening a new one.
+- Exposed `showScenicPopup` and `closeScenicPopup` helpers on the map instance so page-level code can pause/resume animation and close popups on reset.
+- On reset, the flight page calls `map.closeScenicPopup()` to ensure no popups remain open and clears visited scenic state.
+
+**Files touched**
+- `src/components/MapWithCenteredAircraft.tsx` — popup creation, cleanup, and helper exposure.
+- `src/app/flight-map/page.tsx` — state rename, popup wiring, pause/resume/reset integration.
+- `src/app/globals.css` — added `.scenic-popup` styling for map popup content.
+
+**Verification**
+- Dev server compiles and `/flight-map` loads. Quick runtime patch applied to replace leftover `setCurrentScenicModal` usage.
+
 
 
 ````

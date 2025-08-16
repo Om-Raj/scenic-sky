@@ -19,6 +19,8 @@ interface FlightPathProps {
   timeLeft: string;
   progressPercent: number;
   onResetView?: () => void;
+  isAnimationPaused?: boolean; // New prop to track scenic modal pause state
+  onResume?: () => void; // New prop for resuming from scenic modal
 }
 
 /**
@@ -37,7 +39,9 @@ export function FlightPath({
   currentTime,
   timeLeft,
   progressPercent,
-  onResetView 
+  onResetView,
+  isAnimationPaused = false,
+  onResume
 }: FlightPathProps) {
   // Add flight path to map when flightState changes
   useEffect(() => {
@@ -143,12 +147,17 @@ export function FlightPath({
             </Button>
 
             <Button
-              variant={isPlaying ? "default" : "outline"}
+              variant={isAnimationPaused ? "default" : (isPlaying ? "default" : "outline")}
               size="sm"
-              onClick={isPlaying ? onPause : onPlay}
+              onClick={isAnimationPaused ? onResume : (isPlaying ? onPause : onPlay)}
               className="px-6 py-2 rounded-full"
             >
-              {isPlaying ? (
+              {isAnimationPaused ? (
+                <>
+                  <Play className="w-4 h-4 mr-2" />
+                  Resume
+                </>
+              ) : isPlaying ? (
                 <>
                   <Pause className="w-4 h-4 mr-2" />
                   Pause

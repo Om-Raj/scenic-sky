@@ -68,6 +68,20 @@ body {
   z-index: 1000;
 }
 
+/* Scenic popup styling */
+.scenic-popup .maplibregl-popup-content {
+  padding: 0;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+}
+
+.scenic-popup .maplibregl-popup-tip {
+  border-top-color: rgba(255, 255, 255, 0.95);
+}
+
 /* Custom airplane marker animation */
 .airplane-marker {
   cursor: pointer;

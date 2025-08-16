@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { MapWithCenteredAircraft } from '@/components/MapWithCenteredAircraft';
 
@@ -12,6 +12,12 @@ import { useAutoSeatRecommendation } from '@/hooks/useSeatRecommendation';
 import { interpolateDateTime, createDateTimeInTimezone, calculateFlightSolarPosition } from '@/lib/solar-calculations';
 import { formatAirportTime, formatFlightSchedule, parseAirportLocalTime, formatAirportLocalTime } from '@/lib/timezone-utils';
 import { DEMO_AIRPORTS } from '@/lib/gis';
+import { SCENIC_LOCATIONS } from '@/lib/scenic-locations-data';
+import { 
+  findScenicLocationsNearPath, 
+  getLocationsToTrigger,
+  type ScenicLocationWithDetection 
+} from '@/lib/scenic-detection';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { ArrowLeft, Plane, Users, MapPin } from 'lucide-react';
@@ -23,6 +29,12 @@ export default function FlightMapPage() {
   const [map, setMap] = useState<maplibregl.Map | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentMapBearing, setCurrentMapBearing] = useState(0); // Track current map bearing
+  
+  // Scenic location state
+  const [nearbyScenic, setNearbyScenic] = useState<ScenicLocationWithDetection[]>([]);
+  const [visitedScenicIds, setVisitedScenicIds] = useState<Set<string>>(new Set());
+  const [currentScenicLocation, setCurrentScenicLocation] = useState<ScenicLocationWithDetection | null>(null);
+  const [isAnimationPaused, setIsAnimationPaused] = useState(false);
   
   const { 
     flightState, 
@@ -140,7 +152,20 @@ export default function FlightMapPage() {
 
       setIsLoading(true);
       try {
-        generateFlightPath(flightData.departure, flightData.arrival);
+        const newFlightState = generateFlightPath(flightData.departure, flightData.arrival);
+        
+        // Find scenic locations near the new flight path
+        if (newFlightState && newFlightState.path) {
+          const nearbyLocations = findScenicLocationsNearPath(newFlightState.path, SCENIC_LOCATIONS);
+          setNearbyScenic(nearbyLocations);
+          console.log(`Found ${nearbyLocations.length} scenic locations near flight path:`, 
+            nearbyLocations.map(l => l.name));
+        }
+        
+        // Reset scenic state for new flight
+        setVisitedScenicIds(new Set());
+        setCurrentScenicLocation(null);
+        setIsAnimationPaused(false);
       } catch (error) {
         console.error('Error generating flight path:', error);
         // Redirect back to home with error parameter
@@ -154,7 +179,82 @@ export default function FlightMapPage() {
     }
   }, [flightData.departure, flightData.arrival, generateFlightPath, router]);
 
-  // Callback when map bearing changes
+  // Store timer reference to allow early cancellation
+  const modalTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Callback to manually close popup and resume animation
+  const handleClosePopup = useCallback(() => {
+    // Clear any existing timer
+    if (modalTimerRef.current) {
+      clearTimeout(modalTimerRef.current);
+      modalTimerRef.current = null;
+    }
+    
+    // Close popup through map
+    if (map && (map as any).closeScenicPopup) {
+      (map as any).closeScenicPopup();
+    }
+    
+    setCurrentScenicLocation(null);
+    setIsAnimationPaused(false);
+    
+    // Always restart animation when resuming from scenic pause
+    startAnimation(15000); // Resume with 15 second total duration
+  }, [map, startAnimation]);
+
+  // Handle scenic popup events from map
+  const handleScenicPopup = useCallback((location: ScenicLocationWithDetection | null) => {
+    setCurrentScenicLocation(location);
+  }, []);
+
+  // Monitor progress for scenic location triggering
+  useEffect(() => {
+    if (!isAnimating || nearbyScenic.length === 0 || isAnimationPaused || !map) return;
+
+    // Check for scenic locations to trigger
+    const locationsToTrigger = getLocationsToTrigger(progress, nearbyScenic, visitedScenicIds, 0.005); // 0.5% trigger range
+    
+    if (locationsToTrigger.length > 0) {
+      const locationToShow = locationsToTrigger[0]; // Show first one if multiple
+      console.log(`Triggering scenic location: ${locationToShow.name} at ${Math.round(progress * 100)}% progress`);
+      
+      // Pause animation
+      pauseAnimation();
+      setIsAnimationPaused(true);
+      
+      // Show popup through map
+      if ((map as any).showScenicPopup) {
+        (map as any).showScenicPopup(locationToShow);
+      }
+      
+      // Mark as visited
+      setVisitedScenicIds(prev => new Set([...prev, locationToShow.name]));
+      
+      // Auto-resume after 10 seconds or until user clicks resume
+      modalTimerRef.current = setTimeout(() => {
+        handleClosePopup();
+      }, 10000);
+    }
+  }, [progress, isAnimating, nearbyScenic, visitedScenicIds, isAnimationPaused, pauseAnimation, map, handleClosePopup]);
+
+  // Enhanced reset function to clear visited scenic markers and close popups
+  const handleReset = useCallback(() => {
+    resetAnimation();
+    setVisitedScenicIds(new Set()); // Clear visited scenic markers
+    setCurrentScenicLocation(null);
+    setIsAnimationPaused(false);
+    
+    // Close any open popups through map
+    if (map && (map as any).closeScenicPopup) {
+      (map as any).closeScenicPopup();
+    }
+    
+    // Clear any active modal timer
+    if (modalTimerRef.current) {
+      clearTimeout(modalTimerRef.current);
+      modalTimerRef.current = null;
+    }
+  }, [resetAnimation, map]);
   const handleBearingChange = useCallback((bearing: number) => {
     setCurrentMapBearing(bearing);
   }, []);
@@ -382,6 +482,8 @@ export default function FlightMapPage() {
           aircraftPosition={currentAircraftData.position}
           onMapLoad={handleMapLoad}
           onBearingChange={handleBearingChange}
+          scenicLocations={nearbyScenic}
+          onScenicPopup={handleScenicPopup}
         >
           {/* Flight controls overlay */}
           {map && flightState && (
@@ -392,11 +494,13 @@ export default function FlightMapPage() {
               isPlaying={isAnimating}
               onPlay={() => startAnimation(15000)} // 15 second flight duration
               onPause={pauseAnimation}
-              onReset={resetAnimation}
+              onReset={handleReset}
               onProgressChange={setPosition}
               currentTime={calculateCurrentTime()}
               timeLeft={calculateTimeLeft()}
               progressPercent={Math.round(progress * 100)}
+              isAnimationPaused={isAnimationPaused}
+              onResume={handleClosePopup}
               onResetView={() => {
                 // Reset view to show full flight path
                 if (map && flightState) {
