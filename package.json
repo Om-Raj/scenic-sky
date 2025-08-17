@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@react-three/postprocessing": "^3.0.4",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -48,6 +49,7 @@
     "eslint-config-next": "15.4.6",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
+    "postprocessing": "^6.37.7",
     "prettier": "^3.6.2",
     "tailwindcss": "^4",
     "typescript": "^5"

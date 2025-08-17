@@ -144,7 +144,7 @@ export function FlightPath({
             </Button>
 
             <Button
-              variant={isAnimationPaused ? "default" : (isPlaying ? "default" : "outline")}
+              variant="outline"
               size="sm"
               onClick={isAnimationPaused ? onResume : (isPlaying ? onPause : onPlay)}
               className="px-6 py-2 rounded-full"

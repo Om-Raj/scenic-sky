@@ -440,7 +440,7 @@ export default function FlightMapPageContent() {
         {/* Floating Seatmap Button */}
         <Button
           onClick={goToSeatmap}
-          className="absolute top-4 left-4 z-40 bg-white/90 hover:bg-white/95 text-gray-700 border border-gray-200 backdrop-blur-sm shadow-lg transition-all duration-200 hover:shadow-xl rounded-full w-12 h-12 p-0"
+          className="absolute top-4 left-20 z-40 bg-white/90 hover:bg-white/95 text-gray-700 border border-gray-200 backdrop-blur-sm shadow-lg transition-all duration-200 hover:shadow-xl rounded-full w-12 h-12 p-0"
           variant="outline"
           aria-label="View seatmap"
         >
@@ -452,14 +452,14 @@ export default function FlightMapPageContent() {
           <Sheet>
             <SheetTrigger asChild>
               <Button
-                className="absolute top-4 left-20 z-40 bg-white/90 hover:bg-white/95 text-gray-700 border border-gray-200 backdrop-blur-sm shadow-lg transition-all duration-200 hover:shadow-xl rounded-full w-12 h-12 p-0"
+                className="absolute top-4 left-4 z-40 bg-white/90 hover:bg-white/95 text-gray-700 border border-gray-200 backdrop-blur-sm shadow-lg transition-all duration-200 hover:shadow-xl rounded-full w-12 h-12 p-0"
                 variant="outline"
                 aria-label="View scenic locations"
               >
                 <MapPin className="w-5 h-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-[400px] sm:w-[540px] overflow-y-auto bg-white">
+            <SheetContent side="left" className="w-[400px] sm:w-[540px] overflow-y-auto bg-white z-9999">
               <SheetHeader>
                 <SheetTitle>Scenic Locations</SheetTitle>
                 <SheetDescription>

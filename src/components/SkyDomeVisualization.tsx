@@ -2,7 +2,8 @@
 
 import React, { useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Text, Html } from '@react-three/drei';
+import { Text, Html, useTexture } from '@react-three/drei';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import SunCalc from 'suncalc';
 import { getSolarTimeAtLongitude } from '@/lib/timezone-utils';
@@ -134,24 +135,6 @@ function makeSunRayGeometry(sunPosition: { x: number; y: number; z: number }) {
   return geometry;
 }
 
-/**
- * The interior hemisphere mesh (inverted normals via BackSide) for subtle atmosphere.
- */
-function HemisphereMesh({ radius = 1.5 }: { radius?: number }) {
-  const geom = useMemo(() => new THREE.SphereGeometry(radius, 48, 24, 0, Math.PI * 2, 0, Math.PI / 2), [radius]);
-  // Note: SphereGeometry args: (radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength)
-  // thetaLength = PI/2 makes a hemisphere (top half)
-  return (
-    <mesh geometry={geom}>
-      <meshBasicMaterial
-        side={THREE.BackSide}
-        transparent
-        opacity={0.08}
-        toneMapped={false}
-      />
-    </mesh>
-  );
-}
 
 /**
  * Main Scene: hemisphere with grid, compass on circumference, sun day path, and sun ray.
@@ -169,9 +152,21 @@ function SkySphereScene({
   mapBearing?: number;
   radius?: number; 
 }) {
+  // Textured glow (radial sprite) to avoid square artifact
+  const glowTex = useTexture('/sun-flare.png');
+  // Configure texture for UI usage
+  useMemo(() => {
+    glowTex.wrapS = THREE.ClampToEdgeWrapping;
+    glowTex.wrapT = THREE.ClampToEdgeWrapping;
+    glowTex.minFilter = THREE.LinearFilter;
+    glowTex.magFilter = THREE.LinearFilter;
+  // Ensure correct color space for UI textures
+    glowTex.colorSpace = THREE.SRGBColorSpace;
+    return glowTex;
+  }, [glowTex]);
   // Sun position memoized and adjusted for map bearing with UTC time calculation
   const sun = useMemo(() => {
-    const rawSun = getSunPosition(date, latitude, longitude, 1.0, false); // Use UTC time for accuracy
+  const rawSun = getSunPosition(date, latitude, longitude, 1.3, false); // Increase base distance of sun by 1.5x
     
     // Adjust sun position for map bearing (rotate opposite to map)
     // When map rotates clockwise, sun should appear to rotate counter-clockwise
@@ -189,6 +184,9 @@ function SkySphereScene({
       z: adjustedZ
     };
   }, [date, latitude, longitude, mapBearing]);
+
+  // Determine whether the sun is above the horizon for visual state
+  const isAboveHorizon = sun.elevationDeg > 0;
 
   // Sun day path geometry adjusted for map bearing with corrected coordinates
   const sunDayPath = useMemo(() => {
@@ -238,21 +236,19 @@ function SkySphereScene({
     return meridians.map((az) => ({ az, geo: makeMeridianGeometry(az, radius, 48) }));
   }, [meridians, radius]);
 
-  // subtle bobbing animation for sun using frame clock
+  // subtle pulse animation for sun using frame clock (cheap)
   const sunRef = React.useRef<THREE.Mesh | null>(null);
   useFrame((state) => {
     if (sunRef.current) {
       const t = state.clock.elapsedTime;
-      const bob = 1 + 0.02 * Math.sin(t * 1.5);
-      sunRef.current.scale.setScalar(bob);
+      const pulse = 1 + 0.015 * Math.sin(t * 2.0);
+      sunRef.current.scale.setScalar(pulse);
     }
   });
 
   return (
     // Add slight forward tilt to match map's 3D perspective
     <group rotation={[0.2, 0, 0]}>
-      {/* Hemisphere interior for subtle atmosphere */}
-      <HemisphereMesh radius={radius * 1.02} />
 
       {/* Latitude rings: including equator (0°) */}
       {latRingGeometries.map(({ deg, geo }) => {
@@ -292,8 +288,8 @@ function SkySphereScene({
             attach="material"
             color="#ff6b35"
             transparent
-            opacity={0.8}
-            linewidth={2}
+            opacity={0.9}
+            linewidth={3}
           />
         </primitive>
       )}
@@ -305,8 +301,8 @@ function SkySphereScene({
             attach="material"
             color="#ffff00"
             transparent
-            opacity={0.4}
-            linewidth={2}
+            opacity={0.9}
+            linewidth={10}
             depthTest={false}
             depthWrite={false}
           />
@@ -338,54 +334,33 @@ function SkySphereScene({
         );
       })}
 
-      {/* Sun: bright sphere with size based on elevation, not distance from center */}
+      {/* Sun: bright emissive core when above horizon; faded when below. Halo only above horizon. */}
       <group position={[sun.x, sun.y, sun.z]}>
         <mesh ref={sunRef}>
-          <sphereGeometry args={[(() => {
-            // Scale sun size based on elevation angle
-            // Higher elevation = larger sun (appears closer/more prominent)
-            // Lower elevation = smaller sun (appears farther/less prominent)
-            const elevationFactor = Math.max(0.2, (sun.elevationDeg + 90) / 180); // 0.2 to 1.0
-            const baseSize = 0.15; // Increased base size
-            const variationRange = 0.08; // Size can vary by ±0.08
-            const scaledSize = baseSize + (elevationFactor - 0.6) * variationRange; // 0.08 to 0.16
-            return Math.max(0.08, Math.min(0.18, scaledSize)); // Clamp between 0.08 and 0.18
-          })(), 16, 16]} />
-          <meshBasicMaterial 
-            color="#ffff00" 
+          <sphereGeometry args={[0.15, 32, 32]} />
+          <meshStandardMaterial
+            // Faded bluish tone under horizon; warm emissive when above
+            color={isAboveHorizon ? "#ffaa00" : "#8aa0c0"}
+            emissive={isAboveHorizon ? "#ffdd33" : "#000000"}
+            emissiveIntensity={isAboveHorizon ? 2.2 : 0}
             toneMapped={false}
-            depthTest={false}
-            depthWrite={false}
           />
         </mesh>
 
-        {/* Glow effect that scales with sun size */}
-        <sprite scale={[(() => {
-          const elevationFactor = Math.max(0.2, (sun.elevationDeg + 90) / 180);
-          const baseScale = 0.35; // Increased base glow size
-          const variationRange = 0.25; // Glow can vary by ±0.25
-          const scaledGlow = baseScale + (elevationFactor - 0.6) * variationRange; // 0.20 to 0.50
-          return Math.max(0.25, Math.min(0.55, scaledGlow));
-        })(), (() => {
-          const elevationFactor = Math.max(0.2, (sun.elevationDeg + 90) / 180);
-          const baseScale = 0.35;
-          const variationRange = 0.25;
-          const scaledGlow = baseScale + (elevationFactor - 0.6) * variationRange;
-          return Math.max(0.25, Math.min(0.55, scaledGlow));
-        })(), 1]}>
-          <spriteMaterial
-            attach="material"
-            color="#ffff00"
-            transparent
-            opacity={(() => {
-              // Opacity also varies with elevation - higher sun is brighter
-              const elevationFactor = Math.max(0.2, (sun.elevationDeg + 90) / 180);
-              return 0.6 + (elevationFactor * 0.3); // 0.6 to 0.9 opacity
-            })()}
-            depthTest={false}
-            depthWrite={false}
-          />
-        </sprite>
+        {/* Halo: smooth, cheap sprite (only when above horizon) */}
+        {isAboveHorizon && (
+          <sprite scale={[0.6, 0.6, 1]}>
+            <spriteMaterial
+              attach="material"
+              map={glowTex}
+              color={"#ffffaa"}
+              blending={THREE.AdditiveBlending}
+              transparent
+              opacity={0.6}
+              depthWrite={false}
+            />
+          </sprite>
+        )}
 
         {/* Show elevation/azimuth readout only when above horizon */}
         {sun.elevationDeg > 0 && (
@@ -404,6 +379,18 @@ function SkySphereScene({
           </Html>
         )}
       </group>
+
+      {/* Lightweight bloom only when sun is above the horizon (turn off "glow" at night) */}
+      {isAboveHorizon && (
+        <EffectComposer>
+          <Bloom
+            intensity={0.8}
+            kernelSize={2}
+            luminanceThreshold={0.3}
+            luminanceSmoothing={0.8}
+          />
+        </EffectComposer>
+      )}
     </group>
   );
 }
@@ -463,6 +450,7 @@ export default function SkySphereVisualization({
           mapBearing={mapBearing}
           radius={radius} 
         />
+
       </Canvas>
     </div>
   );

@@ -32,6 +32,8 @@ export function MapWithCenteredAircraft({
   const currentPopup = useRef<maplibregl.Popup | null>(null);
   const hoverPopup = useRef<maplibregl.Popup | null>(null); // Popup for hover interactions
   const currentHoverFeature = useRef<string | undefined>(undefined);
+  // Track DOM-based scenic markers so we can clean them up on updates
+  const scenicMarkersRef = useRef<Map<string, maplibregl.Marker>>(new Map());
   // Snapshot initial position once; subsequent updates are handled by a separate effect
   const initialCenterRef = useRef<[number, number]>([
     aircraftPosition.lng,
@@ -208,7 +210,7 @@ export function MapWithCenteredAircraft({
     };
   }, [onMapLoad]);
 
-  // Add/update scenic location layers using GeoJSON source and symbol layer
+  // Add/update scenic location layers using GeoJSON source and DOM SVG markers
   useEffect(() => {
     if (!map.current || !isLoaded || !scenicLocations.length) return;
 
@@ -222,6 +224,10 @@ export function MapWithCenteredAircraft({
     if (map.current.getSource('scenic-locations')) {
       map.current.removeSource('scenic-locations');
     }
+
+    // Remove any existing DOM markers before re-adding
+    scenicMarkersRef.current.forEach((marker) => marker.remove());
+    scenicMarkersRef.current.clear();
 
     // Create GeoJSON data for scenic locations
     const geojsonData = {
@@ -243,55 +249,33 @@ export function MapWithCenteredAircraft({
       })),
     };
 
-    // Add GeoJSON source
+    // Add GeoJSON source (used for hover detection and future spatial queries)
     map.current.addSource('scenic-locations', {
       type: 'geojson',
       data: geojsonData,
     });
 
-    // Load custom marker image and add symbol layer
-    map.current.loadImage('/map-marker.png')
-      .then((response) => {
-        if (!map.current) return;
-        
-        // Add image to map if not already added
-        if (!map.current.hasImage('custom-marker')) {
-          map.current.addImage('custom-marker', response.data);
-        }
+    // Create crisp DOM-based SVG markers per scenic location (bypass WebGL textures)
+    scenicLocations.forEach((location) => {
+      const id = `${location.lat}-${location.lon}`;
+      const el = document.createElement('div');
+      el.style.width = '32px';
+      el.style.height = '32px';
+      el.style.transform = 'translateY(-6px)'; // nudge so it feels anchored
+      el.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))';
+      el.style.pointerEvents = 'none'; // don't block map hover events
+      el.innerHTML = `
+        <svg height="32px" width="32px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-5.12 -5.12 522.24 522.24" xml:space="preserve" fill="#ff0000" stroke="#ff0000" stroke-width="5.12"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:#ff0000;} </style> <g> <path class="st0" d="M256,0C160.798,0,83.644,77.155,83.644,172.356c0,97.162,48.158,117.862,101.386,182.495 C248.696,432.161,256,512,256,512s7.304-79.839,70.97-157.148c53.228-64.634,101.386-85.334,101.386-182.495 C428.356,77.155,351.202,0,256,0z M256,231.921c-32.897,0-59.564-26.668-59.564-59.564s26.668-59.564,59.564-59.564 c32.896,0,59.564,26.668,59.564,59.564S288.896,231.921,256,231.921z"></path> </g> </g></svg>
+      `;
 
-        // Add symbol layer for scenic markers
-        map.current.addLayer({
-          id: 'scenic-layer',
-          type: 'symbol',
-          source: 'scenic-locations',
-          layout: {
-            'icon-image': 'custom-marker',
-            'icon-size': 0.03, // Adjust size as needed
-            'icon-anchor': 'bottom',
-            'icon-allow-overlap': true,
-          },
-        });
-      })
-      .catch((error) => {
-        console.error('Error loading marker image:', error);
-        // Fallback to circle markers if image fails to load
-        if (map.current) {
-          map.current.addLayer({
-            id: 'scenic-layer',
-            type: 'circle',
-            source: 'scenic-locations',
-            paint: {
-              'circle-radius': 8,
-              'circle-color': '#ef4444',
-              'circle-stroke-color': '#ffffff',
-              'circle-stroke-width': 2,
-              'circle-opacity': 0.9,
-            },
-          });
-        }
-      });
+      const marker = new maplibregl.Marker({ element: el, anchor: 'center' })
+        .setLngLat([location.lon, location.lat])
+        .addTo(map.current!);
 
-    // Add invisible hover detection layer with larger hit area
+      scenicMarkersRef.current.set(id, marker);
+    });
+
+  // Add invisible hover detection layer with larger hit area
     map.current.addLayer({
       id: 'scenic-hover-layer',
       type: 'circle',
@@ -392,7 +376,7 @@ export function MapWithCenteredAircraft({
         // Remove hover event listeners
         map.current.off('mouseenter', 'scenic-hover-layer', handleMouseEnter);
         map.current.off('mouseleave', 'scenic-hover-layer', handleMouseLeave);
-        
+
         // Remove layers and source
         if (map.current.getLayer('scenic-layer')) {
           map.current.removeLayer('scenic-layer');
@@ -404,6 +388,10 @@ export function MapWithCenteredAircraft({
           map.current.removeSource('scenic-locations');
         }
       }
+
+      // Remove DOM markers
+      scenicMarkersRef.current.forEach((marker) => marker.remove());
+      scenicMarkersRef.current.clear();
       
       // Close hover popup
       closeHoverPopup();
