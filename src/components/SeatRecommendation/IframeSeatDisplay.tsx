@@ -6,17 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { RecommendedSeatsResult, ScrapedSeatData } from '@/lib/iframe-seat-scraper';
 import { formatSeatFeatures, getSeatDisplayClass } from '@/lib/iframe-seat-scraper';
-import { 
-  Plane, 
-  MapPin, 
-  Users, 
-  CheckCircle, 
-  AlertCircle,
-  RefreshCw,
-  ArrowLeft,
-  ArrowRight,
-  Sparkles
-} from 'lucide-react';
+import { Plane, Users, CheckCircle, AlertCircle, RefreshCw, ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
 
 interface IframeSeatDisplayProps {
   scrapedSeats: RecommendedSeatsResult | null;

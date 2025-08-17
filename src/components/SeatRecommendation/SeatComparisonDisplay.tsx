@@ -4,12 +4,8 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { SeatRecommendationResult } from '@/lib/seat-recommendation-types';
-import { 
-  getPrioritizedScenicViews, 
-  getFormattedSolarEvents,
-  generateRecommendationSummary 
-} from '@/lib/seat-recommendation-engine';
-import { Sparkles, Mountain, Sun, Clock, MapPin, ArrowLeft, ArrowRight, Star } from 'lucide-react';
+import { getPrioritizedScenicViews, getFormattedSolarEvents, generateRecommendationSummary } from '@/lib/seat-recommendation-engine';
+import { Sparkles, Mountain, Sun, ArrowLeft, ArrowRight, Star } from 'lucide-react';
 
 interface SeatComparisonDisplayProps {
   result: SeatRecommendationResult;

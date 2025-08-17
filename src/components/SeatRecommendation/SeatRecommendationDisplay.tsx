@@ -34,16 +34,6 @@ export function SeatRecommendationDisplay({
     return `${h}h ${m}m`;
   };
 
-  const getVisibilityColor = (visibility: string): string => {
-    switch (visibility) {
-      case 'excellent': return 'text-green-600';
-      case 'good': return 'text-blue-600';
-      case 'fair': return 'text-yellow-600';
-      case 'poor': return 'text-gray-500';
-      default: return 'text-gray-500';
-    }
-  };
-
   const getVisibilityBadge = (visibility: string): string => {
     switch (visibility) {
       case 'excellent': return 'bg-green-100 text-green-800';

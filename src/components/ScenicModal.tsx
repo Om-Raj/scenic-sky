@@ -49,11 +49,14 @@ export function ScenicModal({ scenicLocation }: ScenicModalProps) {
       /> */}
       
       <Card className="bg-white/95 backdrop-blur-sm shadow-xl border-0 overflow-hidden">
-        <div className="relative">
+        <div className="relative w-full h-24">
           <Image
-            src="/sun-flare.png" // Placeholder for scenic image
+            src="/sun-flare.png"
             alt={scenicLocation.name}
-            className="w-full h-24 object-cover"
+            fill
+            sizes="(max-width: 768px) 100vw, 320px"
+            className="object-cover"
+            priority={false}
           />
         </div>
         

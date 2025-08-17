@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { greatCirclePoints, getDistance, interpolateAlongPath, DEMO_AIRPORTS } from '@/lib/gis';
-import type { FlightState, Airport, PathPoint, AnimationState } from '@/lib/types';
+import type { FlightState, PathPoint, AnimationState } from '@/lib/types';
 
 /**
  * Hook for managing flight path calculation, animation, and state
@@ -138,7 +138,7 @@ export function useFlightPath() {
     return () => {
       stopAnimation();
     };
-  }, [flightState?.isPlaying, animationState]);
+  }, [flightState?.isPlaying, animationState, stopAnimation]);
 
   // Get current airplane position and bearing for map display
   const getCurrentPosition = useCallback((): PathPoint | null => {

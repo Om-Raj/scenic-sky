@@ -1,16 +1,14 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
-const geistSans = Geist({
+// Use system fonts as fallback instead of Google Fonts to avoid network issues
+const geistSans = {
   variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
+};
 
-const geistMono = Geist_Mono({
+const geistMono = {
   variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
+};
 
 export const metadata: Metadata = {
   title: 'Scenic Sky',

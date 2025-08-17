@@ -107,7 +107,7 @@ export function formatAirportLocalTime(date: Date, airport: Airport): string {
  * @param date Date for DST calculations
  * @returns IANA timezone identifier
  */
-export function getTimezoneForCoordinates(lat: number, lng: number, date: Date): string {
+export function getTimezoneForCoordinates(lat: number, lng: number): string {
   // Simplified timezone regions based on longitude and latitude
   // In a production app, you'd use a proper timezone lookup service
   
@@ -156,7 +156,7 @@ export function createDateTimeAtPosition(
   coordinates: { lat: number; lng: number },
   flightDate: Date
 ): Date {
-  const timezone = getTimezoneForCoordinates(coordinates.lat, coordinates.lng, flightDate);
+  const timezone = getTimezoneForCoordinates(coordinates.lat, coordinates.lng);
   return createDateTimeInTimezone(date, time, timezone, flightDate);
 }
 
@@ -259,8 +259,7 @@ export function interpolateFlightDateTime(
   // Get the timezone for the current aircraft position
   const localTimezone = getTimezoneForCoordinates(
     aircraftPosition.lat, 
-    aircraftPosition.lng, 
-    rawDateTime
+    aircraftPosition.lng
   );
   
   // Convert to the local timezone at the aircraft's position
@@ -392,7 +391,7 @@ export function getTimezoneInfo(
   isDST: boolean;
   localTime: string;
 } {
-  const timezone = getTimezoneForCoordinates(coordinates.lat, coordinates.lng, date);
+  const timezone = getTimezoneForCoordinates(coordinates.lat, coordinates.lng);
   const month = date.getMonth();
   const isDST = month >= 2 && month <= 10;
   const offsets = getTimezoneOffsets(date);

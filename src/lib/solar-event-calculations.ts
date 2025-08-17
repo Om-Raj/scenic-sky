@@ -2,8 +2,7 @@
 import * as SunCalc from 'suncalc';
 import type { PathPoint } from './types';
 import type { SolarEvent } from './seat-recommendation-types';
-import { determineSideOfAircraft } from './scenic-location-calculations';
-import { interpolateDateTime, calculateFlightSolarPosition } from './solar-calculations';
+import { interpolateDateTime } from './solar-calculations';
 import { formatFlightTime } from './timezone-utils';
 
 /**
@@ -11,19 +10,6 @@ import { formatFlightTime } from './timezone-utils';
  */
 const CRUISING_ALTITUDE_METERS = 11000; // ~36,000 feet
 
-/**
- * Calculate horizon distance at cruising altitude
- * @param altitudeMeters Aircraft altitude in meters
- * @returns Horizon distance in kilometers
- */
-function calculateHorizonDistance(altitudeMeters: number): number {
-  const earthRadiusKm = 6371;
-  const altitudeKm = altitudeMeters / 1000;
-  
-  // Use geometric horizon formula: d = √(2 * R * h + h²)
-  // where R is Earth radius and h is altitude
-  return Math.sqrt(2 * earthRadiusKm * altitudeKm + altitudeKm * altitudeKm);
-}
 
 /**
  * Determine if the sun is visible from aircraft at given position and time
@@ -98,7 +84,6 @@ export function findSolarEventsAlongPath(
   const samples = Math.ceil(flightDurationMs / samplingIntervalMs);
   
   let previousSunElevation = -90;
-  let previousProgress = -1;
   
   for (let i = 0; i <= samples; i++) {
     const progress = i / samples;
@@ -176,8 +161,7 @@ export function findSolarEventsAlongPath(
       });
     }
     
-    previousSunElevation = currentElevation;
-    previousProgress = progress;
+  previousSunElevation = currentElevation;
   }
   
   return events.sort((a, b) => a.progress - b.progress);

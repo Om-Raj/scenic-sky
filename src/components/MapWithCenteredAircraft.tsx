@@ -32,6 +32,12 @@ export function MapWithCenteredAircraft({
   const currentPopup = useRef<maplibregl.Popup | null>(null);
   const hoverPopup = useRef<maplibregl.Popup | null>(null); // Popup for hover interactions
   const currentHoverFeature = useRef<string | undefined>(undefined);
+  // Snapshot initial position once; subsequent updates are handled by a separate effect
+  const initialCenterRef = useRef<[number, number]>([
+    aircraftPosition.lng,
+    aircraftPosition.lat,
+  ]);
+  const initialBearingRef = useRef<number>(aircraftPosition.bearing || 0);
 
   // Function to create popup content HTML using shadcn-style components
   const createPopupContent = (location: ScenicLocationWithDetection) => {
@@ -126,9 +132,13 @@ export function MapWithCenteredAircraft({
   // Expose popup functions to parent component
   useEffect(() => {
     if (map.current && isLoaded) {
-      // Add popup functions to map instance for external access
-      (map.current as any).showScenicPopup = showScenicPopup;
-      (map.current as any).closeScenicPopup = closeScenicPopup;
+      // Add popup functions to map instance for external access without any
+      const m = map.current as unknown as maplibregl.Map & {
+        showScenicPopup?: typeof showScenicPopup;
+        closeScenicPopup?: typeof closeScenicPopup;
+      };
+      m.showScenicPopup = showScenicPopup;
+      m.closeScenicPopup = closeScenicPopup;
     }
   }, [isLoaded, showScenicPopup, closeScenicPopup]);
 
@@ -136,7 +146,7 @@ export function MapWithCenteredAircraft({
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
-    map.current = new maplibregl.Map({
+  map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: {
         version: 8,
@@ -160,10 +170,10 @@ export function MapWithCenteredAircraft({
           },
         ],
       },
-      center: [aircraftPosition.lng, aircraftPosition.lat],
+  center: initialCenterRef.current, // use initial snapshot to avoid effect deps
       zoom: 3, // Close zoom to show aircraft perspective
       pitch: 45, // Tilted view for 3D effect
-      bearing: aircraftPosition.bearing || 0, // Initialize with correct bearing for forward movement
+  bearing: initialBearingRef.current, // initialize with snapshot
     });
 
     // Add navigation controls
@@ -293,8 +303,20 @@ export function MapWithCenteredAircraft({
     });
 
     // Add hover event listeners
-    const handleMouseEnter = (e: any) => {
-      const feature = e.features?.[0];
+    type FeatureProperties = {
+      id: string;
+      name: string;
+      type: string;
+      description: string;
+      likes: number;
+      distanceFromPath: number;
+    };
+    type GeoJSONPoint = {
+      type: 'Point';
+      coordinates: [number, number];
+    };
+    const handleMouseEnter = (e: maplibregl.MapLayerMouseEvent) => {
+      const feature = e.features?.[0] as (maplibregl.MapGeoJSONFeature & { properties: FeatureProperties; geometry: GeoJSONPoint }) | undefined;
       if (!feature) return;
       
       const featureId = feature.properties.id;
@@ -306,7 +328,7 @@ export function MapWithCenteredAircraft({
         // Change cursor style
         map.current!.getCanvas().style.cursor = 'pointer';
         
-        const coordinates = (feature.geometry as any).coordinates.slice() as [number, number];
+  const coordinates = (feature.geometry as GeoJSONPoint).coordinates.slice() as [number, number];
         
         // Handle longitude wrapping for popup positioning
         while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
@@ -355,7 +377,7 @@ export function MapWithCenteredAircraft({
       }
     };
 
-    const handleMouseLeave = () => {
+  const handleMouseLeave = () => {
       map.current!.getCanvas().style.cursor = '';
       closeHoverPopup();
     };

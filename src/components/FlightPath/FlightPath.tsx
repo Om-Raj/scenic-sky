@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import maplibregl from 'maplibre-gl';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Play, Pause, RotateCcw } from 'lucide-react';
-import { interpolateAlongPath } from '@/lib/gis';
 import type { FlightState } from '@/lib/types';
 
 interface FlightPathProps {
@@ -18,7 +17,6 @@ interface FlightPathProps {
   currentTime: string;
   timeLeft: string;
   progressPercent: number;
-  onResetView?: () => void;
   isAnimationPaused?: boolean; // New prop to track scenic modal pause state
   onResume?: () => void; // New prop for resuming from scenic modal
 }
@@ -39,7 +37,6 @@ export function FlightPath({
   currentTime,
   timeLeft,
   progressPercent,
-  onResetView,
   isAnimationPaused = false,
   onResume
 }: FlightPathProps) {
@@ -169,6 +166,7 @@ export function FlightPath({
                 </>
               )}
             </Button>
+            {/* View button removed per UI request */}
           </div>
         </div>
       </div>

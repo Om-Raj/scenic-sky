@@ -32,14 +32,7 @@ export default function SeatRecommendationDemo() {
     arrivalAirportCode: 'LHR',
   });
 
-  const {
-    result,
-    loading,
-    error,
-    recommendationSummary,
-    generateRecommendation,
-    reset,
-  } = useSeatRecommendation();
+  const { result, loading, error, generateRecommendation, reset } = useSeatRecommendation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

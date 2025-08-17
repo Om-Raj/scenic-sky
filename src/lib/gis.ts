@@ -2,6 +2,7 @@ import { greatCircle } from '@turf/great-circle';
 import { bearing } from '@turf/bearing';
 import { distance } from '@turf/distance';
 import { point } from '@turf/turf';
+import type { Coord } from '@turf/helpers';
 import type { Airport, PathPoint } from './types';
 
 /**
@@ -34,7 +35,7 @@ export function greatCirclePoints(
 
   // Generate great-circle line using Turf.js
   const line = greatCircle(startPoint, endPoint);
-  const coordinates = line.geometry.coordinates;
+  const coordinates = line.geometry.coordinates as [number, number][];
 
   // Sample points evenly along the path for smooth animation
   const sampledPoints: PathPoint[] = [];
@@ -45,7 +46,7 @@ export function greatCirclePoints(
     const segmentIndex = Math.floor(ratio * totalSegments);
     const segmentRatio = ratio * totalSegments - segmentIndex;
 
-    let currentCoord: number[];
+    let currentCoord: [number, number];
     if (segmentIndex >= coordinates.length - 1) {
       currentCoord = coordinates[coordinates.length - 1];
     } else {
@@ -59,20 +60,18 @@ export function greatCirclePoints(
     }
 
     // Calculate bearing for airplane rotation (direction of travel)
-    let bearing = 0;
+  let bearingDeg = 0;
     if (i < numPoints) {
       const nextIndex = Math.min(segmentIndex + 1, coordinates.length - 1);
       if (nextIndex < coordinates.length) {
-        const currentPoint = point(currentCoord);
-        const nextPoint = point(coordinates[nextIndex]);
-        bearing = getBearing(currentPoint, nextPoint);
+    bearingDeg = getBearing(currentCoord, coordinates[nextIndex]);
       }
     }
 
     sampledPoints.push({
-      lat: currentCoord[1],
-      lon: currentCoord[0],
-      bearing,
+  lat: currentCoord[1],
+  lon: currentCoord[0],
+  bearing: bearingDeg,
     });
   }
 
@@ -85,8 +84,9 @@ export function greatCirclePoints(
  * @param to Ending point
  * @returns Bearing in degrees (0-360)
  */
-export function getBearing(from: any, to: any): number {
-  const bearingValue = bearing(from, to);
+export function getBearing(from: [number, number], to: [number, number]): number {
+  // Turf's bearing accepts Coord, which can be a [lon, lat] tuple
+  const bearingValue = bearing(from as Coord, to as Coord);
   // Convert to 0-360 range for easier rotation calculations
   return bearingValue < 0 ? bearingValue + 360 : bearingValue;
 }
@@ -127,9 +127,11 @@ export function interpolateAlongPath(path: PathPoint[], progress: number): PathP
   const point2 = path[segmentIndex + 1];
 
   // Linear interpolation between points for smooth movement
+  const b1 = point1.bearing ?? 0;
+  const b2 = point2.bearing ?? b1;
   return {
     lat: point1.lat + (point2.lat - point1.lat) * segmentProgress,
     lon: point1.lon + (point2.lon - point1.lon) * segmentProgress,
-    bearing: point1.bearing + (point2.bearing! - point1.bearing!) * segmentProgress,
+    bearing: b1 + (b2 - b1) * segmentProgress,
   };
 }

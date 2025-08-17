@@ -1,10 +1,6 @@
 // Main seat recommendation engine that orchestrates scenic location and solar event analysis
-import type { 
-  SeatRecommendationInput, 
-  SeatRecommendationResult, 
-  SideView 
-} from './seat-recommendation-types';
-import type { Airport, PathPoint } from './types';
+import type { SeatRecommendationInput, SeatRecommendationResult } from './seat-recommendation-types';
+import type { Airport } from './types';
 import { DEMO_AIRPORTS, greatCirclePoints, getDistance } from './gis';
 import { createDateTimeInTimezone } from './solar-calculations';
 import { SCENIC_LOCATIONS } from './scenic-locations-data';

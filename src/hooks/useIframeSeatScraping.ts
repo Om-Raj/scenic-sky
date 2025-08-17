@@ -78,7 +78,7 @@ export function useIframeSeatScraping(
           error: 'Failed to scrape seats - iframe may not be loaded or no valid seats found',
         }));
       }
-    } catch (error) {
+  } catch (error) {
       setState(prev => ({
         ...prev,
         loading: false,
@@ -225,7 +225,7 @@ export function useIframeLoadState(iframeElement: HTMLIFrameElement | null): {
             }));
           }
         }
-      } catch (error) {
+  } catch {
         setState({
           isLoading: false,
           isReady: false,

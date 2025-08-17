@@ -110,32 +110,7 @@ function makeMeridianGeometry(azimuthDeg: number, radius = 1.5, segments = 36) {
 /**
  * Generate sun day path geometry - shows sun trajectory for the current day with UTC time
  */
-function makeSunDayPathGeometry(
-  date: Date, 
-  latitude: number, 
-  longitude: number, 
-  radius = 1.5,
-  useSolarTime = false  // DISABLED: Use UTC time for consistency with flight calculations
-) {
-  const points: number[] = [];
-  const currentDate = new Date(date);
-  
-  for (let hour = 0; hour < 24; hour += 0.5) {
-    const testDate = new Date(currentDate);
-    testDate.setHours(Math.floor(hour), (hour % 1) * 60, 0, 0);
-    
-    const sunPos = getSunPosition(testDate, latitude, longitude, radius, useSolarTime);
-    
-    // Only add points where sun is above horizon
-    if (sunPos.elevationDeg > 0) {
-      points.push(sunPos.x, sunPos.y, sunPos.z);
-    }
-  }
-
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
-  return geometry;
-}
+// makeSunDayPathGeometry removed (unused)
 
 /**
  * Generate sun ray geometry from sun position to aircraft (accounting for scene tilt)
@@ -213,7 +188,7 @@ function SkySphereScene({
       x: adjustedX,
       z: adjustedZ
     };
-  }, [date, latitude, longitude, radius, mapBearing]);
+  }, [date, latitude, longitude, mapBearing]);
 
   // Sun day path geometry adjusted for map bearing with corrected coordinates
   const sunDayPath = useMemo(() => {
@@ -254,8 +229,14 @@ function SkySphereScene({
   }, [sun]);
 
   // Precompute latitude rings (elevations) and meridians (azimuths) - reduced for cleaner look
-  const latRings = useMemo(() => [0], []); // Keep only equator, 30°, and 60°
-  const meridians = useMemo(() => [], []); // Keep only cardinal directions
+  const latRings = useMemo(() => [0], []);
+  const latRingGeometries = useMemo(() => {
+    return latRings.map((deg) => ({ deg, geo: makeLatitudeRingGeometry(deg, radius, 96) }));
+  }, [latRings, radius]);
+  const meridians = useMemo(() => [] as number[], []);
+  const meridianGeometries = useMemo(() => {
+    return meridians.map((az) => ({ az, geo: makeMeridianGeometry(az, radius, 48) }));
+  }, [meridians, radius]);
 
   // subtle bobbing animation for sun using frame clock
   const sunRef = React.useRef<THREE.Mesh | null>(null);
@@ -274,8 +255,7 @@ function SkySphereScene({
       <HemisphereMesh radius={radius * 1.02} />
 
       {/* Latitude rings: including equator (0°) */}
-      {latRings.map((deg) => {
-        const geo = useMemo(() => makeLatitudeRingGeometry(deg, radius, 96), [deg, radius]);
+      {latRingGeometries.map(({ deg, geo }) => {
         const isEquator = deg === 0;
         return (
           <primitive key={`lat-${deg}`} object={new THREE.Line(geo)}>
@@ -291,8 +271,7 @@ function SkySphereScene({
       })}
 
       {/* Meridians */}
-      {meridians.map((az) => {
-        const geo = useMemo(() => makeMeridianGeometry(az, radius, 48), [az, radius]);
+      {meridianGeometries.map(({ az, geo }) => {
         const isCardinal = az % 90 === 0;
         return (
           <primitive key={`mer-${az}`} object={new THREE.Line(geo)}>
