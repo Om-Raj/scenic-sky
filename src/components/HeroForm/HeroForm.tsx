@@ -9,15 +9,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { DEMO_AIRPORTS } from '@/lib/gis';
+import { AIRPORTS } from '@/lib/constants/airports';
 import type { FlightFormData } from '@/lib/types';
+import { AIRPLANE_MODELS } from '@/lib/constants/airplane-models';
+
 
 interface HeroFormProps {
   onSubmit: (data: FlightFormData) => void;
   isLoading?: boolean;
 }
-
-const AIRPLANE_MODELS = ['Boeing-787-9', 'Airbus-A320', 'Boeing-747'];
 
 export function HeroForm({ onSubmit, isLoading = false }: HeroFormProps) {
   const [formData, setFormData] = useState<FlightFormData>({
@@ -53,102 +53,79 @@ export function HeroForm({ onSubmit, isLoading = false }: HeroFormProps) {
   return (
     <div className="w-full max-w-4xl mx-auto p-6 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg">
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          {/* Airplane Model */}
+        {/* Row 1 (Desktop): Departure Date & Time | Arrival Date & Time */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Departure Date & Time */}
           <div className="space-y-2">
-            <Label htmlFor="airplane-model">Aircraft Model</Label>
-            <Select
-              value={formData.airplaneModel}
-              onValueChange={(value) =>
-                setFormData((prev) => ({ ...prev, airplaneModel: value }))
-              }
-            >
-              <SelectTrigger id="airplane-model">
-                <SelectValue placeholder="Select aircraft" />
-              </SelectTrigger>
-              <SelectContent className="bg-white border border-gray-200 shadow-md rounded-md">
-                {AIRPLANE_MODELS.map((model) => (
-                  <SelectItem key={model} value={model}>
-                    {model}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label htmlFor="departure-date">Departure Date</Label>
+                <Input
+                  id="departure-date"
+                  type="date"
+                  value={formData.departureDate}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      departureDate: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="departure-time">Departure Time</Label>
+                <Input
+                  id="departure-time"
+                  type="time"
+                  value={formData.departureTime}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      departureTime: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+            </div>
           </div>
 
-          {/* Departure Date */}
+          {/* Arrival Date & Time */}
           <div className="space-y-2">
-            <Label htmlFor="departure-date">Departure Date</Label>
-            <Input
-              id="departure-date"
-              type="date"
-              value={formData.departureDate}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  departureDate: e.target.value,
-                }))
-              }
-            />
-          </div>
-
-          {/* Departure Time */}
-          <div className="space-y-2">
-            <Label htmlFor="departure-time">Departure Time</Label>
-            <Input
-              id="departure-time"
-              type="time"
-              value={formData.departureTime}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  departureTime: e.target.value,
-                }))
-              }
-            />
-          </div>
-
-          {/* Arrival Date */}
-          <div className="space-y-2">
-            <Label htmlFor="arrival-date">Arrival Date</Label>
-            <Input
-              id="arrival-date"
-              type="date"
-              value={formData.arrivalDate}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  arrivalDate: e.target.value,
-                }))
-              }
-            />
-          </div>
-
-          {/* Action Button - spans remaining space on large screens */}
-          <div className="mb-2 lg:flex lg:items-end">
-            <Button type="submit" disabled={isLoading} className="bg-blue-500 text-white w-full lg:h-10">
-              {isLoading ? 'Processing...' : 'Plan Flight Route'}
-            </Button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label htmlFor="arrival-date">Arrival Date</Label>
+                <Input
+                  id="arrival-date"
+                  type="date"
+                  value={formData.arrivalDate}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      arrivalDate: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="arrival-time">Arrival Time</Label>
+                <Input
+                  id="arrival-time"
+                  type="time"
+                  value={formData.arrivalTime}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      arrivalTime: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+            </div>
           </div>
         </div>
 
+        {/* Row 2 (Desktop): Departure Airport | Arrival Airport | Aircraft Model */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Arrival Time */}
-          <div className="space-y-2">
-            <Label htmlFor="arrival-time">Arrival Time</Label>
-            <Input
-              id="arrival-time"
-              type="time"
-              value={formData.arrivalTime}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  arrivalTime: e.target.value,
-                }))
-              }
-            />
-          </div>
-
           {/* Departure Airport */}
           <div className="space-y-2">
             <Label htmlFor="departure">Departure Airport</Label>
@@ -162,7 +139,7 @@ export function HeroForm({ onSubmit, isLoading = false }: HeroFormProps) {
                 <SelectValue placeholder="Select departure airport" />
               </SelectTrigger>
               <SelectContent className="bg-white border border-gray-200 shadow-md rounded-md">
-                {DEMO_AIRPORTS.map((airport) => (
+                {AIRPORTS.map((airport) => (
                   <SelectItem key={airport.code} value={airport.code}>
                     {airport.code} - {airport.name}
                   </SelectItem>
@@ -184,7 +161,7 @@ export function HeroForm({ onSubmit, isLoading = false }: HeroFormProps) {
                 <SelectValue placeholder="Select arrival airport" />
               </SelectTrigger>
               <SelectContent className="bg-white border border-gray-200 shadow-md rounded-md">
-                {DEMO_AIRPORTS.map((airport) => (
+                {AIRPORTS.map((airport) => (
                   <SelectItem key={airport.code} value={airport.code}>
                     {airport.code} - {airport.name}
                   </SelectItem>
@@ -192,9 +169,31 @@ export function HeroForm({ onSubmit, isLoading = false }: HeroFormProps) {
               </SelectContent>
             </Select>
           </div>
+
+          {/* Aircraft Model */}
+          <div className="space-y-2">
+            <Label htmlFor="airplane-model">Aircraft Model</Label>
+            <Select
+              value={formData.airplaneModel}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, airplaneModel: value }))
+              }
+            >
+              <SelectTrigger id="airplane-model">
+                <SelectValue placeholder="Select aircraft" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border border-gray-200 shadow-md rounded-md">
+                {AIRPLANE_MODELS.map((model) => (
+                  <SelectItem key={model} value={model}>
+                    {model}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
-        {/* Error Display */}
+        {/* Error Display (above submit) */}
         {error && (
           <div
             className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md"
@@ -203,6 +202,17 @@ export function HeroForm({ onSubmit, isLoading = false }: HeroFormProps) {
             {error}
           </div>
         )}
+
+        {/* Row 3: Submit button (always last) */}
+        <div className="pt-2">
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="bg-blue-500 text-white w-full"
+          >
+            {isLoading ? 'Processing...' : 'Plan Flight Route'}
+          </Button>
+        </div>
       </form>
     </div>
   );

@@ -5,9 +5,10 @@ export interface ScenicLocation {
   lat: number;
   lon: number;
   type: 'mountain' | 'volcano' | 'ocean' | 'city' | 'landmark' | 'natural' | 'cultural';
-  sampleImage?: string;
+  src?: string;
   likes: number;
   description?: string;
+  visibilityRadius: number;
 }
 
 export interface SideView {

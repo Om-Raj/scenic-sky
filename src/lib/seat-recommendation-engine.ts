@@ -1,9 +1,10 @@
 // Main seat recommendation engine that orchestrates scenic location and solar event analysis
 import type { SeatRecommendationInput, SeatRecommendationResult } from './seat-recommendation-types';
 import type { Airport } from './types';
-import { DEMO_AIRPORTS, greatCirclePoints, getDistance } from './gis';
+import { greatCirclePoints, getDistance } from './gis';
+import { AIRPORTS } from '@/lib/constants/airports';
 import { createDateTimeInTimezone } from './solar-calculations';
-import { SCENIC_LOCATIONS } from './scenic-locations-data';
+import { SCENIC_LOCATIONS } from '@/lib/constants/scenic-locations';
 import { 
   findVisibleScenicLocations, 
   groupLocationsBySide 
@@ -74,10 +75,10 @@ function parseFlightInput(input: SeatRecommendationInput): {
   endDateTime: Date;
 } {
   // Find airports in demo data
-  const departureAirport = DEMO_AIRPORTS.find(
+  const departureAirport = AIRPORTS.find(
     airport => airport.code === input.departureAirportCode
   );
-  const arrivalAirport = DEMO_AIRPORTS.find(
+  const arrivalAirport = AIRPORTS.find(
     airport => airport.code === input.arrivalAirportCode
   );
   

@@ -47,7 +47,7 @@ export function MapWithCenteredAircraft({
       <div class="p-0 max-w-xs">
         <div class="relative">
           <img 
-            src="/sun-flare.png" 
+            src="${location.src || '/sun-flare.png'}" 
             alt="${location.name}" 
             class="w-full h-24 object-cover rounded-t-lg"
           />
@@ -239,6 +239,7 @@ export function MapWithCenteredAircraft({
           type: location.type,
           description: location.description || `Beautiful ${location.type} worth seeing during your flight.`,
           likes: location.likes,
+          src: location.src,
           distanceFromPath: location.distanceFromPath,
           id: `${location.lat}-${location.lon}`, // Unique identifier
         },
@@ -293,6 +294,7 @@ export function MapWithCenteredAircraft({
       type: string;
       description: string;
       likes: number;
+      src: string | null;
       distanceFromPath: number;
     };
     type GeoJSONPoint = {
@@ -319,20 +321,30 @@ export function MapWithCenteredAircraft({
           coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
         
-        // Create hover popup content
+        // Create hover popup content styled like ScenicModal
         const hoverContent = `
-          <div class="p-3 max-w-xs">
-            <div class="relative mb-3">
-              <img 
-                src="/sun-flare.png" 
-                alt="${feature.properties.name}" 
-                class="w-full h-20 object-cover rounded-lg"
-              />
-            </div>
-            <h3 class="text-sm font-semibold text-gray-900 mb-2">${feature.properties.name}</h3>
-            <div class="flex items-center justify-between">
-              <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">${feature.properties.type}</span>
-              <span class="text-xs text-gray-600">${feature.properties.distanceFromPath.toFixed(1)}km away</span>
+          <div class="max-w-xs">
+            <div class="bg-white/95 backdrop-blur-sm shadow-xl border-0 overflow-hidden rounded-lg">
+              <div class="relative w-full h-24">
+                <img 
+                  src="${feature.properties.src || "/sun-flare.png"}" 
+                  alt="${feature.properties.name}" 
+                  class="object-cover w-full h-24"
+                />
+              </div>
+              <div class="p-4">
+                <h3 class="text-sm font-semibold text-gray-900 leading-tight mb-2">${feature.properties.name}</h3>
+                <p class="text-xs text-gray-600 mb-3 line-clamp-2 leading-relaxed">
+                  ${feature.properties.description || `Beautiful ${feature.properties.type} worth seeing during your flight.`}
+                </p>
+                <div class="flex items-center justify-between">
+                  <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">${feature.properties.type}</span>
+                  <div class="flex items-center space-x-1 text-xs text-red-500">
+                    <svg class="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <span class="font-medium">${(feature.properties.likes / 1000).toFixed(1)}k</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         `;

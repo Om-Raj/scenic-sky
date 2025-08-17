@@ -51,7 +51,7 @@ export function ScenicModal({ scenicLocation }: ScenicModalProps) {
       <Card className="bg-white/95 backdrop-blur-sm shadow-xl border-0 overflow-hidden">
         <div className="relative w-full h-24">
           <Image
-            src="/sun-flare.png"
+            src={scenicLocation.src || "/sun-flare.png"}
             alt={scenicLocation.name}
             fill
             sizes="(max-width: 768px) 100vw, 320px"

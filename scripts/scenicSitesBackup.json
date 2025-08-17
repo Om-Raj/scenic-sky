@@ -1,0 +1,1263 @@
+[
+  {
+    "name": "Mount Everest",
+    "lat": 27.9881,
+    "lon": 86.925,
+    "type": "mountain",
+    "likes": 50000,
+    "description": "World's highest peak in the Himalayas",
+    "src": "/scenic_locations/mount-everest.jpg"
+  },
+  {
+    "name": "Mount Fuji",
+    "lat": 35.3606,
+    "lon": 138.7274,
+    "type": "volcano",
+    "likes": 45000,
+    "description": "Iconic volcanic mountain in Japan",
+    "src": "/scenic_locations/mount-fuji.jpg"
+  },
+  {
+    "name": "Matterhorn",
+    "lat": 45.9763,
+    "lon": 7.6586,
+    "type": "mountain",
+    "likes": 35000,
+    "description": "Pyramidal peak in the Swiss Alps",
+    "src": "/scenic_locations/matterhorn.jpg"
+  },
+  {
+    "name": "Mount Kilimanjaro",
+    "lat": -3.0674,
+    "lon": 37.3556,
+    "type": "volcano",
+    "likes": 40000,
+    "description": "Africa's highest peak with snow-capped summit",
+    "src": "/scenic_locations/mount-kilimanjaro.jpg"
+  },
+  {
+    "name": "Mount McKinley (Denali)",
+    "lat": 63.0692,
+    "lon": -151.007,
+    "type": "mountain",
+    "likes": 25000,
+    "description": "North America's highest peak in Alaska",
+    "src": "/scenic_locations/mount-mckinley-denali-.jpg"
+  },
+  {
+    "name": "Mount Vesuvius",
+    "lat": 40.8218,
+    "lon": 14.4289,
+    "type": "volcano",
+    "likes": 30000,
+    "description": "Famous volcano overlooking Naples Bay",
+    "src": "/scenic_locations/mount-vesuvius.jpg"
+  },
+  {
+    "name": "Mount Rainier",
+    "lat": 46.8523,
+    "lon": -121.7603,
+    "type": "volcano",
+    "likes": 28000,
+    "description": "Iconic stratovolcano in Washington State",
+    "src": "/scenic_locations/mount-rainier.jpg"
+  },
+  {
+    "name": "Alps Mountain Range",
+    "lat": 46.5197,
+    "lon": 8.0512,
+    "type": "mountain",
+    "likes": 42000,
+    "description": "Majestic European mountain range",
+    "src": "/scenic_locations/alps-mountain-range.jpg"
+  },
+  {
+    "name": "Rocky Mountains",
+    "lat": 39.7392,
+    "lon": -104.9903,
+    "type": "mountain",
+    "likes": 38000,
+    "description": "Spectacular North American mountain range",
+    "src": "/scenic_locations/rocky-mountains.jpg"
+  },
+  {
+    "name": "Andes Mountains",
+    "lat": -13.1631,
+    "lon": -72.545,
+    "type": "mountain",
+    "likes": 36000,
+    "description": "World's longest continental mountain range",
+    "src": "/scenic_locations/andes-mountains.jpg"
+  },
+  {
+    "name": "Grand Canyon",
+    "lat": 36.1069,
+    "lon": -112.1129,
+    "type": "natural",
+    "likes": 55000,
+    "description": "Massive canyon carved by the Colorado River",
+    "src": "/scenic_locations/grand-canyon.jpg"
+  },
+  {
+    "name": "Niagara Falls",
+    "lat": 43.0962,
+    "lon": -79.0377,
+    "type": "natural",
+    "likes": 48000,
+    "description": "Powerful waterfalls on US-Canada border",
+    "src": "/scenic_locations/niagara-falls.jpg"
+  },
+  {
+    "name": "Victoria Falls",
+    "lat": -17.9243,
+    "lon": 25.8572,
+    "type": "natural",
+    "likes": 35000,
+    "description": "Spectacular waterfall on Zambezi River",
+    "src": "/scenic_locations/victoria-falls.jpg"
+  },
+  {
+    "name": "Uluru (Ayers Rock)",
+    "lat": -25.3444,
+    "lon": 131.0369,
+    "type": "natural",
+    "likes": 32000,
+    "description": "Sacred monolith in Australian Outback",
+    "src": "/scenic_locations/uluru-ayers-rock-.jpg"
+  },
+  {
+    "name": "Yellowstone National Park",
+    "lat": 44.428,
+    "lon": -110.5885,
+    "type": "natural",
+    "likes": 40000,
+    "description": "Geothermal wonderland with geysers",
+    "src": "/scenic_locations/yellowstone-national-park.jpg"
+  },
+  {
+    "name": "Angel Falls",
+    "lat": 5.9678,
+    "lon": -62.5369,
+    "type": "natural",
+    "likes": 25000,
+    "description": "World's highest uninterrupted waterfall",
+    "src": "/scenic_locations/angel-falls.jpg"
+  },
+  {
+    "name": "Amazon Rainforest",
+    "lat": -3.4653,
+    "lon": -62.2159,
+    "type": "natural",
+    "likes": 45000,
+    "description": "World's largest tropical rainforest",
+    "src": "/scenic_locations/amazon-rainforest.jpg"
+  },
+  {
+    "name": "Sahara Desert",
+    "lat": 23.4162,
+    "lon": 25.6628,
+    "type": "natural",
+    "likes": 38000,
+    "description": "World's largest hot desert",
+    "src": "/scenic_locations/sahara-desert.jpg"
+  },
+  {
+    "name": "Great Barrier Reef",
+    "lat": -18.2871,
+    "lon": 147.6992,
+    "type": "ocean",
+    "likes": 50000,
+    "description": "World's largest coral reef system",
+    "src": "/scenic_locations/great-barrier-reef.jpg"
+  },
+  {
+    "name": "Maldives Atolls",
+    "lat": 3.2028,
+    "lon": 73.2207,
+    "type": "ocean",
+    "likes": 42000,
+    "description": "Pristine coral atolls in Indian Ocean",
+    "src": "/scenic_locations/maldives-atolls.jpg"
+  },
+  {
+    "name": "Norwegian Fjords",
+    "lat": 62.1734,
+    "lon": 7.6953,
+    "type": "ocean",
+    "likes": 38000,
+    "description": "Dramatic glacial fjords in Norway",
+    "src": "/scenic_locations/norwegian-fjords.jpg"
+  },
+  {
+    "name": "Bora Bora Lagoon",
+    "lat": -16.5004,
+    "lon": -151.7415,
+    "type": "ocean",
+    "likes": 35000,
+    "description": "Stunning turquoise lagoon in French Polynesia",
+    "src": "/scenic_locations/bora-bora-lagoon.jpg"
+  },
+  {
+    "name": "Ha Long Bay",
+    "lat": 20.9101,
+    "lon": 107.1839,
+    "type": "ocean",
+    "likes": 40000,
+    "description": "Limestone karsts rising from emerald waters",
+    "src": "/scenic_locations/ha-long-bay.jpg"
+  },
+  {
+    "name": "Manhattan Skyline",
+    "lat": 40.7831,
+    "lon": -73.9712,
+    "type": "city",
+    "likes": 60000,
+    "description": "Iconic skyscrapers of New York City",
+    "src": "/scenic_locations/manhattan-skyline.jpg"
+  },
+  {
+    "name": "Dubai Skyline",
+    "lat": 25.2048,
+    "lon": 55.2708,
+    "type": "city",
+    "likes": 45000,
+    "description": "Futuristic cityscape with Burj Khalifa",
+    "src": "/scenic_locations/dubai-skyline.jpg"
+  },
+  {
+    "name": "Hong Kong Skyline",
+    "lat": 22.3193,
+    "lon": 114.1694,
+    "type": "city",
+    "likes": 42000,
+    "description": "Dramatic skyline between mountains and harbor",
+    "src": "/scenic_locations/hong-kong-skyline.jpg"
+  },
+  {
+    "name": "Singapore Skyline",
+    "lat": 1.3521,
+    "lon": 103.8198,
+    "type": "city",
+    "likes": 38000,
+    "description": "Modern cityscape with Marina Bay",
+    "src": "/scenic_locations/singapore-skyline.jpg"
+  },
+  {
+    "name": "Sydney Harbour",
+    "lat": -33.8568,
+    "lon": 151.2153,
+    "type": "city",
+    "likes": 48000,
+    "description": "Beautiful harbor with Opera House and Bridge",
+    "src": "/scenic_locations/sydney-harbour.jpg"
+  },
+  {
+    "name": "Las Vegas Strip",
+    "lat": 36.1147,
+    "lon": -115.1728,
+    "type": "city",
+    "likes": 35000,
+    "description": "Glittering entertainment district in desert",
+    "src": "/scenic_locations/las-vegas-strip.jpg"
+  },
+  {
+    "name": "San Francisco Bay",
+    "lat": 37.8044,
+    "lon": -122.2711,
+    "type": "city",
+    "likes": 40000,
+    "description": "Scenic bay with Golden Gate Bridge",
+    "src": "/scenic_locations/san-francisco-bay.jpg"
+  },
+  {
+    "name": "Pyramids of Giza",
+    "lat": 29.9792,
+    "lon": 31.1342,
+    "type": "cultural",
+    "likes": 55000,
+    "description": "Ancient pyramids and Sphinx",
+    "src": "/scenic_locations/pyramids-of-giza.jpg"
+  },
+  {
+    "name": "Taj Mahal",
+    "lat": 27.1751,
+    "lon": 78.0421,
+    "type": "cultural",
+    "likes": 52000,
+    "description": "Magnificent marble mausoleum",
+    "src": "/scenic_locations/taj-mahal.jpg"
+  },
+  {
+    "name": "Machu Picchu",
+    "lat": -13.1631,
+    "lon": -72.545,
+    "type": "cultural",
+    "likes": 48000,
+    "description": "Ancient Incan citadel in the Andes",
+    "src": "/scenic_locations/machu-picchu.jpg"
+  },
+  {
+    "name": "Angkor Wat",
+    "lat": 13.4125,
+    "lon": 103.867,
+    "type": "cultural",
+    "likes": 40000,
+    "description": "Magnificent temple complex in Cambodia",
+    "src": "/scenic_locations/angkor-wat.jpg"
+  },
+  {
+    "name": "Stonehenge",
+    "lat": 51.1789,
+    "lon": -1.8262,
+    "type": "cultural",
+    "likes": 30000,
+    "description": "Mysterious prehistoric stone circle",
+    "src": "/scenic_locations/stonehenge.jpg"
+  },
+  {
+    "name": "Easter Island Statues",
+    "lat": -27.1127,
+    "lon": -109.3497,
+    "type": "cultural",
+    "likes": 28000,
+    "description": "Enigmatic moai statues in Pacific Ocean",
+    "src": "/scenic_locations/easter-island-statues.jpg"
+  },
+  {
+    "name": "Petra",
+    "lat": 30.3285,
+    "lon": 35.4444,
+    "type": "cultural",
+    "likes": 45000,
+    "description": "Rose-red city carved into rock",
+    "src": "/scenic_locations/petra.jpg"
+  },
+  {
+    "name": "Great Wall of China",
+    "lat": 40.4319,
+    "lon": 116.5704,
+    "type": "cultural",
+    "likes": 58000,
+    "description": "Ancient fortification across northern China",
+    "src": "/scenic_locations/great-wall-of-china.jpg"
+  },
+  {
+    "name": "Aurora Borealis Zone",
+    "lat": 69.6496,
+    "lon": 18.9553,
+    "type": "natural",
+    "likes": 35000,
+    "description": "Northern lights viewing area in Norway",
+    "src": "/scenic_locations/aurora-borealis-zone.jpg"
+  },
+  {
+    "name": "Patagonia",
+    "lat": -49.3227,
+    "lon": -72.9491,
+    "type": "natural",
+    "likes": 32000,
+    "description": "Dramatic landscapes at the end of the world",
+    "src": "/scenic_locations/patagonia.jpg"
+  },
+  {
+    "name": "Iceland Glaciers",
+    "lat": 64.9631,
+    "lon": -19.0208,
+    "type": "natural",
+    "likes": 30000,
+    "description": "Spectacular glacial formations",
+    "src": "/scenic_locations/iceland-glaciers.jpg"
+  },
+  {
+    "name": "Serengeti Plains",
+    "lat": -2.3333,
+    "lon": 34.8333,
+    "type": "natural",
+    "likes": 38000,
+    "description": "Vast savanna with wildlife migrations",
+    "src": "/scenic_locations/serengeti-plains.jpg"
+  },
+  {
+    "name": "Lake Baikal",
+    "lat": 53.556,
+    "lon": 108.3526,
+    "type": "natural",
+    "likes": 34000,
+    "description": "Deepest freshwater lake on Earth",
+    "src": "/scenic_locations/lake-baikal.jpg"
+  },
+  {
+    "name": "Grand Canyon Skywalk",
+    "lat": 36.1316,
+    "lon": -113.81,
+    "type": "natural",
+    "likes": 30000,
+    "description": "Glass bridge extending over the canyon, aerially distinctive",
+    "src": "/scenic_locations/grand-canyon-skywalk.jpg"
+  },
+  {
+    "name": "Victoria Harbour, Hong Kong",
+    "lat": 22.287,
+    "lon": 114.1739,
+    "type": "city",
+    "likes": 45000,
+    "description": "Iconic natural harbor and skyline readily visible from above",
+    "src": "/scenic_locations/victoria-harbour-hong-kong.jpg"
+  },
+  {
+    "name": "Red Sea Coral Reef Coastline",
+    "lat": 23.5,
+    "lon": 36.5,
+    "type": "natural",
+    "likes": 28000,
+    "description": "Vivid coral reef patterns visible from aerial view over Red Sea coast",
+    "src": "/scenic_locations/red-sea-coral-reef-coastline.jpg"
+  },
+  {
+    "name": "Pink Beach (Komodo)",
+    "lat": -8.45,
+    "lon": 119.533,
+    "type": "natural",
+    "likes": 27000,
+    "description": "Beach with reddish-pink sand by foraminifera",
+    "src": "/scenic_locations/pink-beach-komodo-.jpg"
+  },
+  {
+    "name": "Rose Valley, Cappadocia",
+    "lat": 38.661,
+    "lon": 34.828,
+    "type": "natural",
+    "likes": 26000,
+    "description": "Fairy-chimney rock formations in Turkey",
+    "src": "/scenic_locations/rose-valley-cappadocia.jpg"
+  },
+  {
+    "name": "Uvs Lake Basin",
+    "lat": 51,
+    "lon": 90,
+    "type": "natural",
+    "likes": 14000,
+    "description": "Diverse landscapes across steppe, swamp, lakes",
+    "src": "/scenic_locations/uvs-lake-basin.jpg"
+  },
+  {
+    "name": "Pamukkale Terraces, Turkey",
+    "lat": 37.924,
+    "lon": 29.118,
+    "type": "natural",
+    "likes": 21000,
+    "description": "White travertine terraces visible from the air",
+    "src": "/scenic_locations/pamukkale-terraces-turkey.jpg"
+  },
+  {
+    "name": "Yanar Dag",
+    "lat": 40.37,
+    "lon": 49.84,
+    "type": "natural",
+    "likes": 20000,
+    "description": "Natural continuously burning gas fire hill",
+    "src": "/scenic_locations/yanar-dag.jpg"
+  },
+  {
+    "name": "Yangykala Canyon",
+    "lat": 41.5,
+    "lon": 56.65,
+    "type": "natural",
+    "likes": 16000,
+    "description": "Wave-shaped eroded rock canyon",
+    "src": "/scenic_locations/yangykala-canyon.jpg"
+  },
+  {
+    "name": "Zhangye Danxia",
+    "lat": 38.505,
+    "lon": 100.45,
+    "type": "natural",
+    "likes": 32000,
+    "description": "Colorful layered rock formations",
+    "src": "/scenic_locations/zhangye-danxia.jpg"
+  },
+  {
+    "name": "Verdon Gorge",
+    "lat": 43.75,
+    "lon": 6.4667,
+    "type": "natural",
+    "likes": 24000,
+    "description": "Dramatic turquoise river canyon in Europe",
+    "src": "/scenic_locations/verdon-gorge.jpg"
+  },
+  {
+    "name": "Blue Grotto, Capri",
+    "lat": 40.55,
+    "lon": 14.243,
+    "type": "natural",
+    "likes": 28000,
+    "description": "Seaside sea-cave illuminated in vivid blue—visible mouth",
+    "src": "/scenic_locations/blue-grotto-capri.jpg"
+  },
+  {
+    "name": "Scala dei Turchi",
+    "lat": 37.246,
+    "lon": 13.598,
+    "type": "natural",
+    "likes": 22000,
+    "description": "White marl cliffs on Sicily’s coast",
+    "src": "/scenic_locations/scala-dei-turchi.jpg"
+  },
+  {
+    "name": "Stuðlagil Canyon",
+    "lat": 65.75,
+    "lon": -14.85,
+    "type": "natural",
+    "likes": 18000,
+    "description": "Basalt column canyon revealed by dam",
+    "src": "/scenic_locations/stu-lagil-canyon.jpg"
+  },
+  {
+    "name": "Vatnajökull Glacier",
+    "lat": 64.25,
+    "lon": -16.9,
+    "type": "natural",
+    "likes": 30000,
+    "description": "Europe’s largest glacier",
+    "src": "/scenic_locations/vatnaj-kull-glacier.jpg"
+  },
+  {
+    "name": "Devils Garden, Arches NP",
+    "lat": 38.7584,
+    "lon": -109.6065,
+    "type": "natural",
+    "likes": 25000,
+    "description": "Rock arches and towers in Arches National Park",
+    "src": "/scenic_locations/devils-garden-arches-np.jpg"
+  },
+  {
+    "name": "Grand Prismatic Spring",
+    "lat": 44.525,
+    "lon": -110.8382,
+    "type": "natural",
+    "likes": 35000,
+    "description": "Largest hot spring in the U.S. with rainbow colors",
+    "src": "/scenic_locations/grand-prismatic-spring.jpg"
+  },
+  {
+    "name": "Hierve el Agua",
+    "lat": 17.1833,
+    "lon": -96.5833,
+    "type": "natural",
+    "likes": 20000,
+    "description": "Rock-formed 'waterfalls' mineral terraces",
+    "src": "/scenic_locations/hierve-el-agua.jpg"
+  },
+  {
+    "name": "Hoh Rainforest",
+    "lat": 47.861,
+    "lon": -123.935,
+    "type": "natural",
+    "likes": 21000,
+    "description": "Largest temperate rainforest in U.S.",
+    "src": "/scenic_locations/hoh-rainforest.jpg"
+  },
+  {
+    "name": "Hopewell Rocks",
+    "lat": 45.58,
+    "lon": -64.69,
+    "type": "natural",
+    "likes": 23000,
+    "description": "Flowerpot-shaped rock formations in tidal bay",
+    "src": "/scenic_locations/hopewell-rocks.jpg"
+  },
+  {
+    "name": "Horseshoe Bend",
+    "lat": 36.879,
+    "lon": -111.51,
+    "type": "natural",
+    "likes": 27000,
+    "description": "Distinctive meander in Colorado River",
+    "src": "/scenic_locations/horseshoe-bend.jpg"
+  },
+  {
+    "name": "Iguazu Falls (Aerial View), Argentina/Brazil",
+    "lat": -25.6953,
+    "lon": -54.4367,
+    "type": "natural",
+    "likes": 40000,
+    "description": "Massive stepped waterfall system visible from the air",
+    "src": "/scenic_locations/iguazu-falls-aerial-view-argentina-brazil.jpg"
+  },
+  {
+    "name": "Mammoth Hot Springs",
+    "lat": 44.976,
+    "lon": -110.704,
+    "type": "natural",
+    "likes": 20000,
+    "description": "Terraced hot spring deposits in Yellowstone",
+    "src": "/scenic_locations/mammoth-hot-springs.jpg"
+  },
+  {
+    "name": "Perito Moreno Glacier, Argentina",
+    "lat": -50.4977,
+    "lon": -73.0489,
+    "type": "natural",
+    "likes": 30000,
+    "description": "Advancing glacier visible with large striking ice front from above",
+    "src": "/scenic_locations/perito-moreno-glacier-argentina.jpg"
+  },
+  {
+    "name": "Monument Valley",
+    "lat": 36.9989,
+    "lon": -110.098,
+    "type": "natural",
+    "likes": 30000,
+    "description": "Iconic red sandstone buttes",
+    "src": "/scenic_locations/monument-valley.jpg"
+  },
+  {
+    "name": "Moraine Lake",
+    "lat": 51.3213,
+    "lon": -116.186,
+    "type": "natural",
+    "likes": 29000,
+    "description": "Emerald lake in Valley of Ten Peaks",
+    "src": "/scenic_locations/moraine-lake.jpg"
+  },
+  {
+    "name": "Spotted Lake",
+    "lat": 49.1833,
+    "lon": -119.5,
+    "type": "natural",
+    "likes": 18000,
+    "description": "Mineral-rich lake forming colored spots",
+    "src": "/scenic_locations/spotted-lake.jpg"
+  },
+  {
+    "name": "Caño Cristales",
+    "lat": 2.9,
+    "lon": -73.7,
+    "type": "natural",
+    "likes": 24000,
+    "description": "River 'of five colors' in Colombia",
+    "src": "/scenic_locations/ca-o-cristales.jpg"
+  },
+  {
+    "name": "Salar de Uyuni",
+    "lat": -20.1338,
+    "lon": -67.4891,
+    "type": "natural",
+    "likes": 35000,
+    "description": "World’s largest salt flat — mirror effect",
+    "src": "/scenic_locations/salar-de-uyuni.jpg"
+  },
+  {
+    "name": "Geiranger Fjord",
+    "lat": 62.1,
+    "lon": 7.25,
+    "type": "natural",
+    "likes": 31000,
+    "description": "UNESCO fjord with steep cliffs and waterfalls",
+    "src": "/scenic_locations/geiranger-fjord.jpg"
+  },
+  {
+    "name": "Na Pali Coast",
+    "lat": 22.2,
+    "lon": -159.6,
+    "type": "natural",
+    "likes": 33000,
+    "description": "Rugged Hawaiian coastline with sea cliffs",
+    "src": "/scenic_locations/na-pali-coast.jpg"
+  },
+  {
+    "name": "Skógafoss",
+    "lat": 63.5321,
+    "lon": -19.511,
+    "type": "natural",
+    "likes": 26000,
+    "description": "Powerful waterfall on Iceland’s south coast",
+    "src": "/scenic_locations/sk-gafoss.jpg"
+  },
+  {
+    "name": "Dragon’s Blood Trees, Socotra",
+    "lat": 12.5,
+    "lon": 54,
+    "type": "natural",
+    "likes": 22000,
+    "description": "Unique umbrella-shaped trees endemic to Socotra",
+    "src": "/scenic_locations/dragon-s-blood-trees-socotra.jpg"
+  },
+  {
+    "name": "Redwood National Park",
+    "lat": 41.213,
+    "lon": -124.0046,
+    "type": "natural",
+    "likes": 28000,
+    "description": "Tallest trees on Earth — coastal redwoods",
+    "src": "/scenic_locations/redwood-national-park.jpg"
+  },
+  {
+    "name": "Marble Caves, Chile",
+    "lat": -46.657,
+    "lon": -73.055,
+    "type": "natural",
+    "likes": 25000,
+    "description": "Turquoise water-lapped marble cavern in Patagonia",
+    "src": "/scenic_locations/marble-caves-chile.jpg"
+  },
+  {
+    "name": "Munnar Tea Plantations",
+    "lat": 10.09,
+    "lon": 77.06,
+    "type": "natural",
+    "likes": 23000,
+    "description": "Rolling green tea hills in Kerala, India",
+    "src": "/scenic_locations/munnar-tea-plantations.jpg"
+  },
+  {
+    "name": "Milford Sound",
+    "lat": -44.67,
+    "lon": 167.93,
+    "type": "natural",
+    "likes": 34000,
+    "description": "Majestic fiord with dramatic cliffs and waterfalls",
+    "src": "/scenic_locations/milford-sound.jpg"
+  },
+  {
+    "name": "Capri Island (viewpoint)",
+    "lat": 40.5532,
+    "lon": 14.222,
+    "type": "natural",
+    "likes": 30000,
+    "description": "Island views over azure Tyrrhenian Sea",
+    "src": "/scenic_locations/capri-island-viewpoint-.jpg"
+  },
+  {
+    "name": "Jökulsárlón Glacier Lagoon",
+    "lat": 64.048,
+    "lon": -16.21,
+    "type": "natural",
+    "likes": 28000,
+    "description": "Floating icebergs in lagoon beside glacier",
+    "src": "/scenic_locations/j-kuls-rl-n-glacier-lagoon.jpg"
+  },
+  {
+    "name": "Lake Pukaki",
+    "lat": -44.1667,
+    "lon": 170.15,
+    "type": "natural",
+    "likes": 27000,
+    "description": "Glacial lake with turquoise waters",
+    "src": "/scenic_locations/lake-pukaki.jpg"
+  },
+  {
+    "name": "Table Mountain",
+    "lat": -33.9628,
+    "lon": 18.4098,
+    "type": "mountain",
+    "likes": 38000,
+    "description": "Flat-topped mountain overlooking Cape Town",
+    "src": "/scenic_locations/table-mountain.jpg"
+  },
+  {
+    "name": "Mount Elbrus",
+    "lat": 43.3499,
+    "lon": 42.4453,
+    "type": "mountain",
+    "likes": 36000,
+    "description": "Highest peak in Europe",
+    "src": "/scenic_locations/mount-elbrus.jpg"
+  },
+  {
+    "name": "Mount Etna",
+    "lat": 37.751,
+    "lon": 14.9934,
+    "type": "volcano",
+    "likes": 35000,
+    "description": "Active stratovolcano in Sicily",
+    "src": "/scenic_locations/mount-etna.jpg"
+  },
+  {
+    "name": "Mount Cook (Aoraki)",
+    "lat": -43.595,
+    "lon": 170.141,
+    "type": "mountain",
+    "likes": 34000,
+    "description": "Highest mountain in New Zealand",
+    "src": "/scenic_locations/mount-cook-aoraki-.jpg"
+  },
+  {
+    "name": "Mount Ararat",
+    "lat": 39.7021,
+    "lon": 44.2986,
+    "type": "mountain",
+    "likes": 28000,
+    "description": "Snow-capped peak associated with Noah’s Ark legend",
+    "src": "/scenic_locations/mount-ararat.jpg"
+  },
+  {
+    "name": "Mount Sinai",
+    "lat": 28.5394,
+    "lon": 33.975,
+    "type": "mountain",
+    "likes": 26000,
+    "description": "Historic mountain in the Sinai Peninsula",
+    "src": "/scenic_locations/mount-sinai.jpg"
+  },
+  {
+    "name": "Mount Roraima",
+    "lat": 5.1436,
+    "lon": -60.7622,
+    "type": "mountain",
+    "likes": 31000,
+    "description": "Flat-topped tepui on the triple border",
+    "src": "/scenic_locations/mount-roraima.jpg"
+  },
+  {
+    "name": "Blue Mountains",
+    "lat": -33.7,
+    "lon": 150.3,
+    "type": "mountain",
+    "likes": 29000,
+    "description": "Eucalyptus-covered plateau west of Sydney",
+    "src": "/scenic_locations/blue-mountains.jpg"
+  },
+  {
+    "name": "Pamir Mountains",
+    "lat": 38.5,
+    "lon": 72,
+    "type": "mountain",
+    "likes": 27000,
+    "description": "High peaks of Central Asia known as \"Roof of the World\"",
+    "src": "/scenic_locations/pamir-mountains.jpg"
+  },
+  {
+    "name": "Karakoram Range",
+    "lat": 35.8825,
+    "lon": 76.5133,
+    "type": "mountain",
+    "likes": 33000,
+    "description": "Includes K2, second highest peak in the world",
+    "src": "/scenic_locations/karakoram-range.jpg"
+  },
+  {
+    "name": "Mount Shasta",
+    "lat": 41.4092,
+    "lon": -122.1944,
+    "type": "volcano",
+    "likes": 28000,
+    "description": "Prominent volcanic peak in northern California",
+    "src": "/scenic_locations/mount-shasta.jpg"
+  },
+  {
+    "name": "Mount St. Helens",
+    "lat": 46.1912,
+    "lon": -122.1944,
+    "type": "volcano",
+    "likes": 27000,
+    "description": "Volcano famous for 1980 eruption",
+    "src": "/scenic_locations/mount-st-helens.jpg"
+  },
+  {
+    "name": "Mount Yasur",
+    "lat": -19.532,
+    "lon": 169.447,
+    "type": "volcano",
+    "likes": 25000,
+    "description": "Highly active volcano on Tanna Island",
+    "src": "/scenic_locations/mount-yasur.jpg"
+  },
+  {
+    "name": "Mount Teide",
+    "lat": 28.2724,
+    "lon": -16.6425,
+    "type": "volcano",
+    "likes": 34000,
+    "description": "Highest peak in Spain and prominent volcanic cone",
+    "src": "/scenic_locations/mount-teide.jpg"
+  },
+  {
+    "name": "Mount Erebus",
+    "lat": -77.53,
+    "lon": 167.16,
+    "type": "volcano",
+    "likes": 24000,
+    "description": "Southernmost active volcano on Earth",
+    "src": "/scenic_locations/mount-erebus.jpg"
+  },
+  {
+    "name": "Mount Pico",
+    "lat": 38.47,
+    "lon": -28.4,
+    "type": "volcano",
+    "likes": 22000,
+    "description": "Highest mountain in Portugal",
+    "src": "/scenic_locations/mount-pico.jpg"
+  },
+  {
+    "name": "Mount Kenya",
+    "lat": -0.1521,
+    "lon": 37.3084,
+    "type": "mountain",
+    "likes": 30000,
+    "description": "Second-highest peak in Africa",
+    "src": "/scenic_locations/mount-kenya.jpg"
+  },
+  {
+    "name": "Mount Meru",
+    "lat": -3.25,
+    "lon": 36.75,
+    "type": "mountain",
+    "likes": 24000,
+    "description": "Volcanic mountain in Arusha National Park",
+    "src": "/scenic_locations/mount-meru.jpg"
+  },
+  {
+    "name": "Mount Taranaki",
+    "lat": -39.297,
+    "lon": 174.063,
+    "type": "volcano",
+    "likes": 28000,
+    "description": "Symmetrical volcanic cone on North Island",
+    "src": "/scenic_locations/mount-taranaki.jpg"
+  },
+  {
+    "name": "Mount Tambora",
+    "lat": -8.25,
+    "lon": 118,
+    "type": "volcano",
+    "likes": 25000,
+    "description": "Volcano known for 1815 eruption",
+    "src": "/scenic_locations/mount-tambora.jpg"
+  },
+  {
+    "name": "Lake Titicaca",
+    "lat": -15.765,
+    "lon": -69.345,
+    "type": "natural",
+    "likes": 33000,
+    "description": "Highest navigable lake in the world",
+    "src": "/scenic_locations/lake-titicaca.jpg"
+  },
+  {
+    "name": "Lake Geneva",
+    "lat": 46.45,
+    "lon": 6.6,
+    "type": "natural",
+    "likes": 32000,
+    "description": "Crescent-shaped lake on the Swiss-French border",
+    "src": "/scenic_locations/lake-geneva.jpg"
+  },
+  {
+    "name": "Lake Victoria",
+    "lat": -1,
+    "lon": 33,
+    "type": "natural",
+    "likes": 35000,
+    "description": "Largest lake in Africa by area",
+    "src": "/scenic_locations/lake-victoria.jpg"
+  },
+  {
+    "name": "Lake Superior",
+    "lat": 47.7,
+    "lon": -87.5,
+    "type": "natural",
+    "likes": 34000,
+    "description": "Largest freshwater lake by surface area",
+    "src": "/scenic_locations/lake-superior.jpg"
+  },
+  {
+    "name": "Lake Powell",
+    "lat": 37,
+    "lon": -111.3,
+    "type": "natural",
+    "likes": 28000,
+    "description": "Reservoir with dramatic desert scenery",
+    "src": "/scenic_locations/lake-powell.jpg"
+  },
+  {
+    "name": "Mekong Delta",
+    "lat": 10,
+    "lon": 105,
+    "type": "natural",
+    "likes": 26000,
+    "description": "Vast river delta in southern Vietnam",
+    "src": "/scenic_locations/mekong-delta.jpg"
+  },
+  {
+    "name": "Danube Delta",
+    "lat": 45.2,
+    "lon": 29.5,
+    "type": "natural",
+    "likes": 25000,
+    "description": "Second largest river delta in Europe",
+    "src": "/scenic_locations/danube-delta.jpg"
+  },
+  {
+    "name": "Okavango Delta",
+    "lat": -19,
+    "lon": 22.5,
+    "type": "natural",
+    "likes": 27000,
+    "description": "Seasonal inland delta in the Kalahari Desert",
+    "src": "/scenic_locations/okavango-delta.jpg"
+  },
+  {
+    "name": "Hudson Bay",
+    "lat": 60,
+    "lon": -85,
+    "type": "ocean",
+    "likes": 23000,
+    "description": "Massive inland sea in northeastern Canada",
+    "src": "/scenic_locations/hudson-bay.jpg"
+  },
+  {
+    "name": "Bay of Biscay",
+    "lat": 45,
+    "lon": -5,
+    "type": "ocean",
+    "likes": 21000,
+    "description": "Large gulf of the northeast Atlantic Ocean",
+    "src": "/scenic_locations/bay-of-biscay.jpg"
+  },
+  {
+    "name": "Gulf of Aqaba",
+    "lat": 28,
+    "lon": 34.5,
+    "type": "ocean",
+    "likes": 24000,
+    "description": "Narrow gulf at the northern Red Sea",
+    "src": "/scenic_locations/gulf-of-aqaba.jpg"
+  },
+  {
+    "name": "Coral Sea",
+    "lat": -18,
+    "lon": 152,
+    "type": "ocean",
+    "likes": 26000,
+    "description": "Sea off Australia’s northeast coast",
+    "src": "/scenic_locations/coral-sea.jpg"
+  },
+  {
+    "name": "Tasman Sea",
+    "lat": -40,
+    "lon": 160,
+    "type": "ocean",
+    "likes": 25000,
+    "description": "Sea between Australia and New Zealand",
+    "src": "/scenic_locations/tasman-sea.jpg"
+  },
+  {
+    "name": "Bay of Bengal",
+    "lat": 15,
+    "lon": 88,
+    "type": "ocean",
+    "likes": 27000,
+    "description": "Largest bay in the world",
+    "src": "/scenic_locations/bay-of-bengal.jpg"
+  },
+  {
+    "name": "Gulf of California",
+    "lat": 26,
+    "lon": -111,
+    "type": "ocean",
+    "likes": 28000,
+    "description": "Sea of Cortez between Baja and mainland Mexico",
+    "src": "/scenic_locations/gulf-of-california.jpg"
+  },
+  {
+    "name": "Andaman Sea",
+    "lat": 10,
+    "lon": 97,
+    "type": "ocean",
+    "likes": 25000,
+    "description": "Sea southeast of the Bay of Bengal",
+    "src": "/scenic_locations/andaman-sea.jpg"
+  },
+  {
+    "name": "Bering Sea",
+    "lat": 58,
+    "lon": -175,
+    "type": "ocean",
+    "likes": 23000,
+    "description": "Sea between Alaska and Russia",
+    "src": "/scenic_locations/bering-sea.jpg"
+  },
+  {
+    "name": "Paris Skyline with Eiffel Tower",
+    "lat": 48.8584,
+    "lon": 2.2945,
+    "type": "city",
+    "likes": 48000,
+    "description": "Famous landmark and skyline along the Seine",
+    "src": "/scenic_locations/paris-skyline-with-eiffel-tower.jpg"
+  },
+  {
+    "name": "London Skyline with River Thames",
+    "lat": 51.5074,
+    "lon": -0.1278,
+    "type": "city",
+    "likes": 47000,
+    "description": "Historic city view winding along the Thames",
+    "src": "/scenic_locations/london-skyline-with-river-thames.jpg"
+  },
+  {
+    "name": "Rio de Janeiro Skyline",
+    "lat": -22.9519,
+    "lon": -43.2105,
+    "type": "city",
+    "likes": 49000,
+    "description": "City framed by Sugarloaf Mountain and beaches",
+    "src": "/scenic_locations/rio-de-janeiro-skyline.jpg"
+  },
+  {
+    "name": "Athens with Acropolis",
+    "lat": 37.9715,
+    "lon": 23.7267,
+    "type": "cultural",
+    "likes": 42000,
+    "description": "Ancient citadel above modern Athens",
+    "src": "/scenic_locations/athens-with-acropolis.jpg"
+  },
+  {
+    "name": "Venice Lagoon",
+    "lat": 45.4408,
+    "lon": 12.3155,
+    "type": "city",
+    "likes": 45000,
+    "description": "City of canals in a shallow lagoon",
+    "src": "/scenic_locations/venice-lagoon.jpg"
+  },
+  {
+    "name": "Budapest Skyline",
+    "lat": 47.4979,
+    "lon": 19.0402,
+    "type": "city",
+    "likes": 43000,
+    "description": "Parliament and bridges along the Danube",
+    "src": "/scenic_locations/budapest-skyline.jpg"
+  },
+  {
+    "name": "Prague Old Town",
+    "lat": 50.0755,
+    "lon": 14.4378,
+    "type": "city",
+    "likes": 42000,
+    "description": "Historic core on both sides of the Vltava",
+    "src": "/scenic_locations/prague-old-town.jpg"
+  },
+  {
+    "name": "Barcelona Skyline",
+    "lat": 41.4036,
+    "lon": 2.1744,
+    "type": "city",
+    "likes": 46000,
+    "description": "Grid-patterned city with famous basilica",
+    "src": "/scenic_locations/barcelona-skyline.jpg"
+  },
+  {
+    "name": "Chicago Skyline",
+    "lat": 41.8781,
+    "lon": -87.6298,
+    "type": "city",
+    "likes": 44000,
+    "description": "Downtown skyscrapers along Lake Michigan",
+    "src": "/scenic_locations/chicago-skyline.jpg"
+  },
+  {
+    "name": "Boston Harbor",
+    "lat": 42.3601,
+    "lon": -71.0589,
+    "type": "city",
+    "likes": 40000,
+    "description": "Historic harbor and city layout visible from above",
+    "src": "/scenic_locations/boston-harbor.jpg"
+  },
+  {
+    "name": "Seattle Skyline",
+    "lat": 47.6062,
+    "lon": -122.3321,
+    "type": "city",
+    "likes": 43000,
+    "description": "City framed by Puget Sound and Mount Rainier in distance",
+    "src": "/scenic_locations/seattle-skyline.jpg"
+  },
+  {
+    "name": "Miami Beach",
+    "lat": 25.7907,
+    "lon": -80.13,
+    "type": "city",
+    "likes": 41000,
+    "description": "Long sandy barrier island and Art Deco district",
+    "src": "/scenic_locations/miami-beach.jpg"
+  },
+  {
+    "name": "Havana Skyline",
+    "lat": 23.1136,
+    "lon": -82.3666,
+    "type": "city",
+    "likes": 39000,
+    "description": "Coastal capital with colorful colonial architecture",
+    "src": "/scenic_locations/havana-skyline.jpg"
+  },
+  {
+    "name": "Reykjavik Skyline",
+    "lat": 64.1355,
+    "lon": -21.8954,
+    "type": "city",
+    "likes": 36000,
+    "description": "Northernmost capital city with bay views",
+    "src": "/scenic_locations/reykjavik-skyline.jpg"
+  },
+  {
+    "name": "Honolulu with Diamond Head",
+    "lat": 21.3069,
+    "lon": -157.8583,
+    "type": "city",
+    "likes": 45000,
+    "description": "Urban skyline against volcanic tuff cone",
+    "src": "/scenic_locations/honolulu-with-diamond-head.jpg"
+  },
+  {
+    "name": "Cape Town with Table Bay",
+    "lat": -33.9249,
+    "lon": 18.4241,
+    "type": "city",
+    "likes": 46000,
+    "description": "Coastal city at the foot of Table Mountain",
+    "src": "/scenic_locations/cape-town-with-table-bay.jpg"
+  },
+  {
+    "name": "Istanbul Skyline",
+    "lat": 41.0082,
+    "lon": 28.9784,
+    "type": "city",
+    "likes": 47000,
+    "description": "City bridging Europe and Asia on the Bosphorus",
+    "src": "/scenic_locations/istanbul-skyline.jpg"
+  },
+  {
+    "name": "Kuala Lumpur Skyline",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "type": "city",
+    "likes": 44000,
+    "description": "Modern skyline with twin towers",
+    "src": "/scenic_locations/kuala-lumpur-skyline.jpg"
+  },
+  {
+    "name": "Los Angeles Skyline and Coast",
+    "lat": 34.0522,
+    "lon": -118.2437,
+    "type": "city",
+    "likes": 45000,
+    "description": "Sprawling city to Pacific shoreline",
+    "src": "/scenic_locations/los-angeles-skyline-and-coast.jpg"
+  },
+  {
+    "name": "Toronto Skyline",
+    "lat": 43.6532,
+    "lon": -79.3832,
+    "type": "city",
+    "likes": 44000,
+    "description": "Urban skyline on Lake Ontario",
+    "src": "/scenic_locations/toronto-skyline.jpg"
+  }
+]
+

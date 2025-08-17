@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { greatCirclePoints, getDistance, interpolateAlongPath, DEMO_AIRPORTS } from '@/lib/gis';
+import { greatCirclePoints, getDistance, interpolateAlongPath } from '@/lib/gis';
 import type { FlightState, PathPoint, AnimationState } from '@/lib/types';
+import { AIRPORTS } from '@/lib/constants/airports';
 
 /**
  * Hook for managing flight path calculation, animation, and state
@@ -20,8 +21,8 @@ export function useFlightPath() {
 
   // Calculate and set up flight path between two airports
   const generateFlightPath = useCallback((departureCode: string, arrivalCode: string) => {
-    const departure = DEMO_AIRPORTS.find((airport) => airport.code === departureCode);
-    const arrival = DEMO_AIRPORTS.find((airport) => airport.code === arrivalCode);
+    const departure = AIRPORTS.find((airport) => airport.code === departureCode);
+    const arrival = AIRPORTS.find((airport) => airport.code === arrivalCode);
 
     if (!departure || !arrival) {
       throw new Error('Invalid airport codes');

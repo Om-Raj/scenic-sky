@@ -3,8 +3,8 @@ import type { ScenicLocation } from './seat-recommendation-types';
 import type { PathPoint } from './types';
 
 /**
- * Detection radius thresholds for different scenic location types (in kilometers)
- * Used for finding scenic locations near the flight path
+ * Default detection radius thresholds for different scenic location types (in kilometers)
+ * Used only as a fallback when a location does not specify visibilityRadius (> 0)
  */
 const DETECTION_THRESHOLDS = {
   mountain: 100,
@@ -59,8 +59,11 @@ export function findScenicLocationsNearPath(
       }
     }
 
-    // Get detection threshold for this location type
-    const threshold = DETECTION_THRESHOLDS[location.type] || 50;
+    // Prefer location's own visibilityRadius; fall back to type-based default
+    const fallback = DETECTION_THRESHOLDS[location.type] || 50;
+    const threshold = location.visibilityRadius && location.visibilityRadius > 0
+      ? location.visibilityRadius
+      : fallback;
     
     // Check if location is within detection range
     if (minDistance <= threshold) {
@@ -112,8 +115,11 @@ export function isAircraftNearScenicLocation(
   const aircraftPoint = point([aircraftPosition.lon, aircraftPosition.lat]);
   const locationPoint = point([scenicLocation.lon, scenicLocation.lat]);
   const dist = distance(aircraftPoint, locationPoint);
-  
-  const threshold = DETECTION_THRESHOLDS[scenicLocation.type] || 50;
+  // Prefer per-location visibility radius; fall back to type default
+  const fallback = DETECTION_THRESHOLDS[scenicLocation.type] || 50;
+  const threshold = scenicLocation.visibilityRadius && scenicLocation.visibilityRadius > 0
+    ? scenicLocation.visibilityRadius
+    : fallback;
   return dist <= threshold;
 }
 

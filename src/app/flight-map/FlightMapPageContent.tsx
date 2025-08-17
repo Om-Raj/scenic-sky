@@ -10,8 +10,8 @@ import { FlightPath } from '@/components/FlightPath';
 import { useFlightPath } from '@/hooks/useFlightPath';
 import { interpolateDateTime } from '@/lib/solar-calculations';
 import { parseAirportLocalTime, formatAirportLocalTime } from '@/lib/timezone-utils';
-import { DEMO_AIRPORTS } from '@/lib/gis';
-import { SCENIC_LOCATIONS } from '@/lib/scenic-locations-data';
+import { AIRPORTS } from '@/lib/constants/airports';
+import { SCENIC_LOCATIONS } from '@/lib/constants/scenic-locations';
 import { 
   findScenicLocationsNearPath, 
   getLocationsToTrigger,
@@ -71,8 +71,8 @@ export default function FlightMapPageContent() {
       return null;
     }
 
-    const departureAirport = DEMO_AIRPORTS.find(apt => apt.code === flightData.departure);
-    const arrivalAirport = DEMO_AIRPORTS.find(apt => apt.code === flightData.arrival);
+    const departureAirport = AIRPORTS.find(apt => apt.code === flightData.departure);
+    const arrivalAirport = AIRPORTS.find(apt => apt.code === flightData.arrival);
     
     if (!departureAirport || !arrivalAirport) {
       return null;
@@ -106,8 +106,8 @@ export default function FlightMapPageContent() {
     }
 
     // Find airport timezone information
-    const departureAirport = DEMO_AIRPORTS.find(apt => apt.code === flightData.departure);
-    const arrivalAirport = DEMO_AIRPORTS.find(apt => apt.code === flightData.arrival);
+    const departureAirport = AIRPORTS.find(apt => apt.code === flightData.departure);
+    const arrivalAirport = AIRPORTS.find(apt => apt.code === flightData.arrival);
     
     if (!departureAirport || !arrivalAirport) {
       return null;
@@ -275,8 +275,8 @@ export default function FlightMapPageContent() {
     }
     
     // Find airport timezone information
-    const departureAirport = DEMO_AIRPORTS.find(apt => apt.code === flightData.departure);
-    const arrivalAirport = DEMO_AIRPORTS.find(apt => apt.code === flightData.arrival);
+    const departureAirport = AIRPORTS.find(apt => apt.code === flightData.departure);
+    const arrivalAirport = AIRPORTS.find(apt => apt.code === flightData.arrival);
     
     if (!departureAirport || !arrivalAirport) {
       return 'N/A';
@@ -318,8 +318,8 @@ export default function FlightMapPageContent() {
     }
     
     // Find airport timezone information
-    const departureAirport = DEMO_AIRPORTS.find(apt => apt.code === flightData.departure);
-    const arrivalAirport = DEMO_AIRPORTS.find(apt => apt.code === flightData.arrival);
+    const departureAirport = AIRPORTS.find(apt => apt.code === flightData.departure);
+    const arrivalAirport = AIRPORTS.find(apt => apt.code === flightData.arrival);
     
     if (!departureAirport || !arrivalAirport) {
       return 'N/A';
@@ -474,7 +474,7 @@ export default function FlightMapPageContent() {
                       <div className="relative">
                         <div className="relative w-full h-32">
                           <Image
-                            src="/sun-flare.png"
+                            src={location.src || "/sun-flare.png"}
                             alt={location.name}
                             fill
                             sizes="(max-width: 768px) 100vw, 540px"

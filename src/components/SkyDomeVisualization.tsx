@@ -2,7 +2,7 @@
 
 import React, { useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Text, Html, useTexture } from '@react-three/drei';
+import { Text, useTexture } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import SunCalc from 'suncalc';
@@ -301,8 +301,8 @@ function SkySphereScene({
             attach="material"
             color="#ffff00"
             transparent
-            opacity={0.9}
-            linewidth={10}
+            opacity={0.4}
+            linewidth={3}
             depthTest={false}
             depthWrite={false}
           />
@@ -362,22 +362,7 @@ function SkySphereScene({
           </sprite>
         )}
 
-        {/* Show elevation/azimuth readout only when above horizon */}
-        {sun.elevationDeg > 0 && (
-          <Html center position={[0.15, 0.08, 0]}>
-            <div style={{
-              color: 'white',
-              fontSize: 10,
-              padding: '2px 6px',
-              background: 'rgba(0,0,0,0.4)',
-              borderRadius: 4,
-              pointerEvents: 'none',
-              whiteSpace: 'nowrap',
-            }}>
-              {`Az ${sun.azimuthDeg.toFixed(0)}° • El ${sun.elevationDeg.toFixed(0)}°`}
-            </div>
-          </Html>
-        )}
+  {/* Removed inline readout near sun; a bottom-left HUD shows angles instead. */}
       </group>
 
       {/* Lightweight bloom only when sun is above the horizon (turn off "glow" at night) */}
@@ -406,8 +391,14 @@ export default function SkySphereVisualization({
   sizePx = 300,
   radius = 1.5,
 }: Props) {
+  // Compute sun angles for a small HUD readout (angles don't depend on map bearing)
+  const hudSun = React.useMemo(() => {
+    const s = getSunPosition(date, latitude, longitude, 1.5, false);
+    return { elevationDeg: s.elevationDeg, azimuthDeg: s.azimuthDeg };
+  }, [date, latitude, longitude]);
   return (
-    <div
+    <>
+      <div
       aria-hidden
       style={{
         position: 'fixed',
@@ -453,5 +444,29 @@ export default function SkySphereVisualization({
 
       </Canvas>
     </div>
+      {/* Bottom-left HUD for azimuth/elevation */}
+      <div
+        aria-hidden
+        style={{
+          position: 'fixed',
+          left: 0,
+          bottom: 0,
+          padding: '4px 6px',
+          fontSize: 10,
+          color: '#ffffff',
+          background: 'rgba(0,0,0,0.45)',
+          border: '1px solid rgba(255,255,255,0.12)',
+          backdropFilter: 'blur(4px)',
+          pointerEvents: 'none',
+          zIndex: 1001,
+          lineHeight: 1.2,
+          letterSpacing: 0.25,
+        }}
+      >
+        <span style={{ opacity: 0.85 }}>Azimuth</span>: {hudSun.azimuthDeg.toFixed(0)}°
+        <span style={{ margin: '0 6px', opacity: 0.35 }}>|</span>
+        <span style={{ opacity: 0.85 }}>Elevation</span>: {hudSun.elevationDeg.toFixed(0)}°
+      </div>
+    </>
   );
 }
